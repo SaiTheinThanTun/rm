@@ -1,0 +1,11 @@
+name: raimodel
+title: RAImodel
+account: saitheinthantun
+server: shinyapps.io
+appId: 148374
+bundleId: 666520
+url: https://saitheinthantun.shinyapps.io/raimodel/
+when: 1483337878.72324
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: parameters20161229RAI|plot.png|RAImodel16122016a.R

@@ -1,0 +1,11 @@
+name: gmsmodel
+title: GMSmodel
+account: saitheinthantun
+server: shinyapps.io
+appId: 149826
+bundleId: 673760
+url: https://saitheinthantun.shinyapps.io/gmsmodel/
+when: 1483971569.49906
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: app_tmp.R|GMS_Pf_EliminationStrategy_model_0601207_advancedRCD.R|parameters20170107RAI.txt

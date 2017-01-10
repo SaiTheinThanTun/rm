@@ -1,0 +1,11 @@
+name: raimodel_v2
+title: raimodel_v2
+account: saitheinthantun
+server: shinyapps.io
+appId: 149743
+bundleId: 672238
+url: https://saitheinthantun.shinyapps.io/raimodel_v2/
+when: 1483805187.96739
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: app_tmp.R|GMS_Pf_EliminationStrategy_model_0601207_advancedRCD.R|parameters20170107RAI.txt
