@@ -23,8 +23,8 @@ ui <- fluidPage(
                     
              ),
              column(3,
+                    checkboxInput(inputId="RCDon", label = "switch on scale up of RCD default radial search", value = FALSE),
                     sliderInput(inputId="RCDscale", label = "years to scale up RCD ", value = 2, min=.25, max=3, step=.25), #.25 timesteps
-                    checkboxInput(inputId="RCDcoex", label = "change RCD to co-exposure search   ", value = FALSE),
                     sliderInput(inputId="RCDsensC", label = "sensitivity of RCD test used for clinical infection ", value = 95, min=0, max=100),
                     sliderInput(inputId="RCDsensA", label = "sensitivity of RCD test used for super-microscopic asymtomatic infection", value = 60, min=0, max=100),
                     sliderInput(inputId="RCDsensU", label = "sensitivity of RCD test used for sub-microscopic asymtomatic infection", value = 0, min=0, max=100)
@@ -37,7 +37,7 @@ ui <- fluidPage(
                     
              ),
              column(3,
-                    checkboxInput(inputId="RCDon", label = "switch on scale up of RCD default radial search", value = FALSE),
+                    checkboxInput(inputId="RCDcoex", label = "change RCD to co-exposure search   ", value = FALSE),
                     sliderInput(inputId="clustRCDcoex", label = "% increased likelihood of finding cases with coexposure search given outside-village transmission ", value = 90, min=0, max=100),
                     checkboxInput(inputId="IRSon", label = "switch on scale up of IRS ", value = FALSE),
                     sliderInput(inputId="IRSscale", label = "years to scale up IRS ", value = 1, min=.25, max=3, step=.25),
