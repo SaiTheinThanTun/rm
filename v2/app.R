@@ -59,7 +59,7 @@ ui <- fluidPage(
                     sliderInput(inputId="dm", label = "months to complete each round ", value = 6, min=1, max=24)
              ),
              column(3,
-                    sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=7, max=30),
+                    sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=15, max=30),
                     sliderInput(inputId="cm_1", label = "% population coverage of 1st MDA round", value = 80, min=0, max=100),
                     sliderInput(inputId="cm_2", label = "% of 1st MDA round population to get 2nd", value = 95, min=0, max=100),
                     sliderInput(inputId="cm_3", label = "% of 2nd MDA round population to get 3rd", value = 95, min=0, max=100)
@@ -416,10 +416,10 @@ server <- function(input, output) {
                
                timei<-timei-startyear
                
-               wsiEDAT<-(1-(Y<=timei))*(Y<=(timei+EDATscale))*((Y-timei)/EDATscale)+1*(Y>=(timei+EDATscale))
-               wsiITN<-(1-(Y<=timei))*(Y<=(timei+ITNscale))*((Y-timei)/ITNscale)+1*(Y>=(timei+ITNscale))
-               wsiRCD<-(1-(Y<=timei))*(Y<=(timei+RCDscale))*((Y-timei)/RCDscale)+1*(Y>=(timei+RCDscale))
-               wsiIRS<-(1-(Y<=timei))*(Y<=(timei+IRSscale))*((Y-timei)/IRSscale)+1*(Y>=(timei+IRSscale))
+               wsiEDAT<-(1-(Y<=timei))*(Y<=(timei+EDATscale))*((Y-timei)/EDATscale)+1*(Y>(timei+EDATscale))
+               wsiITN<-(1-(Y<=timei))*(Y<=(timei+ITNscale))*((Y-timei)/ITNscale)+1*(Y>(timei+ITNscale))
+               wsiRCD<-(1-(Y<=timei))*(Y<=(timei+RCDscale))*((Y-timei)/RCDscale)+1*(Y>(timei+RCDscale))
+               wsiIRS<-(1-(Y<=timei))*(Y<=(timei+IRSscale))*((Y-timei)/IRSscale)+1*(Y>(timei+IRSscale))
                covEDAT<-(1-wsiEDAT)*covEDAT0+wsiEDAT*covEDATi
                covITN<-(1-wsiITN)*covITN0+wsiITN*covITNi
                covRCD<-(1-wsiRCD)*covRCD0+wsiRCD*covRCDi
