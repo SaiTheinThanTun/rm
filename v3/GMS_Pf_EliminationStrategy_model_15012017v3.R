@@ -13,8 +13,7 @@ maxt<-stopyear-startyear
 times <- seq(0, maxt, by = dt)
 tsteps<-length(times)
 
-# initial prevalence
-initprev<-0.1
+
 
 # ENTER COUNTERFACTUAL AND INTERVENTION SCENARIOS
 # 1 = include EDAT scaleup 1-yes, 0-no
@@ -25,7 +24,7 @@ initprev<-0.1
 # 6 = include MDA 1-yes, 0-no
 # 7 = include primaquine with ACT 
 scenario_0<-c(0,0,0,0,0,0,0)
-scenario_i<-c(1,1,1,1,1,1,1)
+scenario_i<-c(1,0,0,0,0,0,0)
 
 runGMS<-function(scenario) 
 {
@@ -41,6 +40,7 @@ runGMS<-function(scenario)
     
     # process indicators
     timei = 2018,                # timing of intervention [N]
+    API = 12,                   # baseline API [5 to 1000]
     EDATon = scenario[1],        # switch on scale up of EDAT [C]
     EDATscale = 3,               # years to scale up EDAT [1 to 3]
     covEDATi = 90,               # new percentage of all villages covered by VMW [0 to 100]
@@ -58,7 +58,7 @@ runGMS<-function(scenario)
     effRCD = 20,                 # number of people investigated per new clinical index case [0 to 1000] 
     dRCD = 4,                    # number of weeks for each investigation [1 to 8]
     clustRCD = 20,               # percentage increased likelihood of finding cases with radial search given village transmission [0 to 100]
-    clustRCDcoex = 90,             # percentage increased likelihood of finding cases with coexposure search given outside-village transmission [0 to 100]
+    clustRCDcoex=90,             # percentage increased likelihood of finding cases with coexposure search given outside-village transmission [0 to 100]
     IRSon = scenario[5],         # switch on scale up of IRS [C]  
     IRSscale = 1,                # years to scale up IRS [1 to 3]
     covIRSi = 90,                # new coverage of IRS (%) [0 to 90]
@@ -75,9 +75,9 @@ runGMS<-function(scenario)
     cm_1 = 80,                   # % popultion coverage of first MDA round [N] 
     cm_2 = 95,                   # % of people from first MDA round who receieve the second [N] 
     cm_3 = 95,                   # % of people from second MDA round who receieve the third [N]
-    effv_1 = 0,                  # protective efficacy of a single dose of RTS,S [N]
-    effv_2 = 0,                 # protective efficacy of two doses of RTS,S [N]
-    effv_3 = 0,                 # protective efficacy of three doses of RTS,S [N]
+    effv_1 = 0,#5,                  # protective efficacy of a single dose of RTS,S [N]
+    effv_2 = 0,#20,                 # protective efficacy of two doses of RTS,S [N]
+    effv_3 = 0,#50,                 # protective efficacy of three doses of RTS,S [N]
     dv = 1,                      # duration of vaccine protection [N]
      
     primon = scenario[2],        # ACT+primaquine for EDAT and MDA [C]
@@ -86,7 +86,7 @@ runGMS<-function(scenario)
     # setting typology parameters
     R0 =  2.20,                  # basic reproduction number
     eta = 50,                    # percentage of all infections that are caught in the outside the village (forrest) [0 to 100]
-    covEDAT0 = 30,               # baseline percentage of all villages with VMW [0 to 100]
+    covEDAT0 = 10,#30,               # baseline percentage of all villages with VMW [0 to 100]
     nuTr = 14,                   # days of infectiosness after treatment ACT [N]
     nuTrp = 7,                   # days of infectiosness after treatment ACT+primaquine [N]
     covITN0 = 60,                # baseline coverage of ITN (%) [0 to 90]
@@ -94,9 +94,9 @@ runGMS<-function(scenario)
     covIRS0 = 0,                 # baseline coverage of IRS (%) [0 to 90]
     amp = 0.7,                   # relative amplitude seasonality [N]
     phi = 0.5,                   # phase angle seasonality [N]
-    muC = 5,                     # number of imported clinical cases per 1000 population per year [0 to 10]
-    muA = 50,                    # number of imported super-microscopic asymtomatic infection per 1000 population per year [0 to 100]
-    muU = 50,                    # number of imported sub-microscopic asymtomatic infections per 1000 population per year [0 to 100]
+    muC = 1,#5,                     # number of imported clinical cases per 1000 population per year [0 to 10]
+    muA = 10,#50,                    # number of imported super-microscopic asymtomatic infection per 1000 population per year [10 to 100]
+    muU = 10,#50,                    # number of imported sub-microscopic asymtomatic infections per 1000 population per year [10 to 100]
     percfail2018 = 30,           # percentage of cases failing treatment in 2018 and before [0 to 100]
     percfail2019 = 10,           # percentage of cases failing treatment in 2019  [0 to 100]
     percfail2020 = 20,           # percentage of cases failing treatment in 2020 and after  [0 to 100]
@@ -113,17 +113,96 @@ runGMS<-function(scenario)
     mu = 50                      # life expectancy (years) [N]
    )
   
+
   
+  
+  
+  
+  ############################################################################
+  ## FINDING BETA start ##
+  ############################################################################
+  
+  # initial prevalence
+  initprev<-min(1,parameters['API']/100)
   # MODEL INITIAL CONDITIONS
   # population size
   initP<-10000 
   
-  initS_0<-0.5*(1-initprev)*initP
-  initIC_0<-0
-  initIA_0<-initprev*initP
-  initIU_0<-0
-  initR_0<-0.5*(1-initprev)*initP
+  initS_0<-0.7*(1-initprev)*initP
+  initIC_0<-0.1*initprev*initP
+  initIA_0<-0.5*initprev*initP
+  initIU_0<-0.4*initprev*initP
+  initR_0<-0.3*(1-initprev)*initP
   initTr_0<-0
+  
+  eta <- parameters['eta']/100
+  mu <- 1/parameters['mu']
+  muC <- parameters['muC']/1000
+  muA <- parameters['muA']/1000
+  muU <- parameters['muU']/1000
+  nuC <- 365/parameters['nuC']
+  nuA <- 365/parameters['nuA']
+  nuU <- 365/parameters['nuU']
+  nuTr <- 365/parameters['nuTr']
+  lossd <- 365/parameters['lossd']
+  omega <- 1/parameters['omega']
+  effIRS <- parameters['effIRS']/100
+  covIRS0 <- parameters['covIRS0']/100
+  effITN <- parameters['effITN']/100
+  covITN0 <- parameters['covITN0']/100
+  rhoa <- parameters['rhoa']/100
+  rhou <- parameters['rhou']/100
+  ps <- parameters['ps']/100
+  pr <- parameters['pr']/100
+  covEDAT0 <- 0.9*parameters['covEDAT0']/100
+  percfail2018 <- parameters['percfail2018']
+  
+  nTr<- nuTr
+  
+  API <- parameters['API']
+  
+  modeleq <- function(y){
+    x<-exp(y)
+    F1 <-  x[9] - (1-(1-eta)*effIRS*covIRS0)*(1-effITN*covITN0)*x[10]*(x[2]+x[6]+rhoa*x[3]+rhou*x[4])/initP
+    F2 <- (API*initP/1000)- (ps*covEDAT0*x[9]* x[1]+pr*covEDAT0*x[9]* x[5]+pr*covEDAT0*x[9]* x[4]+pr*covEDAT0*x[9]* x[3])
+    F3 <- mu*initP-(mu+muC+muA+muU)*x[1]+omega*x[5]-x[9]*x[1]+lossd*x[7]
+    F4 <- muC*initP-(mu+muC+muA+muU)*x[2]+ps*(1-covEDAT0)*x[9]*x[1]+pr*(1-covEDAT0)*x[9]*x[5]+pr*(1-covEDAT0)*x[9]*x[4]+pr*(1-covEDAT0)*x[9]*x[3]-nuC*x[2]
+    F5 <- muA*initP-(mu+muC+muA+muU)*x[3]+(1-ps)*x[9]*x[1]+(1-pr)*x[9]*x[5]+(1-pr)*x[9]*x[4]-pr*x[9]*x[3]+nuC*x[2]-nuA*x[3]+percfail2018*nTr*x[6]
+    F6 <- muU*initP-(mu+muC+muA+muU)*x[4]-x[9]*x[4]-nuU*x[4]+nuA*x[3]
+    F7 <- -(mu+muC+muA+muU)*x[5]-omega*x[5]-x[9]*x[5]+nuU*x[4]+lossd*x[8]
+    F8 <- -(mu+muC+muA+muU)*x[6]+ps*covEDAT0*x[9]*x[1]+pr*covEDAT0*x[9]*x[5]+pr*covEDAT0*x[9]*x[4]+pr*covEDAT0*x[9]*x[3]-nTr*x[6]
+    F9 <- -(mu+muC+muA+muU)*x[7]+omega*x[8]-lossd*x[7]
+    F10 <- x[1]+ x[2]+ x[3]+ x[4]+ x[5]+ x[6]+ x[7]+ x[8] - initP
+    
+    RMS<-((F1^2)+(F2^2)+(F3^2)+(F4^2)+(F5^2)+(F6^2)+(F7^2)+(F8^2)+(F9^2)+(F10^2))^0.5
+    return(RMS)
+  }
+  
+  betaout<-max(7,min(API/10,50))
+  for (i in 1:3){
+    guess<-log(c(initS_0, initIC_0, initIA_0, initIU_0, (initR_0-5), 1, 1, 1, API/1000, betaout))
+    sum(exp(guess[1:8]))
+    out.eq <- optim(guess, modeleq, method = "BFGS",control = list(abstol=1,reltol=1e-10))
+    betaout<-(exp(out.eq$par[10]))
+    prevout <- 100*sum(exp(out.eq$par[c(2,3,4,6)]))/initP
+    initprev<-min(0.9,prevout/100)
+    initS_0<-0.7*(1-initprev)*initP
+    initIC_0<-0.1*initprev*initP
+    initIA_0<-0.5*initprev*initP
+    initIU_0<-0.4*initprev*initP
+    initR_0<-0.3*(1-initprev)*initP
+  }
+  
+  initprev<-max(0.025,min(0.9,prevout/100))
+  
+  
+  ############################################################################
+  ## FINDING BETA end ##
+  ############################################################################
+  
+  
+  
+  
   
   state <- c(Y = 0, Cinc = 0,  
              S_0 = initS_0, IC_0 = initIC_0, IA_0 = initIA_0, IU_0 = initIU_0, R_0 = initR_0, Tr_0 = initTr_0, Sm_0 = 0, Rm_0 = 0,
@@ -203,7 +282,8 @@ runGMS<-function(scenario)
            P <- (sS+sR+sIC+sIA+sIU+sTr+sSm+sRm)
            seas<-1+amp*cos(2*3.14159*(Y-phi))
            nu <- 1/((1/nuC)+(1/nuA)+(1/nuU))
-           beta<-R0*(mu+nu)*seas
+           # beta<-R0*(mu+nu)*seas
+           beta<-betaout*seas
            mu_out <- mu+muC+muA+muU
 
            timei<-timei-startyear
@@ -235,12 +315,12 @@ runGMS<-function(scenario)
            tau <- covEDAT
            
            fail <- ((Y+startyear)<2019)*(percfail2018/100)+((Y+startyear)>=2019)*((Y+startyear)<2020)*(percfail2019/100)+((Y+startyear)>=2020)*(percfail2020/100)
-           #fail <- (Y<2019)*(percfail2018/100)+(Y>=2019)*(Y<2020)*(percfail2019/100)+(Y>=2020)*(percfail2020/100)
 
            
            # set up treatment rate for RCD
            incm<-ps*tau*lam*sS+pr*tau*lam*sR+pr*tau*lam*sIU+pr*tau*lam*sIA
-           rateRCD<-((1-eta)*(1+(1-RCDcoex)*clustRCD)+eta*(1+RCDcoex*clustRCDcoex))*(effRCD/P)*incm*covRCD #*dRCD
+#           rateRCD<-((1-eta)*(1+(1-RCDcoex)*clustRCD)+eta*(1+RCDcoex*clustRCDcoex))*(effRCD/P)*incm*covRCD*dRCD
+           rateRCD<-((1-eta)*(1+(1-RCDcoex)*clustRCD)+eta*(1+RCDcoex*clustRCDcoex))*(effRCD/P)*incm*covRCD
            tauRCD<-1/((1/rateRCD)+(1/nuTr))
            
 
@@ -352,11 +432,11 @@ prevalence<-cbind(GMSout0[,3],GMSouti[,3])
 
 # PLOTTING
 par(mfrow=c(1,2))
-maxy<-20
+maxy<-max(clinmonth,prevalence)+1
 matplot(times,clinmonth, type='l',lty=1,xlab = "Time",ylab="incidence per 1000 per month",main="Confirmed cases per month per 1000 population",ylim=c(0,maxy),lwd=2)
 lines(c(2018,2018),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
 lines(c(2021,2021),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
-maxy<-20
+maxy<-max(clinmonth,prevalence)+1
 matplot(times,prevalence, type='l',lty=1,xlab = "Time",ylab="% prevalence",main="Predicted population prevalence by U-PCR",ylim=c(0,maxy),lwd=2)
 lines(c(2018,2018),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
 lines(c(2021,2021),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
