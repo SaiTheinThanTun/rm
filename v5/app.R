@@ -518,7 +518,7 @@ server <- function(input, output) {
     # effv_2 = input$effv_2,
     # effv_3 = input$effv_3,
     # dv = input$dv,
-    MSATon = scenario[8],
+    #MSATon = scenario[8],
     MSATscale = input$MSATscale,
     covMSATi = input$covMSATi,
     MSATsensC = input$MSATsensC,
@@ -590,27 +590,14 @@ server <- function(input, output) {
   # initial prevalence
   initprevR <- reactive(0.001*input$API)
   
+  GMSout0R <- reactive(runGMS(initprevR(), scenario_0,parametersR()))
+  
+  GMSoutiR <- reactive(runGMS(initprevR(), scenario_iR(),parametersR()))
   
   output$MODEL <- renderPlot({
+    GMSout0<-GMSout0R()
     
-    
-    
-    
-    # ENTER COUNTERFACTUAL AND INTERVENTION SCENARIOS
-    # 1 = include EDAT scaleup 1-yes, 0-no
-    # 2 = include ITN scaleup 1-yes, 0-no
-    # 3 = include RCD default radial search
-    # 4 = include RCD but with coexposure search 
-    # 5 = include IRS scaleup 1-yes, 0-no
-    # 6 = include MDA 1-yes, 0-no
-    # 7 = include primaquine with ACT 
-    
-    
-    
-    #scenario<-scenario_0
-    GMSout0<-runGMS(initprevR(), scenario_0,parametersR())
-    #scenario<-scenario_i
-    GMSouti<-runGMS(initprevR(), scenario_iR(),parametersR())
+    GMSouti<-GMSoutiR()
     
     times<-GMSout0[,1]
     clinmonth<-cbind(GMSout0[,2],GMSouti[,2])
@@ -636,7 +623,6 @@ server <- function(input, output) {
     lines(times[(runin:length(prevalence[,1]))],prevalence[(runin:length(prevalence[,1])),2], type='l',lty=1,col="blue",xlab = "Time",ylab="% prevalence",main="Predicted population prevalence by U-PCR",ylim=c(0,maxy),lwd=2)
     lines(c(2018,2018),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
     lines(c(2021,2021),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
-    
     
   })
 }
