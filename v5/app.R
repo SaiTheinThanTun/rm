@@ -154,14 +154,195 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
+  scenario_0<-c(EDATon = 0,
+                ITNon = 0,
+                RCDon = 0,
+                RCDcoex = 0,
+                IRSon = 0,
+                MDAon = 0,
+                primon = 0,
+                MSATon = 0)
+  scenario_iR<-reactive(c(EDATon = input$EDATon,
+                          ITNon = input$ITNon,
+                          RCDon = input$RCDon,
+                          RCDcoex = input$RCDcoex,
+                          IRSon = input$IRSon,
+                          MDAon = input$MDAon,
+                          primon = input$primon,
+                          MSATon = input$MSATon))
+  parametersR <- reactive(c(
+    
+    # ************** SAI ***********#
+    # For shiny app, please see square brackets [a to b] for range of slider from a to b 
+    # if [N] then don't include 
+    # if [C] then check box
+    # ************** SAI ***********#
+    
+    # process indicators
+    # timei = 2018,                # timing of intervention [N] #remove
+    EDATon = scenario[1],        # switch on scale up of EDAT [C]
+    # EDATscale = 3,               # years to scale up EDAT [1 to 3]
+    # covEDATi = 90,               # new % of all villages covered by VMW [0 to 100]
+    ITNon = scenario[2],         # switch on scale up of ITN [C]
+    # ITNscale = 0.5,              # years to scale up ITN [1 to 3]
+    # covITNi = 90,                # new coverage of ITN (%) [0 to 90]
+    # effITN = 30,                 # % of new infections averted due to owenership of ITN [0 to 50]
+    RCDon = scenario[3],         # switch on scale up of RCD default radial search   [C] 
+    # RCDscale = 2,                # years to scale up RCD [1 to 3]
+    RCDcoex = scenario[4],       # Change RCD to co-exposure search   [C] 
+    # RCDsensC = 95,               # Sensitivity of RCD test used for clinical infection [0 to 100]
+    # RCDsensA = 60,               # Sensitivity of RCD test used for super-microscopic asymtomatic infection [0 to 100]
+    # RCDsensU = 0,                # Sensitivity of RCD test used for sub-microscopic asymtomatic infection [0 to 100]
+    # covRCDi = 50,                # new coverage of RCD (%) [0 to 100]
+    # effRCD = 20,                 # number of people investigated per new clinical index case [0 to 1000] 
+    # dRCD = 4,                    # number of weeks for each investigation [1 to 8] #remove
+    # clustRCD = 20,               # % increased likelihood of finding cases with radial search given village transmission [0 to 100]
+    # clustRCDcoex = 90,             # % increased likelihood of finding cases with coexposure search given outside-village transmission [0 to 100]
+    IRSon = scenario[5],         # switch on scale up of IRS [C]  
+    # IRSscale = 1,                # years to scale up IRS [1 to 3]
+    # covIRSi = 90,                # new coverage of IRS (%) [0 to 90]
+    # effIRS = 15,                 # % reduction in risk provided by IRS [0 to 25]
+    MDAon = scenario[6],         # switch on MDA [C]
+    # cmda_1 = 50,                 # effective population coverage of focal MDA in round 1 [0 to 100]
+    # cmda_2 = 50,                 # effective population coverage of focal MDA in round 2 [0 to 100]
+    # cmda_3 = 50,                 # effective population coverage of focal MDA in round 3 [0 to 100]
+    tm_1 = 2018+(input$tm_1/12),          # timing of 1st round [2018 to 2021 - 1 month steps]
+    tm_2 = 2018+(input$tm_2/12),          # timing of 2nd round [2018+(1/12) to 2021 - 1 month steps]
+    tm_3 = 2018+(input$tm_3/12),          # timing of 3rd round [2018+(2/12) to 2021 - 1 month steps]
+    # dm = 6,                      # number of months taken to reach population target coverage in each round [15 to 24]
+    # lossd = 30,                  # number of days of profilaxis provided by the ACT [7 to 30]
+    # cm_1 = 80,                   # % popultion coverage of 1st MDA round [N] 
+    # cm_2 = 95,                   # % of people from 1st MDA round who receieve the 2nd [N] 
+    # cm_3 = 95,                   # % of people from 2nd MDA round who receieve the 3rd [N]
+    # vacon = input$vacon,         # switch on MDA [C]
+    effv_1 = 0,                  # protective efficacy of a single dose of RTS,S [N]
+    effv_2 = 0,                 # protective efficacy of two doses of RTS,S [N]
+    effv_3 = 0,                 # protective efficacy of three doses of RTS,S [N]
+    dv = 1,                      # duration of vaccine protection [N]
+    
+    primon = scenario[7],        # ACT+primaquine for EDAT and MDA [C]
+    # NB: This is an extremely simplistic model for primaquine
+    
+    timei = 2018,
+    #EDATon = input$EDATon,
+    EDATscale = input$EDATscale,
+    covEDATi = input$covEDATi,
+    #ITNon = input$ITNon,
+    ITNscale = input$ITNscale,
+    covITNi = input$covITNi,
+    effITN = input$effITN,
+    #RCDon = input$RCDon,
+    RCDscale = input$RCDscale,
+    #RCDcoex = input$RCDcoex,
+    RCDsensC = input$RCDsensC,
+    RCDsensA = input$RCDsensA,
+    RCDsensU = input$RCDsensU,
+    covRCDi = input$covRCDi,
+    effRCD = input$effRCD,
+    dRCD = 4,
+    clustRCD = input$clustRCD,
+    clustRCDcoex = input$clustRCDcoex,
+    #IRSon = input$IRSon,
+    IRSscale = input$IRSscale,
+    covIRSi = input$covIRSi,
+    effIRS = input$effIRS,
+    #MDAon = input$MDAon,
+    cmda_1 = input$cmda_1,
+    cmda_2 = input$cmda_2,
+    cmda_3 = input$cmda_3,
+    #tm_1 = input$tm_1,
+    #tm_2 = input$tm_2,
+    #tm_3 = input$tm_3,
+    dm = input$dm,
+    lossd = input$lossd,
+    cm_1 = input$cm_1,
+    cm_2 = input$cm_2,
+    cm_3 = input$cm_3,
+    # effv_1 = input$effv_1,
+    # effv_2 = input$effv_2,
+    # effv_3 = input$effv_3,
+    # dv = input$dv,
+    MSATon = scenario[8],
+    MSATscale = input$MSATscale,
+    covMSATi = input$covMSATi,
+    MSATsensC = input$MSATsensC,
+    MSATsensA = input$MSATsensA,
+    MSATsensU = input$MSATsensU,
+    
+    # setting typology parameters
+    # R0 =  2.20,                  # basic reproduction number
+    # eta = 50,                    # % of all infections that are caught in the outside the village (forrest) [0 to 100]
+    # covEDAT0 = 30,               # baseline % of all villages with VMW [0 to 100]
+    nuTr = 14,                   # days of infectiosness after treatment ACT [N]
+    nuTrp = 7,                   # days of infectiosness after treatment ACT+primaquine [N]
+    # covITN0 = 60,                # baseline coverage of ITN (%) [0 to 90]
+    # covRCD0 = 0,                 # baseline coverage of RCD (%) [0 to 90]
+    # covIRS0 = 0,                 # baseline coverage of IRS (%) [0 to 90]
+    amp = 0.7,                   # relative amplitude seasonality [N]
+    phi = 0.5,                   # phase angle seasonality [N]
+    # muC = 5,                     # number of imported clinical cases per 1000 population per year [0 to 10]
+    # muA = 50,                    # number of imported super-microscopic asymtomatic infection per 1000 population per year [0 to 100]
+    # muU = 50,                    # number of imported sub-microscopic asymtomatic infections per 1000 population per year [0 to 100]
+    # percfail2018 = 30,           # % of cases failing treatment in 2018 and before [0 to 100]
+    # percfail2019 = 10,           # % of cases failing treatment in 2019  [0 to 100]
+    # percfail2020 = 20,           # % of cases failing treatment in 2020 and after  [0 to 100]
+    bh = input$bh,                 # bites per human per year
+    epsilonh=0.23,                 # per bite probability of an infectious mosquito infecting a human
+    epsilonm=0.5,                  # per bite probability of an infectious human infecting a mosquito
+    b=365/3,                       # per mosquito rate of biting
+    deltam=365/14,                 
+    gammam=365/10,
+    eta = input$eta,
+    covEDAT0 = input$covEDAT0,
+    #nuTr = input$nuTr,
+    #nuTrp = input$nuTrp,
+    covITN0 = input$covITN0,
+    covRCD0 = input$covRCD0,
+    covIRS0 = input$covIRS0,
+    #amp = input$amp,
+    #phi = input$phi,
+    muC = input$muC,
+    muA = input$muA,
+    muU = input$muU,
+    percfail2018 = input$percfail2018,
+    percfail2019 = input$percfail2019,
+    percfail2020 = input$percfail2020,
+    covMSAT0=0,
+    
+    # biological parameters
+    # omega = 2,                   # average duration of immunity (years) [N]
+    # nuC = 9,                     # days of symptoms in the absence of treatment [N]
+    # nuA = 60,                    # days of super-microscopic asymtomatic infection [N]
+    # nuU = 60,                    # days of sub-microscopic asymtomatic infection [N]
+    # rhoa = 70,                   # relative infectivity of super-microscopic asymptomatic infections compared with clinical infections (%) [N]
+    # rhou = 30,                   # relative infectivity of sub-microscopic asymptomatic infections compared with clinical infections (%) [N]
+    # ps = 90,                     # % of all non-immune new infections that are clinical [N]
+    # pr = 20,                     # % of all immune new infections that are clinical [N]
+    # mu = 50                      # life expectancy (years) [N]
+    
+    omega = input$omega,
+    nuC = input$nuC,
+    nuA = input$nuA,
+    nuU = input$nuU,
+    rhoa = input$rhoa,
+    rhou = input$rhou,
+    ps = input$ps,
+    pr = input$pr,
+    mu = input$mu
+  ))
+  
+  #non-reactive parameters
+  # define the number of weeks to run the model
+  dt<-1/12
+  startyear<-2010
+  stopyear<-2025
+  maxt<-stopyear-startyear
+  times <- seq(0, maxt, by = dt)
+  tsteps<-length(times)
+  
+  
   output$MODEL <- renderPlot({
-    # define the number of weeks to run the model
-    dt<-1/12
-    startyear<-2010
-    stopyear<-2025
-    maxt<-stopyear-startyear
-    times <- seq(0, maxt, by = dt)
-    tsteps<-length(times)
+    
     
     # initial prevalence
     initprev<-0.001*input$API
@@ -174,173 +355,13 @@ server <- function(input, output) {
     # 5 = include IRS scaleup 1-yes, 0-no
     # 6 = include MDA 1-yes, 0-no
     # 7 = include primaquine with ACT 
-    scenario_0<-c(0,0,0,0,0,0,0,0)
-    scenario_i<-c(input$EDATon,input$ITNon,input$RCDon,input$RCDcoex,input$IRSon,input$MDAon,input$primon,input$MSATon)
     
-    runGMS<-function(scenario) 
+    
+    runGMS<-function(scenario,param) 
     {
       #MODEL PARAMETERS
-      parameters <- c(
+      parameters <- c(scenario,param)
         
-        
-        # ************** SAI ***********#
-        # For shiny app, please see square brackets [a to b] for range of slider from a to b 
-        # if [N] then don't include 
-        # if [C] then check box
-        # ************** SAI ***********#
-        
-        # process indicators
-        # timei = 2018,                # timing of intervention [N] #remove
-        EDATon = scenario[1],        # switch on scale up of EDAT [C]
-        # EDATscale = 3,               # years to scale up EDAT [1 to 3]
-        # covEDATi = 90,               # new % of all villages covered by VMW [0 to 100]
-        ITNon = scenario[2],         # switch on scale up of ITN [C]
-        # ITNscale = 0.5,              # years to scale up ITN [1 to 3]
-        # covITNi = 90,                # new coverage of ITN (%) [0 to 90]
-        # effITN = 30,                 # % of new infections averted due to owenership of ITN [0 to 50]
-        RCDon = scenario[3],         # switch on scale up of RCD default radial search   [C] 
-        # RCDscale = 2,                # years to scale up RCD [1 to 3]
-        RCDcoex = scenario[4],       # Change RCD to co-exposure search   [C] 
-        # RCDsensC = 95,               # Sensitivity of RCD test used for clinical infection [0 to 100]
-        # RCDsensA = 60,               # Sensitivity of RCD test used for super-microscopic asymtomatic infection [0 to 100]
-        # RCDsensU = 0,                # Sensitivity of RCD test used for sub-microscopic asymtomatic infection [0 to 100]
-        # covRCDi = 50,                # new coverage of RCD (%) [0 to 100]
-        # effRCD = 20,                 # number of people investigated per new clinical index case [0 to 1000] 
-        # dRCD = 4,                    # number of weeks for each investigation [1 to 8] #remove
-        # clustRCD = 20,               # % increased likelihood of finding cases with radial search given village transmission [0 to 100]
-        # clustRCDcoex = 90,             # % increased likelihood of finding cases with coexposure search given outside-village transmission [0 to 100]
-        IRSon = scenario[5],         # switch on scale up of IRS [C]  
-        # IRSscale = 1,                # years to scale up IRS [1 to 3]
-        # covIRSi = 90,                # new coverage of IRS (%) [0 to 90]
-        # effIRS = 15,                 # % reduction in risk provided by IRS [0 to 25]
-        MDAon = scenario[6],         # switch on MDA [C]
-        # cmda_1 = 50,                 # effective population coverage of focal MDA in round 1 [0 to 100]
-        # cmda_2 = 50,                 # effective population coverage of focal MDA in round 2 [0 to 100]
-        # cmda_3 = 50,                 # effective population coverage of focal MDA in round 3 [0 to 100]
-        tm_1 = 2018+(input$tm_1/12),          # timing of 1st round [2018 to 2021 - 1 month steps]
-        tm_2 = 2018+(input$tm_2/12),          # timing of 2nd round [2018+(1/12) to 2021 - 1 month steps]
-        tm_3 = 2018+(input$tm_3/12),          # timing of 3rd round [2018+(2/12) to 2021 - 1 month steps]
-        # dm = 6,                      # number of months taken to reach population target coverage in each round [15 to 24]
-        # lossd = 30,                  # number of days of profilaxis provided by the ACT [7 to 30]
-        # cm_1 = 80,                   # % popultion coverage of 1st MDA round [N] 
-        # cm_2 = 95,                   # % of people from 1st MDA round who receieve the 2nd [N] 
-        # cm_3 = 95,                   # % of people from 2nd MDA round who receieve the 3rd [N]
-        # vacon = input$vacon,         # switch on MDA [C]
-        effv_1 = 0,                  # protective efficacy of a single dose of RTS,S [N]
-        effv_2 = 0,                 # protective efficacy of two doses of RTS,S [N]
-        effv_3 = 0,                 # protective efficacy of three doses of RTS,S [N]
-        dv = 1,                      # duration of vaccine protection [N]
-        
-        primon = scenario[7],        # ACT+primaquine for EDAT and MDA [C]
-        # NB: This is an extremely simplistic model for primaquine
-        
-        timei = 2018,
-        #EDATon = input$EDATon,
-        EDATscale = input$EDATscale,
-        covEDATi = input$covEDATi,
-        #ITNon = input$ITNon,
-        ITNscale = input$ITNscale,
-        covITNi = input$covITNi,
-        effITN = input$effITN,
-        #RCDon = input$RCDon,
-        RCDscale = input$RCDscale,
-        #RCDcoex = input$RCDcoex,
-        RCDsensC = input$RCDsensC,
-        RCDsensA = input$RCDsensA,
-        RCDsensU = input$RCDsensU,
-        covRCDi = input$covRCDi,
-        effRCD = input$effRCD,
-        dRCD = 4,
-        clustRCD = input$clustRCD,
-        clustRCDcoex = input$clustRCDcoex,
-        #IRSon = input$IRSon,
-        IRSscale = input$IRSscale,
-        covIRSi = input$covIRSi,
-        effIRS = input$effIRS,
-        #MDAon = input$MDAon,
-        cmda_1 = input$cmda_1,
-        cmda_2 = input$cmda_2,
-        cmda_3 = input$cmda_3,
-        #tm_1 = input$tm_1,
-        #tm_2 = input$tm_2,
-        #tm_3 = input$tm_3,
-        dm = input$dm,
-        lossd = input$lossd,
-        cm_1 = input$cm_1,
-        cm_2 = input$cm_2,
-        cm_3 = input$cm_3,
-        # effv_1 = input$effv_1,
-        # effv_2 = input$effv_2,
-        # effv_3 = input$effv_3,
-        # dv = input$dv,
-        MSATon = scenario[8],
-        MSATscale = input$MSATscale,
-        covMSATi = input$covMSATi,
-        MSATsensC = input$MSATsensC,
-        MSATsensA = input$MSATsensA,
-        MSATsensU = input$MSATsensU,
-        
-        # setting typology parameters
-        # R0 =  2.20,                  # basic reproduction number
-        # eta = 50,                    # % of all infections that are caught in the outside the village (forrest) [0 to 100]
-        # covEDAT0 = 30,               # baseline % of all villages with VMW [0 to 100]
-        nuTr = 14,                   # days of infectiosness after treatment ACT [N]
-        nuTrp = 7,                   # days of infectiosness after treatment ACT+primaquine [N]
-        # covITN0 = 60,                # baseline coverage of ITN (%) [0 to 90]
-        # covRCD0 = 0,                 # baseline coverage of RCD (%) [0 to 90]
-        # covIRS0 = 0,                 # baseline coverage of IRS (%) [0 to 90]
-        amp = 0.7,                   # relative amplitude seasonality [N]
-        phi = 0.5,                   # phase angle seasonality [N]
-        # muC = 5,                     # number of imported clinical cases per 1000 population per year [0 to 10]
-        # muA = 50,                    # number of imported super-microscopic asymtomatic infection per 1000 population per year [0 to 100]
-        # muU = 50,                    # number of imported sub-microscopic asymtomatic infections per 1000 population per year [0 to 100]
-        # percfail2018 = 30,           # % of cases failing treatment in 2018 and before [0 to 100]
-        # percfail2019 = 10,           # % of cases failing treatment in 2019  [0 to 100]
-        # percfail2020 = 20,           # % of cases failing treatment in 2020 and after  [0 to 100]
-        bh = input$bh,                 # bites per human per year
-        epsilonh=0.23,                 # per bite probability of an infectious mosquito infecting a human
-        epsilonm=0.5,                  # per bite probability of an infectious human infecting a mosquito
-        b=365/3,                       # per mosquito rate of biting
-        deltam=365/14,                 
-        gammam=365/10,
-        eta = input$eta,
-        covEDAT0 = input$covEDAT0,
-        #nuTr = input$nuTr,
-        #nuTrp = input$nuTrp,
-        covITN0 = input$covITN0,
-        covRCD0 = input$covRCD0,
-        covIRS0 = input$covIRS0,
-        #amp = input$amp,
-        #phi = input$phi,
-        muC = input$muC,
-        muA = input$muA,
-        muU = input$muU,
-        percfail2018 = input$percfail2018,
-        percfail2019 = input$percfail2019,
-        percfail2020 = input$percfail2020,
-        covMSAT0=0,
-        
-        # biological parameters
-        # omega = 2,                   # average duration of immunity (years) [N]
-        # nuC = 9,                     # days of symptoms in the absence of treatment [N]
-        # nuA = 60,                    # days of super-microscopic asymtomatic infection [N]
-        # nuU = 60,                    # days of sub-microscopic asymtomatic infection [N]
-        # rhoa = 70,                   # relative infectivity of super-microscopic asymptomatic infections compared with clinical infections (%) [N]
-        # rhou = 30,                   # relative infectivity of sub-microscopic asymptomatic infections compared with clinical infections (%) [N]
-        # ps = 90,                     # % of all non-immune new infections that are clinical [N]
-        # pr = 20,                     # % of all immune new infections that are clinical [N]
-        # mu = 50                      # life expectancy (years) [N]
-        
-        omega = input$omega,
-        nuC = input$nuC,
-        nuA = input$nuA,
-        nuU = input$nuU,
-        rhoa = input$rhoa,
-        rhou = input$rhou,
-        ps = input$ps,
-        pr = input$pr,
-        mu = input$mu
-      )
       
       
       # MODEL INITIAL CONDITIONS
@@ -582,10 +603,10 @@ server <- function(input, output) {
       
       return(GMSout)
     }
-    scenario<-scenario_0
-    GMSout0<-runGMS(scenario)
-    scenario<-scenario_i
-    GMSouti<-runGMS(scenario)
+    #scenario<-scenario_0
+    GMSout0<-runGMS(scenario_0,parametersR())
+    #scenario<-scenario_i
+    GMSouti<-runGMS(scenario_iR(),parametersR())
     
     times<-GMSout0[,1]
     clinmonth<-cbind(GMSout0[,2],GMSouti[,2])
