@@ -122,7 +122,9 @@ ui <- fluidPage(
                     sliderInput(inputId="pr", label = "% of all immune new infections that are clinical ", value = 20, min=0, max=100),
                     sliderInput(inputId="mu", label = "life expectancy (years) ", value = 50, min=45, max=95)
              )
-    )
+    ),
+    tabPanel(title= strong("Download"),
+             downloadButton("downloadplot","Download high resolution figure"))
   ),
   fluidRow(plotOutput(outputId = "MODEL")),
   br(),
@@ -594,7 +596,9 @@ server <- function(input, output) {
   
   GMSoutiR <- reactive(runGMS(initprevR(), scenario_iR(),parametersR()))
   
-  output$MODEL <- renderPlot({
+  
+  plotR <- function()
+    {
     GMSout0<-GMSout0R()
     
     GMSouti<-GMSoutiR()
@@ -607,7 +611,6 @@ server <- function(input, output) {
     
     finclin<-max(clinmonth[(runin:length(clinmonth[,1])),])
     finprev<-max(prevalence[(runin:length(prevalence[,1])),])
-    
     
     # PLOTTING
     par(mfrow=c(1,2))
@@ -623,8 +626,19 @@ server <- function(input, output) {
     lines(times[(runin:length(prevalence[,1]))],prevalence[(runin:length(prevalence[,1])),2], type='l',lty=1,col="blue",xlab = "Time",ylab="% prevalence",main="Predicted population prevalence by U-PCR",ylim=c(0,maxy),lwd=2)
     lines(c(2018,2018),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
     lines(c(2021,2021),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
-    
+  }
+  
+  output$MODEL <- renderPlot({
+    plotR()
   })
+  
+  output$downloadplot <- downloadHandler(
+    filename = function(){paste('MalMod_',gsub("\\:","",Sys.time()),'.png',sep='')},
+    content = function(file) {
+      png(filename=file, height= 1600, width=4800, units= "px", res=300) #if(...=="png"){png(file)} else if(...=="pdf"){pdf(file)}
+      plotR()
+      dev.off()
+    })
 }
 
 shinyApp(ui = ui, server = server)
