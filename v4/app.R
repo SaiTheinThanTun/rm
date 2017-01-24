@@ -8,37 +8,64 @@ library(TSA)
 ui <- fluidPage(
   tabsetPanel(
     id="panels",
+    tabPanel(title = strong("Typology Parameters"),
+             column(3,
+                    sliderInput(inputId="API", label = "baseline API", value = 2.5, min=1, max=100,step=.5),
+                    sliderInput(inputId="bh", label = "number of mosquito bites per human per day (average)", value = 4, min=0, max=30,step=1),
+                    sliderInput(inputId="eta", label = "% of all infections that are caught outside the village (forest)", value = 50, min=0, max=100),
+                    sliderInput(inputId="covEDAT0", label = "baseline % of all clinical cases treated", value = 30, min=0, max=100)
+             ),
+             column(3,
+                    #sliderInput(inputId="nuTr", label = "days of infectiosness after treatment ACT", value = 14, min=0, max=30), #remove
+                    #sliderInput(inputId="nuTrp", label = "days of infectiosness after treatment ACT+primaquine", value = 7, min=0, max=30), #remove
+                    sliderInput(inputId="covITN0", label = "baseline coverage of ITN (%) ", value = 75, min=0, max=90,step=.5),
+                    sliderInput(inputId="covRCD0", label = "baseline coverage of RCD (%) ", value = 0, min=0, max=90),
+                    sliderInput(inputId="covIRS0", label = "baseline coverage of IRS (%) ", value = 0, min=0, max=90)
+             ),
+             column(3,
+                    #sliderInput(inputId="amp", label = "relative amplitude seasonality ", value = 0.7, min=0, max=2), #remove
+                    #sliderInput(inputId="phi", label = "phase angle seasonality ", value = 0.5, min=0, max=1), #remove
+                    sliderInput(inputId="muC", label = "imported clinical cases per 1000 population per year ", value = 1, min=0, max=10),
+                    sliderInput(inputId="muA", label = "imported super-microscopic asymtomatic infection per 1000 population per year ", value = 10, min=0, max=100),
+                    sliderInput(inputId="muU", label = "imported sub-microscopic asymtomatic infections per 1000 population per year ", value = 10, min=0, max=100)
+             ),
+             column(3,
+                    sliderInput(inputId="percfail2018", label = "% of cases failing treatment in 2018 and before ", value = 30, min=0, max=100),
+                    sliderInput(inputId="percfail2019", label = "% of cases failing treatment in 2019  ", value = 10, min=0, max=100),
+                    sliderInput(inputId="percfail2020", label = "% of cases failing treatment in 2020 and after  ", value = 20, min=0, max=100)
+             )
+    ),
+    
     tabPanel(title = strong("Process Indicators"),
              column(3,
                     #sliderInput(inputId="timei", label = "timing of intervention ", value = 2018, min=2017, max=2020),
                     checkboxInput(inputId="EDATon", label = "switch on scale up of EDAT ", value = FALSE),
                     checkboxInput(inputId="primon", label = "ACT+primaquine for EDAT and MDA ", value = FALSE), #under EDAT checkbox
-                    sliderInput(inputId="EDATscale", label = "years to scale up EDAT ", value = 3, min=.25, max=3, step=.25),
-                    sliderInput(inputId="covEDATi", label = "new % of all villages covered by VMW ", value = 90, min=0, max=100),
+                    sliderInput(inputId="EDATscale", label = "years to scale up EDAT ", value = 1, min=.25, max=3, step=.25),
+                    sliderInput(inputId="covEDATi", label = "new % of all clinical cases treated", value = 90, min=0, max=100),
                     #hr(),
                     checkboxInput(inputId="ITNon", label = "switch on scale up of ITN ", value = FALSE),
                     sliderInput(inputId="ITNscale", label = "years to scale up ITN ", value = 0.5, min=.25, max=3, step=.25),
                     sliderInput(inputId="covITNi", label = "new coverage of ITN (%) ", value = 90, min=0, max=90),
-                    sliderInput(inputId="effITN", label = "% of new infections averted due to owenership of ITN ", value = 30, min=0, max=50)
+                    sliderInput(inputId="effITN", label = "new % of infections averted due to owenership of ITN ", value = 30, min=0, max=50)
                     
              ),
              column(3,
-                    checkboxInput(inputId="RCDon", label = "switch on scale up of RCD default radial search", value = FALSE),
+                    checkboxInput(inputId="RCDon", label = "switch on scale up of RCD", value = FALSE),
                     sliderInput(inputId="RCDscale", label = "years to scale up RCD ", value = 2, min=.25, max=3, step=.25), #.25 timesteps
-                    sliderInput(inputId="RCDsensC", label = "sensitivity of RCD test used for clinical infection ", value = 95, min=0, max=100),
-                    sliderInput(inputId="RCDsensA", label = "sensitivity of RCD test used for super-microscopic asymtomatic infection", value = 60, min=0, max=100),
-                    sliderInput(inputId="RCDsensU", label = "sensitivity of RCD test used for sub-microscopic asymtomatic infection", value = 0, min=0, max=100)
+                    sliderInput(inputId="covRCDi", label = "new coverage of RCD (%)", value = 50, min=0, max=100),
+                    sliderInput(inputId="effRCD", label = "no. people screened per clinical case", value = 20, min=0, max=1000),
+                    sliderInput(inputId="RCDsensC", label = "sensitivity RCD test (clinical) ", value = 95, min=0, max=100),
+                    sliderInput(inputId="RCDsensA", label = "sensitivity RCD test (super-micro, asym)", value = 60, min=0, max=100),
+                    sliderInput(inputId="RCDsensU", label = "sensitivity RCD test (sub-micro, asym)", value = 0, min=0, max=100)
              ),
              column(3,
-                    sliderInput(inputId="covRCDi", label = "new coverage of RCD (%)", value = 50, min=0, max=100),
-                    sliderInput(inputId="effRCD", label = "no. of people investigated per new clinical index case", value = 20, min=0, max=1000),
-                    #sliderInput(inputId="dRCD", label = "number of weeks for each investigation ", value = 4, min=1, max=8),
-                    sliderInput(inputId="clustRCD", label = "% increased likelihood of finding cases with radial search given village transmission", value = 20, min=0, max=100)
+                   sliderInput(inputId="clustRCD", label = "% increased likelihood of finding cases with radial search", value = 20, min=0, max=100),
+                    checkboxInput(inputId="RCDcoex", label = "change RCD from radial serch to co-exposure search   ", value = FALSE),
+                    sliderInput(inputId="clustRCDcoex", label = "% increased likelihood of finding cases with coexposure search", value = 90, min=0, max=100)
                     
              ),
              column(3,
-                    checkboxInput(inputId="RCDcoex", label = "change RCD to co-exposure search   ", value = FALSE),
-                    sliderInput(inputId="clustRCDcoex", label = "% increased likelihood of finding cases with coexposure search given outside-village transmission ", value = 90, min=0, max=100),
                     checkboxInput(inputId="IRSon", label = "switch on scale up of IRS ", value = FALSE),
                     sliderInput(inputId="IRSscale", label = "years to scale up IRS ", value = 1, min=.25, max=3, step=.25),
                     sliderInput(inputId="covIRSi", label = "new coverage of IRS (%) ", value = 90, min=0, max=90),
@@ -59,45 +86,22 @@ ui <- fluidPage(
                     sliderInput(inputId="dm", label = "months to complete each round ", value = 6, min=1, max=24)
              ),
              column(3,
-                    sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=15, max=30),
+                    sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=7, max=30),
                     sliderInput(inputId="cm_1", label = "% population coverage of 1st MDA round", value = 80, min=0, max=100),
                     sliderInput(inputId="cm_2", label = "% of 1st MDA round population to get 2nd", value = 95, min=0, max=100),
                     sliderInput(inputId="cm_3", label = "% of 2nd MDA round population to get 3rd", value = 95, min=0, max=100)
              )
-             # column(3,
-             #        sliderInput(inputId="effv_1", label = "protective efficacy of a single dose of RTS,S ", value = 0, min=0, max=100),
-             #        sliderInput(inputId="effv_2", label = "protective efficacy of two doses of RTS,S ", value = 0, min=0, max=100),
-             #        sliderInput(inputId="effv_3", label = "protective efficacy of three doses of RTS,S ", value = 0, min=0, max=100),
-             #        sliderInput(inputId="dv", label = "duration of vaccine protection ", value = 1, min=0, max=10)
-             #        
-             #        
-             # )
     ),
-    tabPanel(title = strong("Typology Parameters"),
+    tabPanel(title = strong("Imported malaria MSAT indicators"),
              column(3,
-                    sliderInput(inputId="API", label = "baseline API", value = 12, min=5, max=1000),
-                    # numericInput(inputId="R0", label = "basic reproduction number", value = 2.20, min=NA, max=NA),
-                    sliderInput(inputId="eta", label = "% of all infections that are caught outside the village (forest)", value = 50, min=0, max=100),
-                    sliderInput(inputId="covEDAT0", label = "baseline % of all villages with VMW", value = 10, min=10, max=100)
-             ),
+                    checkboxInput(inputId="MSATon", label = "switch on MSAT for imported cases", value = FALSE),
+                    sliderInput(inputId="MSATscale", label = "years to scale up MSAT ", value = 2, min=.25, max=3, step=.25), 
+                    sliderInput(inputId="covMSATi", label = "new coverage of MSAT (%)", value = 80, min=0, max=100)
+              ),
              column(3,
-                    #sliderInput(inputId="nuTr", label = "days of infectiosness after treatment ACT", value = 14, min=0, max=30), #remove
-                    #sliderInput(inputId="nuTrp", label = "days of infectiosness after treatment ACT+primaquine", value = 7, min=0, max=30), #remove
-                    sliderInput(inputId="covITN0", label = "baseline coverage of ITN (%) ", value = 60, min=0, max=90),
-                    sliderInput(inputId="covRCD0", label = "baseline coverage of RCD (%) ", value = 0, min=0, max=90),
-                    sliderInput(inputId="covIRS0", label = "baseline coverage of IRS (%) ", value = 0, min=0, max=90)
-             ),
-             column(3,
-                    #sliderInput(inputId="amp", label = "relative amplitude seasonality ", value = 0.7, min=0, max=2), #remove
-                    #sliderInput(inputId="phi", label = "phase angle seasonality ", value = 0.5, min=0, max=1), #remove
-                    sliderInput(inputId="muC", label = "imported clinical cases per 1000 population per year ", value = 5, min=0, max=10),
-                    sliderInput(inputId="muA", label = "imported super-microscopic asymtomatic infection per 1000 population per year ", value = 50, min=0, max=100),
-                    sliderInput(inputId="muU", label = "imported sub-microscopic asymtomatic infections per 1000 population per year ", value = 50, min=10, max=100)
-             ),
-             column(3,
-                    sliderInput(inputId="percfail2018", label = "% of cases failing treatment in 2018 and before ", value = 30, min=0, max=100),
-                    sliderInput(inputId="percfail2019", label = "% of cases failing treatment in 2019  ", value = 10, min=0, max=100),
-                    sliderInput(inputId="percfail2020", label = "% of cases failing treatment in 2020 and after  ", value = 20, min=0, max=100)
+                    sliderInput(inputId="MSATsensC", label = "sensitivity MSAT test (clinical) ", value = 95, min=0, max=100),
+                    sliderInput(inputId="MSATsensA", label = "sensitivity MSAT test (super-micro, asym)", value = 60, min=0, max=100),
+                    sliderInput(inputId="MSATsensU", label = "sensitivity MSAT test (sub-micro, asym)", value = 0, min=0, max=100)
              )
     ),
     tabPanel(title = strong("Biological Parameters"), #not remove
@@ -142,7 +146,10 @@ ui <- fluidPage(
   br(),
   br(),
   hr(),
-  fluidRow(h4("Legend. Black lines: baseline scenario. Red lines: model result with the selected parameter values."))
+  fluidRow(h4("          Legend")),
+  fluidRow(h4("          Grey solid line: baseline scenario. Blue solid line: elimination strategy scenario.")), 
+  fluidRow(h4("          Dark blue solid line: target baseline API. Grey dashed lines: start and end of elimination activities.")),
+  fluidRow(h4("          Red dashed line: pre-elimniation threshold (API = 1 per 1000 per year)"))
   
 )
 
@@ -150,13 +157,15 @@ server <- function(input, output) {
   output$MODEL <- renderPlot({
     # define the number of weeks to run the model
     dt<-1/12
-    startyear<-2015
+    startyear<-2010
     stopyear<-2025
     maxt<-stopyear-startyear
     times <- seq(0, maxt, by = dt)
     tsteps<-length(times)
     
-
+    # initial prevalence
+    initprev<-0.001*input$API
+    
     # ENTER COUNTERFACTUAL AND INTERVENTION SCENARIOS
     # 1 = include EDAT scaleup 1-yes, 0-no
     # 2 = include ITN scaleup 1-yes, 0-no
@@ -165,8 +174,8 @@ server <- function(input, output) {
     # 5 = include IRS scaleup 1-yes, 0-no
     # 6 = include MDA 1-yes, 0-no
     # 7 = include primaquine with ACT 
-    scenario_0<-c(0,0,0,0,0,0,0)
-    scenario_i<-c(input$EDATon,input$ITNon,input$RCDon,input$RCDcoex,input$IRSon,input$MDAon,input$primon)
+    scenario_0<-c(0,0,0,0,0,0,0,0)
+    scenario_i<-c(input$EDATon,input$ITNon,input$RCDon,input$RCDcoex,input$IRSon,input$MDAon,input$primon,input$MSATon)
     
     runGMS<-function(scenario) 
     {
@@ -182,7 +191,6 @@ server <- function(input, output) {
         
         # process indicators
         # timei = 2018,                # timing of intervention [N] #remove
-        API = input$API,
         EDATon = scenario[1],        # switch on scale up of EDAT [C]
         # EDATscale = 3,               # years to scale up EDAT [1 to 3]
         # covEDATi = 90,               # new % of all villages covered by VMW [0 to 100]
@@ -217,6 +225,7 @@ server <- function(input, output) {
         # cm_1 = 80,                   # % popultion coverage of 1st MDA round [N] 
         # cm_2 = 95,                   # % of people from 1st MDA round who receieve the 2nd [N] 
         # cm_3 = 95,                   # % of people from 2nd MDA round who receieve the 3rd [N]
+        # vacon = input$vacon,         # switch on MDA [C]
         effv_1 = 0,                  # protective efficacy of a single dose of RTS,S [N]
         effv_2 = 0,                 # protective efficacy of two doses of RTS,S [N]
         effv_3 = 0,                 # protective efficacy of three doses of RTS,S [N]
@@ -264,6 +273,12 @@ server <- function(input, output) {
         # effv_2 = input$effv_2,
         # effv_3 = input$effv_3,
         # dv = input$dv,
+        MSATon = scenario[8],
+        MSATscale = input$MSATscale,
+        covMSATi = input$covMSATi,
+        MSATsensC = input$MSATsensC,
+        MSATsensA = input$MSATsensA,
+        MSATsensU = input$MSATsensU,
         
         # setting typology parameters
         # R0 =  2.20,                  # basic reproduction number
@@ -282,7 +297,12 @@ server <- function(input, output) {
         # percfail2018 = 30,           # % of cases failing treatment in 2018 and before [0 to 100]
         # percfail2019 = 10,           # % of cases failing treatment in 2019  [0 to 100]
         # percfail2020 = 20,           # % of cases failing treatment in 2020 and after  [0 to 100]
-        R0 = input$R0,
+        bh = input$bh,                 # bites per human per year
+        epsilonh=0.23,                 # per bite probability of an infectious mosquito infecting a human
+        epsilonm=0.5,                  # per bite probability of an infectious human infecting a mosquito
+        b=365/3,                       # per mosquito rate of biting
+        deltam=365/14,                 
+        gammam=365/10,
         eta = input$eta,
         covEDAT0 = input$covEDAT0,
         #nuTr = input$nuTr,
@@ -298,6 +318,7 @@ server <- function(input, output) {
         percfail2018 = input$percfail2018,
         percfail2019 = input$percfail2019,
         percfail2020 = input$percfail2020,
+        covMSAT0=0,
         
         # biological parameters
         # omega = 2,                   # average duration of immunity (years) [N]
@@ -322,91 +343,16 @@ server <- function(input, output) {
       )
       
       
-      ############################################################################
-      ## FINDING BETA start ##
-      ############################################################################
-      
-      # initial prevalence
-      initprev<-min(1,parameters['API']/100)
       # MODEL INITIAL CONDITIONS
       # population size
       initP<-10000 
       
-      initS_0<-0.7*(1-initprev)*initP
-      initIC_0<-0.1*initprev*initP
-      initIA_0<-0.5*initprev*initP
-      initIU_0<-0.4*initprev*initP
-      initR_0<-0.3*(1-initprev)*initP
+      initS_0<-0.5*(1-initprev)*initP
+      initIC_0<-0
+      initIA_0<-initprev*initP
+      initIU_0<-0
+      initR_0<-0.5*(1-initprev)*initP
       initTr_0<-0
-      
-      eta <- parameters['eta']/100
-      mu <- 1/parameters['mu']
-      muC <- parameters['muC']/1000
-      muA <- parameters['muA']/1000
-      muU <- parameters['muU']/1000
-      nuC <- 365/parameters['nuC']
-      nuA <- 365/parameters['nuA']
-      nuU <- 365/parameters['nuU']
-      nuTr <- 365/parameters['nuTr']
-      lossd <- 365/parameters['lossd']
-      omega <- 1/parameters['omega']
-      effIRS <- parameters['effIRS']/100
-      covIRS0 <- parameters['covIRS0']/100
-      effITN <- parameters['effITN']/100
-      covITN0 <- parameters['covITN0']/100
-      rhoa <- parameters['rhoa']/100
-      rhou <- parameters['rhou']/100
-      ps <- parameters['ps']/100
-      pr <- parameters['pr']/100
-      covEDAT0 <- 0.9*parameters['covEDAT0']/100
-      percfail2018 <- parameters['percfail2018']
-      
-      nTr<- nuTr
-      
-      API <- parameters['API']
-      
-      modeleq <- function(y){
-        x<-exp(y)
-        F1 <-  x[9] - (1-(1-eta)*effIRS*covIRS0)*(1-effITN*covITN0)*x[10]*(x[2]+x[6]+rhoa*x[3]+rhou*x[4])/initP
-        F2 <- (API*initP/1000)- (ps*covEDAT0*x[9]* x[1]+pr*covEDAT0*x[9]* x[5]+pr*covEDAT0*x[9]* x[4]+pr*covEDAT0*x[9]* x[3])
-        F3 <- mu*initP-(mu+muC+muA+muU)*x[1]+omega*x[5]-x[9]*x[1]+lossd*x[7]
-        F4 <- muC*initP-(mu+muC+muA+muU)*x[2]+ps*(1-covEDAT0)*x[9]*x[1]+pr*(1-covEDAT0)*x[9]*x[5]+pr*(1-covEDAT0)*x[9]*x[4]+pr*(1-covEDAT0)*x[9]*x[3]-nuC*x[2]
-        F5 <- muA*initP-(mu+muC+muA+muU)*x[3]+(1-ps)*x[9]*x[1]+(1-pr)*x[9]*x[5]+(1-pr)*x[9]*x[4]-pr*x[9]*x[3]+nuC*x[2]-nuA*x[3]+percfail2018*nTr*x[6]
-        F6 <- muU*initP-(mu+muC+muA+muU)*x[4]-x[9]*x[4]-nuU*x[4]+nuA*x[3]
-        F7 <- -(mu+muC+muA+muU)*x[5]-omega*x[5]-x[9]*x[5]+nuU*x[4]+lossd*x[8]
-        F8 <- -(mu+muC+muA+muU)*x[6]+ps*covEDAT0*x[9]*x[1]+pr*covEDAT0*x[9]*x[5]+pr*covEDAT0*x[9]*x[4]+pr*covEDAT0*x[9]*x[3]-nTr*x[6]
-        F9 <- -(mu+muC+muA+muU)*x[7]+omega*x[8]-lossd*x[7]
-        F10 <- x[1]+ x[2]+ x[3]+ x[4]+ x[5]+ x[6]+ x[7]+ x[8] - initP
-        
-        RMS<-((F1^2)+(F2^2)+(F3^2)+(F4^2)+(F5^2)+(F6^2)+(F7^2)+(F8^2)+(F9^2)+(F10^2))^0.5
-        return(RMS)
-      }
-      
-      betaout<-max(7,min(API/10,50))
-      for (i in 1:3){
-        guess<-log(c(initS_0, initIC_0, initIA_0, initIU_0, (initR_0-5), 1, 1, 1, API/1000, betaout))
-        sum(exp(guess[1:8]))
-        out.eq <- optim(guess, modeleq, method = "BFGS",control = list(abstol=1,reltol=1e-10))
-        betaout<-(exp(out.eq$par[10]))
-        prevout <- 100*sum(exp(out.eq$par[c(2,3,4,6)]))/initP
-        initprev<-min(0.9,prevout/100)
-        initS_0<-0.7*(1-initprev)*initP
-        initIC_0<-0.1*initprev*initP
-        initIA_0<-0.5*initprev*initP
-        initIU_0<-0.4*initprev*initP
-        initR_0<-0.3*(1-initprev)*initP
-      }
-      
-      initprev<-max(0.025,min(0.9,prevout/100))
-      
-      
-      ############################################################################
-      ## FINDING BETA end ##
-      ############################################################################
-      
-      
-      
-      
       
       state <- c(Y = 0, Cinc = 0,  
                  S_0 = initS_0, IC_0 = initIC_0, IA_0 = initIA_0, IU_0 = initIU_0, R_0 = initR_0, Tr_0 = initTr_0, Sm_0 = 0, Rm_0 = 0,
@@ -420,7 +366,7 @@ server <- function(input, output) {
       {
         with(as.list(c(state, parameters)),
              {
-               #convert percentages to proportions
+               #convert %s to proportions
                covEDATi<-0.9*covEDATi/100
                covEDAT0<-0.9*covEDAT0/100
                covITNi<-covITNi/100
@@ -434,6 +380,12 @@ server <- function(input, output) {
                RCDsensC<-RCDsensC/100
                RCDsensA<-RCDsensA/100
                RCDsensU<-RCDsensU/100
+               covMSATi<-covMSATi/100
+               covMSAT0<-covMSAT0/100
+               MSATsensC<-MSATsensC/100
+               MSATsensA<-MSATsensA/100
+               MSATsensU<-MSATsensU/100
+               
                clustRCD<-clustRCD/100
                clustRCDcoex<-clustRCDcoex/100
                cm_1<-cm_1/100
@@ -487,19 +439,21 @@ server <- function(input, output) {
                seas<-1+amp*cos(2*3.14159*(Y-phi))
                nu <- 1/((1/nuC)+(1/nuA)+(1/nuU))
                # beta<-R0*(mu+nu)*seas
-               beta<-betaout*seas
+               beta<-seas*b*epsilonh*epsilonm*bh/((bh*epsilonh+deltam)*(gammam/(gammam+deltam)))
                mu_out <- mu+muC+muA+muU
                
                timei<-timei-startyear
                
-               wsiEDAT<-(1-(Y<=timei))*(Y<=(timei+EDATscale))*((Y-timei)/EDATscale)+1*(Y>(timei+EDATscale))
-               wsiITN<-(1-(Y<=timei))*(Y<=(timei+ITNscale))*((Y-timei)/ITNscale)+1*(Y>(timei+ITNscale))
-               wsiRCD<-(1-(Y<=timei))*(Y<=(timei+RCDscale))*((Y-timei)/RCDscale)+1*(Y>(timei+RCDscale))
-               wsiIRS<-(1-(Y<=timei))*(Y<=(timei+IRSscale))*((Y-timei)/IRSscale)+1*(Y>(timei+IRSscale))
+               wsiEDAT<-(1-(Y<=timei))*(Y<=(timei+EDATscale))*((Y-timei)/EDATscale)+1*(Y>=(timei+EDATscale))
+               wsiITN<-(1-(Y<=timei))*(Y<=(timei+ITNscale))*((Y-timei)/ITNscale)+1*(Y>=(timei+ITNscale))
+               wsiRCD<-(1-(Y<=timei))*(Y<=(timei+RCDscale))*((Y-timei)/RCDscale)+1*(Y>=(timei+RCDscale))
+               wsiIRS<-(1-(Y<=timei))*(Y<=(timei+IRSscale))*((Y-timei)/IRSscale)+1*(Y>=(timei+IRSscale))
+               wsiMSAT<-(1-(Y<=timei))*(Y<=(timei+MSATscale))*((Y-timei)/MSATscale)+1*(Y>=(timei+MSATscale))
                covEDAT<-(1-wsiEDAT)*covEDAT0+wsiEDAT*covEDATi
                covITN<-(1-wsiITN)*covITN0+wsiITN*covITNi
                covRCD<-(1-wsiRCD)*covRCD0+wsiRCD*covRCDi
                covIRS<-(1-wsiIRS)*covIRS0+wsiIRS*covIRSi
+               covMSAT<-(1-wsiMSAT)*covMSAT0+wsiMSAT*covMSATi
                
                nuTr<- primon*((Y<3)*nTr+(Y>3)*nTrp)+(1-primon)*nTr
                lossd<-1/((1/lossd)-(1/nuTr))
@@ -518,12 +472,13 @@ server <- function(input, output) {
                
                tau <- covEDAT
                
+               #fail <- (Y<2019)*(percfail2018/100)+(Y>=2019)*(Y<2020)*(percfail2019/100)+(Y>=2020)*(percfail2020/100)
                fail <- ((Y+startyear)<2019)*(percfail2018/100)+((Y+startyear)>=2019)*((Y+startyear)<2020)*(percfail2019/100)+((Y+startyear)>=2020)*(percfail2020/100)
                
                
                # set up treatment rate for RCD
                incm<-ps*tau*lam*sS+pr*tau*lam*sR+pr*tau*lam*sIU+pr*tau*lam*sIA
-               #           rateRCD<-((1-eta)*(1+(1-RCDcoex)*clustRCD)+eta*(1+RCDcoex*clustRCDcoex))*(effRCD/P)*incm*covRCD*dRCD
+               #rateRCD<-((1-eta)*(1+(1-RCDcoex)*clustRCD)+eta*(1+RCDcoex*clustRCDcoex))*(effRCD/P)*incm*covRCD*dRCD
                rateRCD<-((1-eta)*(1+(1-RCDcoex)*clustRCD)+eta*(1+RCDcoex*clustRCDcoex))*(effRCD/P)*incm*covRCD
                tauRCD<-1/((1/rateRCD)+(1/nuTr))
                
@@ -541,6 +496,9 @@ server <- function(input, output) {
                          +tauRCD*(RCDsensC*sIC+RCDsensA*sIA+RCDsensU*sIU)
                )
                
+               muC <- (1-MSATon*MSATsensC*covMSAT)*muC
+               muA <- (1-MSATon*MSATsensA*covMSAT)*muA
+               muU <- (1-MSATon*MSATsensU*covMSAT)*muU
                
                
                # rate of change
@@ -614,7 +572,7 @@ server <- function(input, output) {
       clinmonth <- tci
       clinmonth[1] <- 0
       clinmonth[2:length(times)] <- 1000*(tci[2:length(times)] - tci[1:(length(times)-1)])/pop[2:length(times)]
-      # percentage prevalence
+      # % prevalence
       prevalence <- 100*rowSums(out[,iprev])/pop
       
       GMSout<-matrix(NA,nrow=length(times),ncol=3)
@@ -633,18 +591,28 @@ server <- function(input, output) {
     clinmonth<-cbind(GMSout0[,2],GMSouti[,2])
     prevalence<-cbind(GMSout0[,3],GMSouti[,3])
     
+    runin<-(2016-startyear)/dt
+    
+    finclin<-max(clinmonth[(runin:length(clinmonth[,1])),])
+    finprev<-max(prevalence[(runin:length(prevalence[,1])),])
+    
     
     # PLOTTING
     par(mfrow=c(1,2))
-    maxy<-max(clinmonth,prevalence)+1
-    matplot(times,clinmonth, type='l',lty=1,xlab = "Time",ylab="incidence per 1000 per month",main="Confirmed cases per month per 1000 population",ylim=c(0,maxy),lwd=2)
+    maxy<-max(finclin,input$API/12)
+    plot(times[(runin:length(clinmonth[,1]))],clinmonth[runin:length(clinmonth[,1]),1], type='l',lty=1,col="dark grey",xlab = "Time",ylab="incidence per 1000 per month",main="Confirmed cases per month per 1000 population",ylim=c(0,maxy),lwd=2)
+    lines(times[(runin:length(clinmonth[,1]))],clinmonth[runin:length(clinmonth[,1]),2], type='l',lty=1,col="blue",xlab = "Time",ylab="incidence per 1000 per month",main="Confirmed cases per month per 1000 population",ylim=c(0,maxy),lwd=2)
     lines(c(2018,2018),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
     lines(c(2021,2021),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
-    abline(h=1/12,col="dark grey",lty=3,lwd=2)
-    maxy<-max(clinmonth,prevalence)+1
-    matplot(times,prevalence, type='l',lty=1,xlab = "Time",ylab="% prevalence",main="Predicted population prevalence by U-PCR",ylim=c(0,maxy),lwd=2)
+    abline(h=input$API/12,col="dark blue",lty=1,lwd=1)
+    abline(h=1/12,col="red",lty=3,lwd=3)
+    maxy<-finprev
+    plot(times[(runin:length(prevalence[,1]))],prevalence[(runin:length(prevalence[,1])),1], type='l',lty=1,col="dark grey",xlab = "Time",ylab="% prevalence",main="Predicted population prevalence by U-PCR",ylim=c(0,maxy),lwd=2)
+    lines(times[(runin:length(prevalence[,1]))],prevalence[(runin:length(prevalence[,1])),2], type='l',lty=1,col="blue",xlab = "Time",ylab="% prevalence",main="Predicted population prevalence by U-PCR",ylim=c(0,maxy),lwd=2)
     lines(c(2018,2018),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
     lines(c(2021,2021),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
+    
+    
   })
 }
 
