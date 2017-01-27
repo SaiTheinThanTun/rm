@@ -1,0 +1,31 @@
+
+•Relationship between human biting rate and prevalence, incidence etc
+
+
+•Relationship between incidence and prevalence for different scenarios
+Dan can direct me to some database on incidence, others also coming out.
+
+
+•Have we got the imported cases right?
+•Have we got the bites outside the village right?
+WORKING ON IT
+
+•How to model RCD. Can we test the impact and compare it to data from the field?
+
+
+•How about the impact of installing an MP?
+MOST IMPORT THING
+
+
+•How about the impact of MDA for different baseline scenarios?
+
+
+•The relative number of clinical, asymptomatic RDT positive and asymptomatic RDT negatives
+
+
+
+•The relative infectiousness of each infection type per bite
+PARASITE VS GAMETOCYTE 
+
+•All the other parameters
+•Anything else we can think of
