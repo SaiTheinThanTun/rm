@@ -124,6 +124,7 @@ ui <- fluidPage(
              )
     ),
     tabPanel(title= strong("Download"),
+             downloadButton("downloadTable", "Download current values of parameters"),
              downloadButton("downloadplot","Download high resolution figure"))
   ),
   fluidRow(plotOutput(outputId = "MODEL")),
@@ -638,6 +639,19 @@ server <- function(input, output) {
       png(filename=file, height= 1600, width=4800, units= "px", res=300) #if(...=="png"){png(file)} else if(...=="pdf"){pdf(file)}
       plotR()
       dev.off()
+    })
+  
+  tableContentR <- reactive({
+    tmp <- c(scenario_iR(),parametersR())
+    tmp2 <- cbind(names(tmp),tmp)
+    colnames(tmp2) <- c("Variable","Value")
+    tmp2
+    })
+  
+  output$downloadTable <- downloadHandler(
+    filename = function(){paste('MalMod_',gsub("\\:","",Sys.time()),'.csv',sep='')},
+    content = function(file) {
+      write.csv(tableContentR(), file, row.names = FALSE)
     })
 }
 
