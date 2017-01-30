@@ -458,7 +458,8 @@ server <- function(input, output) {
                covIRS<-(1-wsiIRS)*covIRS0+wsiIRS*covIRSi
                covMSAT<-(1-wsiMSAT)*covMSAT0+wsiMSAT*covMSATi
                
-               nuTr<- primon*((Y<3)*nTr+(Y>3)*nTrp)+(1-primon)*nTr
+               # nuTr<- primon*((Y<3)*nTr+(Y>3)*nTrp)+(1-primon)*nTr
+               nuTr<- primon*((Y<timei)*nTr+(Y>timei)*nTrp)+(1-primon)*nTr
                lossd<-1/((1/lossd)-(1/nuTr))
                
                lam <- (1-(1-eta)*effIRS*covIRS)*(1-effITN*covITN)*beta*(sIC+sTr+rhoa*sIA+rhou*sIU)/P
