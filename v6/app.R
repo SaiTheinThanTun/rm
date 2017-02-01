@@ -39,40 +39,49 @@ ui <- fluidPage(
     ),
     
     tabPanel(title = strong("New Interventions"),
-             column(3,
+             column(4,
+                    wellPanel(
+                    h3("Early Diagnosis and Treatment"),
                     #sliderInput(inputId="timei", label = "timing of intervention ", value = 2018, min=2017, max=2020),
                     checkboxInput(inputId="EDATon", label = "switch on scale up of EDAT ", value = FALSE),
                     checkboxInput(inputId="primon", label = "ACT+primaquine for EDAT and MDA ", value = FALSE), #under EDAT checkbox
                     sliderInput(inputId="EDATscale", label = "years to scale up EDAT ", value = 1, min=.25, max=3, step=.25),
-                    sliderInput(inputId="covEDATi", label = "new % of all clinical cases treated", value = 90, min=0, max=100),
-                    #hr(),
+                    sliderInput(inputId="covEDATi", label = "new % of all clinical cases treated", value = 90, min=0, max=100)
+                    ), wellPanel(
+                    h3("Insecticide Treated Net"),
                     checkboxInput(inputId="ITNon", label = "switch on scale up of ITN ", value = FALSE),
                     sliderInput(inputId="ITNscale", label = "years to scale up ITN ", value = 0.5, min=.25, max=3, step=.25),
                     sliderInput(inputId="covITNi", label = "new coverage of ITN (%) ", value = 90, min=0, max=90)
                     # sliderInput(inputId="effITN", label = "new % of infections averted due to owenership of ITN ", value = 30, min=0, max=50)
+                    )
                     
              ),
-             column(3,
+             column(4, wellPanel(
+               h3("Reactive Case Detection"),
                     checkboxInput(inputId="RCDon", label = "switch on scale up of RCD", value = FALSE),
                     sliderInput(inputId="RCDscale", label = "years to scale up RCD ", value = 2, min=.25, max=3, step=.25), #.25 timesteps
                     sliderInput(inputId="covRCDi", label = "new coverage of RCD (%)", value = 50, min=0, max=100),
                     sliderInput(inputId="effRCD", label = "no. people screened per clinical case", value = 20, min=0, max=1000),
+               radioButtons(inputId="RCDcoex", label = "RCD Search Type: ", choices = c("Radial search"=0, "Co-exposure search"=1), selected = 0, inline=TRUE),
+               sliderInput(inputId="clustRCD", label = "% increased likelihood of finding cases with radial search", value = 20, min=0, max=100),
+               sliderInput(inputId="clustRCDcoex", label = "% increased likelihood of finding cases with co-exposure search", value = 90, min=0, max=100)
+             )
+             ),
+             column(4, wellPanel(
+               h3("Sensitivity of RCD"),
                     sliderInput(inputId="RCDsensC", label = "sensitivity RCD test (clinical) ", value = 95, min=0, max=100),
                     sliderInput(inputId="RCDsensA", label = "sensitivity RCD test (micro detectable, asym)", value = 60, min=0, max=100),
                     sliderInput(inputId="RCDsensU", label = "sensitivity RCD test (micro undetectable, asym)", value = 0, min=0, max=100)
              ),
-             column(3,
-                   sliderInput(inputId="clustRCD", label = "% increased likelihood of finding cases with radial search", value = 20, min=0, max=100),
-                    checkboxInput(inputId="RCDcoex", label = "change RCD from radial serch to co-exposure search   ", value = FALSE),
-                    sliderInput(inputId="clustRCDcoex", label = "% increased likelihood of finding cases with coexposure search", value = 90, min=0, max=100)
-                    
-             ),
-             column(3,
+             wellPanel(
+                       h3("Indoor Residual Spray"),
                     checkboxInput(inputId="IRSon", label = "switch on scale up of IRS ", value = FALSE),
                     sliderInput(inputId="IRSscale", label = "years to scale up IRS ", value = 1, min=.25, max=3, step=.25),
                     sliderInput(inputId="covIRSi", label = "new coverage of IRS (%) ", value = 90, min=0, max=90)
                     # sliderInput(inputId="effIRS", label = "% reduction in biting rate due to IRS ", value = 15, min=0, max=25)
              )
+             )
+             
     ),
     tabPanel(title = strong("Focal MDA Indicators"),
              column(3,
@@ -94,7 +103,7 @@ ui <- fluidPage(
                     sliderInput(inputId="cm_3", label = "% of 2nd MDA round population to get 3rd", value = 95, min=0, max=100)
              )
     ),
-    tabPanel(title = strong("Imported malaria MSAT indicators"),
+    tabPanel(title = strong("Imported Malaria MSAT Indicators"),
              column(3,
                     checkboxInput(inputId="MSATon", label = "switch on MSAT for imported cases", value = FALSE),
                     sliderInput(inputId="MSATscale", label = "years to scale up MSAT ", value = 2, min=.25, max=3, step=.25), 
@@ -459,7 +468,7 @@ server <- function(input, output) {
   scenario_iR<-reactive(c(EDATon = input$EDATon,
                           ITNon = input$ITNon,
                           RCDon = input$RCDon,
-                          RCDcoex = input$RCDcoex,
+                          RCDcoex = as.numeric(input$RCDcoex),
                           IRSon = input$IRSon,
                           MDAon = input$MDAon,
                           primon = input$primon,
@@ -487,11 +496,11 @@ server <- function(input, output) {
     RCDscale = input$RCDscale,
     covRCDi = input$covRCDi,
     effRCD = input$effRCD,
+    clustRCD = input$clustRCD,
+    clustRCDcoex = input$clustRCDcoex,
     RCDsensC = input$RCDsensC,
     RCDsensA = input$RCDsensA,
     RCDsensU = input$RCDsensU,
-    clustRCD = input$clustRCD,
-    clustRCDcoex = input$clustRCDcoex,
     IRSscale = input$IRSscale,
     covIRSi = input$covIRSi,
     
