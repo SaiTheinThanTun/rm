@@ -1,10 +1,11 @@
-name: MalMod
+name: malmod
+title: MalMod
 account: saitheinthantun
 server: shinyapps.io
 appId: 152632
-bundleId: 692650
+bundleId: 697422
 url: https://saitheinthantun.shinyapps.io/malmod/
-when: 1485507439.16141
+when: 1485960852.12615
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: RAI_strategydesigntool_usermanual_27012017_table.docx|to do.txt
+ignoredFiles: MalMod Param descriptions.xlsx|meeting with Dan.txt|RAI_strategydesigntool_usermanual_01022017_a.docx|RAI_strategydesigntool_usermanual_27012017_table.docx|RAIappscreenshots.pptx|to do.txt
