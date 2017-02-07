@@ -116,6 +116,13 @@ ui <- fluidPage(
              br(),
              downloadButton("downloadTable", "Download current values of parameters"),
              downloadButton("downloadplot","Download high resolution figure")),
+    tabPanel(title= strong("Restore your parameters"),
+             wellPanel(
+               fileInput(inputId = "file", label ="Your input file:", accept = c(".csv"))
+             )
+             #,
+             #tableOutput(outputId = "table")
+    ),
     tabPanel(title=strong("User Manual & Help"),
              br(),
              tags$ul(tags$li(strong(a(href="https://www.dropbox.com/s/g9b96n4lki1r2l6/RAI_strategydesigntool_usermanual_01022017.docx?dl=0", "Download User Manual")))),
@@ -279,6 +286,9 @@ runGMS<-function(initprev, scenario, param)
            eta<-eta/100
            # convert time scales
            dm<-dm/12
+           tm_1 <- 2018+(tm_1/12) #new
+           tm_2 <- 2018+(tm_2/12) #new
+           tm_3 <- 2018+(tm_3/12) #new
            # convert durations to rates
            lossd<-365/lossd
            omega<-1/omega
@@ -467,7 +477,7 @@ runGMS<-function(initprev, scenario, param)
 }
 
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   scenario_0<-c(EDATon = 0,
                 ITNon = 0,
                 RCDon = 0,
@@ -519,9 +529,9 @@ server <- function(input, output) {
     cmda_1 = input$cmda_1,
     cmda_2 = input$cmda_2,
     cmda_3 = input$cmda_3,
-    tm_1 = 2018+(input$tm_1/12),          # timing of 1st round [2018 to 2021 - 1 month steps]
-    tm_2 = 2018+(input$tm_2/12),          # timing of 2nd round [2018+(1/12) to 2021 - 1 month steps]
-    tm_3 = 2018+(input$tm_3/12),          # timing of 3rd round [2018+(2/12) to 2021 - 1 month steps]
+    tm_1 = input$tm_1,          # timing of 1st round [2018 to 2021 - 1 month steps]
+    tm_2 = input$tm_2,          # timing of 2nd round [2018+(1/12) to 2021 - 1 month steps]
+    tm_3 = input$tm_3,          # timing of 3rd round [2018+(2/12) to 2021 - 1 month steps]
     dm = input$dm,
     lossd = input$lossd,
     cm_1 = input$cm_1,
@@ -534,6 +544,69 @@ server <- function(input, output) {
     MSATsensA = input$MSATsensA,
     MSATsensU = input$MSATsensU
   ))
+  
+  #getting back previous parameters
+  data <- reactive({read.csv(input$file$datapath)})
+  datavalue <- reactive(data()[,2])
+  observeEvent(input$file,{
+    updateCheckboxInput(session, "EDATon", value = datavalue()[1])
+    updateCheckboxInput(session, "ITNon", value = datavalue()[2])
+    updateCheckboxInput(session, "RCDon", value = datavalue()[3])
+    updateRadioButtons(session, "RCDcoex", selected = datavalue()[4])
+    updateCheckboxInput(session, "IRSon", value = datavalue()[5])
+    updateCheckboxInput(session, "MDAon", value = datavalue()[6])
+    updateCheckboxInput(session, "primon", value = datavalue()[7])
+    updateCheckboxInput(session, "MSATon", value = datavalue()[8])
+    
+    updateSliderInput(session, "API", value = datavalue()[9])
+    
+    updateSliderInput(session, "bh", value = datavalue()[10])
+    updateSliderInput(session, "eta", value = datavalue()[11])
+    updateSliderInput(session, "covEDAT0", value = datavalue()[12])
+    updateSliderInput(session, "covITN0", value = datavalue()[13])
+    updateSliderInput(session, "effITN", value = datavalue()[14])
+    updateSliderInput(session, "covIRS0", value = datavalue()[15])
+    updateSliderInput(session, "effIRS", value = datavalue()[16])
+    updateSliderInput(session, "muC", value = datavalue()[17])
+    updateSliderInput(session, "muA", value = datavalue()[18])
+    updateSliderInput(session, "muU", value = datavalue()[19])
+    updateSliderInput(session, "percfail2018", value = datavalue()[20])
+    updateSliderInput(session, "percfail2019", value = datavalue()[21])
+    updateSliderInput(session, "percfail2020", value = datavalue()[22])
+    updateSliderInput(session, "EDATscale", value = datavalue()[23])
+    updateSliderInput(session, "covEDATi", value = datavalue()[24])
+    updateSliderInput(session, "ITNscale", value = datavalue()[25])
+    updateSliderInput(session, "covITNi", value = datavalue()[26])
+    updateSliderInput(session, "RCDscale", value = datavalue()[27])
+    updateSliderInput(session, "covRCDi", value = datavalue()[28])
+    updateSliderInput(session, "effRCD", value = datavalue()[29])
+    updateSliderInput(session, "clustRCD", value = datavalue()[30])
+    updateSliderInput(session, "clustRCDcoex", value = datavalue()[31])
+    updateSliderInput(session, "RCDsensC", value = datavalue()[32])
+    updateSliderInput(session, "RCDsensA", value = datavalue()[33])
+    updateSliderInput(session, "RCDsensU", value = datavalue()[34])
+    updateSliderInput(session, "IRSscale", value = datavalue()[35])
+    updateSliderInput(session, "covIRSi", value = datavalue()[36])
+    updateSliderInput(session, "cmda_1", value = datavalue()[37])
+    updateSliderInput(session, "cmda_2", value = datavalue()[38])
+    updateSliderInput(session, "cmda_3", value = datavalue()[39])
+    updateSliderInput(session, "tm_1", value = datavalue()[40])
+    updateSliderInput(session, "tm_2", value = datavalue()[41])
+    updateSliderInput(session, "tm_3", value = datavalue()[42])
+    updateSliderInput(session, "dm", value = datavalue()[43])
+    updateSliderInput(session, "lossd", value = datavalue()[44])
+    updateSliderInput(session, "cm_1", value = datavalue()[45])
+    updateSliderInput(session, "cm_2", value = datavalue()[46])
+    updateSliderInput(session, "cm_3", value = datavalue()[47])
+    updateSliderInput(session, "MSATscale", value = datavalue()[48])
+    updateSliderInput(session, "covMSATi", value = datavalue()[49])
+    updateSliderInput(session, "MSATsensC", value = datavalue()[50])
+    updateSliderInput(session, "MSATsensA", value = datavalue()[51])
+    updateSliderInput(session, "MSATsensU", value = datavalue()[52])
+  })
+  
+  #testing
+  #output$table <- renderTable(datavalue()[1:8])
   
   # initial prevalence
   initprevR <- reactive(0.001*input$API)
