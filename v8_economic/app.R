@@ -175,7 +175,8 @@ ui <- fluidPage(
   fluidRow(h4("          Legend")),
   fluidRow(h4("          Grey solid line: baseline scenario. Blue solid line: elimination strategy scenario.")), 
   fluidRow(h4("          Dark blue solid line: target baseline API. Grey dashed lines: start and end of elimination activities.")),
-  fluidRow(h4("          Red dashed line: pre-elimination threshold (API = 1 per 1000 per year)"))
+  fluidRow(h4("          Red dashed line: pre-elimination threshold (API = 1 per 1000 per year)")),
+  tableOutput("incidenceHead")
   
 )
 
@@ -688,6 +689,11 @@ server <- function(input, output, session) {
     content = function(file) {
       write.csv(tableContentR(), file, row.names = FALSE)
     })
+  
+  #economic part
+  output$incidenceHead <- renderTable({
+    sum(GMSoutiR()[,2])
+  })
 }
 
 shinyApp(ui = ui, server = server)
