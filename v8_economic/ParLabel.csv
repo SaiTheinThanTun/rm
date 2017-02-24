@@ -26,9 +26,9 @@ years to scale up ITN,year
 new coverage of ITN (%),%
 years to scale up RCD,year
 new coverage of RCD (%),%
-no. people screened per clinical case,people
-% increased likelihood of finding cases with radial search,%
-% increased likelihood of finding cases with co-exposure search,%
+reaction time,weeks
+added value of radial targetting,%
+added value of co-exposure targetting,%
 sensitivity RCD test (clinical),%
 "sensitivity RCD test (super-micro, asym)",%
 "sensitivity RCD test (sub-micro, asym)",%
@@ -50,3 +50,5 @@ new coverage of MSAT (%),%
 sensitivity MSAT test (clinical),%
 "sensitivity MSAT test (super-micro, asym)",%
 "sensitivity MSAT test (sub-micro, asym)",%
+radius for radial search,meters
+sample size for coexposure search,% of village

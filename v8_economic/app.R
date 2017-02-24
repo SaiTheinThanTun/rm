@@ -533,9 +533,9 @@ server <- function(input, output, session) {
     RCDscale = input$RCDscale,
     covRCDi = input$covRCDi,
     delayRCD = input$delayRCD,
-    RCDrad = input$RCDrad,
+    #RCDrad = input$RCDrad,
     clustRCDrad = input$clustRCDrad,
-    RCDs = input$RCDs,
+    #RCDs = input$RCDs,
     clustRCDcoex = input$clustRCDcoex,
     RCDsensC = input$RCDsensC,
     RCDsensA = input$RCDsensA,
@@ -559,7 +559,10 @@ server <- function(input, output, session) {
     covMSATi = input$covMSATi,
     MSATsensC = input$MSATsensC,
     MSATsensA = input$MSATsensA,
-    MSATsensU = input$MSATsensU
+    MSATsensU = input$MSATsensU,
+    
+    RCDrad = input$RCDrad,
+    RCDs = input$RCDs
   ))
   
   #getting back previous parameters
@@ -697,8 +700,8 @@ server <- function(input, output, session) {
   
   tableContentR <- reactive({
     tmp <- c(scenario_iR(), input$API, parametersR())
-    tmp2 <- cbind(ParLabel[,1], tmp, ParLabel[,2])
-    colnames(tmp2) <- c("Name","Value","Unit")
+    tmp2 <- cbind(ParLabel[,1], tmp, ParLabel[,2], names(tmp))
+    colnames(tmp2) <- c("Name","Value","Unit","VarName")
     tmp2
   })
   
