@@ -11,7 +11,7 @@ ui <- fluidPage(
     tabPanel(title = strong("Typology Parameters"),
              column(3,
                     sliderInput(inputId="API", label = "baseline API", value = 2.5, min=1, max=100,step=0.5),
-                    sliderInput(inputId="bh", label = "number of mosquito bites per human per day (average)", value = 4, min=0, max=30,step=1),
+                    sliderInput(inputId="bh", label = "number of mosquito bites per human per day (average)", value = 7, min=0, max=30,step=1),
                     sliderInput(inputId="eta", label = "% of all infections that are caught outside the village (forest)", value = 50, min=0, max=100,step=10),
                     sliderInput(inputId="covEDAT0", label = "baseline % of all clinical cases treated", value = 30, min=0, max=100)
              ),
@@ -26,8 +26,8 @@ ui <- fluidPage(
              ),
              column(3,
                     sliderInput(inputId="muC", label = "imported clinical cases per 1000 population per year ", value = 1, min=0, max=10,step=1),
-                    sliderInput(inputId="muA", label = "imported asymptomatic microscopically detectable carriers per 1000 population per year ", value = 10, min=0, max=100,step=1),
-                    sliderInput(inputId="muU", label = "imported asymptomatic microscopically undetectable carriers per 1000 population per year ", value = 10, min=0, max=100,step=1)
+                    sliderInput(inputId="muA", label = "imported asymptomatic microscopically detectable carriers per 1000 population per year ", value = 1, min=0, max=100,step=1),
+                    sliderInput(inputId="muU", label = "imported asymptomatic microscopically undetectable carriers per 1000 population per year ", value = 1, min=0, max=100,step=1)
              ),
              column(3,
                     sliderInput(inputId="percfail2018", label = "% of cases failing treatment in 2018 and before ", value = 30, min=0, max=100,step=5),
@@ -53,15 +53,17 @@ ui <- fluidPage(
                     )
                     
              ),
-             column(4, wellPanel(
+              column(4, wellPanel(
                h3("Reactive Case Detection"),
-                    checkboxInput(inputId="RCDon", label = "switch on scale up of RCD", value = FALSE),
-                    sliderInput(inputId="RCDscale", label = "years to scale up RCD ", value = 2, min=.25, max=3, step=.25), #.25 timesteps
-                    sliderInput(inputId="covRCDi", label = "new coverage of RCD (%)", value = 50, min=0, max=100,step=10),
-                    sliderInput(inputId="effRCD", label = "no. people screened per clinical case", value = 20, min=0, max=1000,step=5),
+               checkboxInput(inputId="RCDon", label = "switch on scale up of RCD", value = FALSE),
+               sliderInput(inputId="RCDscale", label = "years to scale up RCD ", value = 2, min=.25, max=3, step=.25), #.25 timesteps
+               sliderInput(inputId="covRCDi", label = "new coverage of RCD (%)", value = 50, min=0, max=100,step=10),
+               sliderInput(inputId="delayRCD", label = "reaction time (weeks)", value = 4, min=1, max=8,step=1),
                radioButtons(inputId="RCDcoex", label = "RCD Search Type: ", choices = c("Radial search"=0, "Co-exposure search"=1), selected = 0, inline=TRUE),
-               sliderInput(inputId="clustRCD", label = "% increased likelihood of finding cases with radial search", value = 20, min=0, max=100,step=10),
-               sliderInput(inputId="clustRCDcoex", label = "% increased likelihood of finding cases with co-exposure search", value = 90, min=0, max=100,step=10)
+               sliderInput(inputId="RCDrad", label = "radius for radial search (m)", value = 5, min=5, max=20,step=1),
+               sliderInput(inputId="clustRCDrad", label = "added value of radial targetting (%)", value = 15, min=0, max=50,step=5),
+               sliderInput(inputId="RCDs", label = "sample size for coexposure search (% of village)", value = 5, min=1, max=10,step=1),
+               sliderInput(inputId="clustRCDcoex", label = "added value of co-exposure targetting (%)", value = 20, min=0, max=50,step=5)
              )
              ),
              column(4, wellPanel(
@@ -175,8 +177,7 @@ ui <- fluidPage(
   fluidRow(h4("          Legend")),
   fluidRow(h4("          Grey solid line: baseline scenario. Blue solid line: elimination strategy scenario.")), 
   fluidRow(h4("          Dark blue solid line: target baseline API. Grey dashed lines: start and end of elimination activities.")),
-  fluidRow(h4("          Red dashed line: pre-elimination threshold (API = 1 per 1000 per year)")),
-  tableOutput("incidenceHead")
+  fluidRow(h4("          Red dashed line: pre-elimination threshold (API = 1 per 1000 per year)"))
   
 )
 
@@ -212,6 +213,10 @@ runGMS<-function(initprev, scenario, param)
                   deltam=365/14,                 
                   gammam=365/10,
                   covRCD0 = 0,
+                  kRCD = 0.032,                
+                  cRCD = 3.5,
+                  muRCDw=4,
+                  sdRCDw=4,
                   covMSAT0=0,
                   omega = 2,                   # average duration of immunity (years) [N]
                   nuC = 9,                     # days of symptoms in the absence of treatment [N]
@@ -260,6 +265,7 @@ runGMS<-function(initprev, scenario, param)
            effIRS <- effIRS/100
            covRCDi<-covRCDi/100
            covRCD0<-covRCD0/100
+           RCDs<-RCDs/100
            RCDsensC<-RCDsensC/100
            RCDsensA<-RCDsensA/100
            RCDsensU<-RCDsensU/100
@@ -269,7 +275,7 @@ runGMS<-function(initprev, scenario, param)
            MSATsensA<-MSATsensA/100
            MSATsensU<-MSATsensU/100
            
-           clustRCD<-clustRCD/100
+           clustRCDrad<-clustRCDrad/100
            clustRCDcoex<-clustRCDcoex/100
            cm_1<-cm_1/100
            cm_2<-cm_2/100
@@ -296,6 +302,7 @@ runGMS<-function(initprev, scenario, param)
            nuC<-365/nuC
            nuA<-365/nuA
            nuU<-365/nuU
+           nuRCD<- 52/delayRCD
            mu<-1/mu
            nTr<-365/nuTr
            nTrp<-365/nuTrp
@@ -362,8 +369,14 @@ runGMS<-function(initprev, scenario, param)
            
            # set up treatment rate for RCD
            incm<-ps*tau*lam*sS+pr*tau*lam*sR+pr*tau*lam*sIU+pr*tau*lam*sIA
-           rateRCD<-((1-eta)*(1+(1-RCDcoex)*clustRCD)+eta*(1+RCDcoex*clustRCDcoex))*(effRCD/P)*incm*covRCD
-           tauRCD<-1/((1/rateRCD)+(1/nuTr))
+#           rateRCD<-((1-eta)*(1+(1-RCDcoex)*clustRCD)+eta*(1+RCDcoex*clustRCDcoex))*(effRCD/P)*incm*covRCD
+           propRCD<-(1-RCDcoex)*(1-exp(-kRCD*(RCDrad-cRCD)))+RCDcoex*RCDs
+           fRCD<-dnorm(delayRCD, mean = muRCDw, sd = sdRCDw, log = FALSE)/dnorm(muRCDw, mean = muRCDw, sd = sdRCDw, log = FALSE)
+           avrad<-clustRCDrad*exp(-kRCD*RCDrad)
+           avcoex<-clustRCDcoex*(1-RCDs)
+           rateRCD<-RCDon*nuRCD*covRCD*incm*(propRCD+fRCD*((1-RCDcoex)*(1-eta)*avrad+RCDcoex*avcoex))
+#           tauRCD<-1/((1/rateRCD)+(1/nuTr))
+           tauRCD<-rateRCD
            
            
            # MDA and RTS,S rounds
@@ -519,8 +532,10 @@ server <- function(input, output, session) {
     covITNi = input$covITNi,
     RCDscale = input$RCDscale,
     covRCDi = input$covRCDi,
-    effRCD = input$effRCD,
-    clustRCD = input$clustRCD,
+    delayRCD = input$delayRCD,
+    RCDrad = input$RCDrad,
+    clustRCDrad = input$clustRCDrad,
+    RCDs = input$RCDs,
     clustRCDcoex = input$clustRCDcoex,
     RCDsensC = input$RCDsensC,
     RCDsensA = input$RCDsensA,
@@ -581,8 +596,8 @@ server <- function(input, output, session) {
     updateSliderInput(session, "covITNi", value = datavalue()[26])
     updateSliderInput(session, "RCDscale", value = datavalue()[27])
     updateSliderInput(session, "covRCDi", value = datavalue()[28])
-    updateSliderInput(session, "effRCD", value = datavalue()[29])
-    updateSliderInput(session, "clustRCD", value = datavalue()[30])
+    updateSliderInput(session, "delayRCD", value = datavalue()[29])
+    updateSliderInput(session, "clustRCDrad", value = datavalue()[30])
     updateSliderInput(session, "clustRCDcoex", value = datavalue()[31])
     updateSliderInput(session, "RCDsensC", value = datavalue()[32])
     updateSliderInput(session, "RCDsensA", value = datavalue()[33])
@@ -605,6 +620,9 @@ server <- function(input, output, session) {
     updateSliderInput(session, "MSATsensC", value = datavalue()[50])
     updateSliderInput(session, "MSATsensA", value = datavalue()[51])
     updateSliderInput(session, "MSATsensU", value = datavalue()[52])
+    updateSliderInput(session, "RCDrad", value = datavalue()[53])
+    updateSliderInput(session, "RCDs", value = datavalue()[54])
+    
   })
   
   #testing
@@ -689,11 +707,6 @@ server <- function(input, output, session) {
     content = function(file) {
       write.csv(tableContentR(), file, row.names = FALSE)
     })
-  
-  #economic part
-  output$incidenceHead <- renderTable({
-    sum(GMSoutiR()[,2])
-  })
 }
 
 shinyApp(ui = ui, server = server)

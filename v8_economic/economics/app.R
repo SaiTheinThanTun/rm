@@ -48,30 +48,65 @@ StaffType_CE   <- c(3,0,0,0,0,0,0,0,0,0)
 StaffType_qPCR <- c(2,0,1,0,0,0,0,0,1,0)
 StaffType_MDA  <- c(2,1,1,0,0,0,0,0,0,0)
 StaffType_ITN  <- c(1,1,0,0,0,0,0,0,0,0)
-
-TotalCost_CEpervil <-(StaffType_Salary/Wdays_per_month)* StaffType_CE* (No_Days_CE_village+No_Days_Travel_CEvil)
-TotalCost_qPCRpervil <-(StaffType_Salary/Wdays_per_month)* StaffType_qPCR* (No_Days_qPCR_village+No_Days_Travel_qPCRvil)
-TotalCost_MDApervil <-(StaffType_Salary/Wdays_per_month)* StaffType_MDA* (No_Days_MDA_village+No_Days_Travel_MDAvil)
-TotalCost_ITNpervil <-(StaffType_Salary/Wdays_per_month)* StaffType_ITN* (No_Days_ITN_village+No_Days_Travel_ITNvil)
-
-sum(TotalCost_CEpervil)
-sum(TotalCost_qPCRpervil)
-sum(TotalCost_MDApervil)
-sum(TotalCost_ITNpervil)
-
-
+ 
 server <- function(input, output) {
+  pop <- reactive({
+    input$pop
+    })
+  
+  No_villages <- reactive({
+    input$No_villages
+    })
+
+  prop_vilCE <- reactive({
+    ceiling(input$No_villages * (input$prop_vilCE / 100))
+    })
+
+  prop_vilqPCR <- reactive({
+    ceiling(input$No_villages * (input$prop_vilqPCR / 100))
+  })
+
+  prop_vilMDA <- reactive({
+    ceiling(input$No_villages * (input$prop_vilMDA / 100))
+  })
+
+  MDA_rounds <- reactive({
+    input$rounds
+  })
+  
+  #non-reactives
+  TotalCost_CEpervil <-(StaffType_Salary/Wdays_per_month)* StaffType_CE* (No_Days_CE_village+No_Days_Travel_CEvil)
+  TotalCost_qPCRpervil <-(StaffType_Salary/Wdays_per_month)* StaffType_qPCR* (No_Days_qPCR_village+No_Days_Travel_qPCRvil)
+  TotalCost_MDApervil <-(StaffType_Salary/Wdays_per_month)* StaffType_MDA* (No_Days_MDA_village+No_Days_Travel_MDAvil)
+  TotalCost_ITNpervil <-(StaffType_Salary/Wdays_per_month)* StaffType_ITN* (No_Days_ITN_village+No_Days_Travel_ITNvil)
+  
+  a <- reactive ({
+    sum(TotalCost_CEpervil)*MDA_rounds()
+    })
+  sum(TotalCost_qPCRpervil)
+  sum(TotalCost_MDApervil)
+  sum(TotalCost_ITNpervil)
+  
   sliderValues <- reactive({
    data.frame(
-     Name=c("Population", "Number of villages", "Number of villages for CE", "Number of villages surveyed", "Number of villages for MDA", "Number of rounds of MDA per TMT events"),
-     Value=c(pop=input$pop,
-      No_villages=input$No_villages,
-      prop_vilCE=ceiling(input$No_villages*(input$prop_vilCE/100)),
-      prop_vilqPCR = ceiling(input$No_villages*(input$prop_vilqPCR/100)),
-      prop_vilMDA=ceiling(input$No_villages*(input$prop_vilMDA/100)),
-      MDA_rounds=input$rounds
+     Name=c("Population", 
+            "Number of villages", 
+            "Number of villages for CE", 
+            "Number of villages surveyed", 
+            "Number of villages for MDA", 
+            "Number of rounds of MDA per TMT events",
+            "TotalCost_CEpervil"),
+     Value = c(
+       pop(), 
+       No_villages(),
+       prop_vilCE(),
+       prop_vilqPCR(),
+       prop_vilMDA(),
+       MDA_rounds(),
+       a()
+     )
       )
-      )})
+    })
 
   
   
