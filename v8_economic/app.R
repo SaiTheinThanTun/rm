@@ -216,7 +216,7 @@ runGMS<-function(initprev, scenario, param)
                   kRCD = 0.032,                
                   cRCD = 3.5,
                   muRCDw=4,
-                  sdRCDw=4,
+                  sdRCDw=1.5,
                   covMSAT0=0,
                   omega = 2,                   # average duration of immunity (years) [N]
                   nuC = 9,                     # days of symptoms in the absence of treatment [N]
@@ -302,7 +302,7 @@ runGMS<-function(initprev, scenario, param)
            nuC<-365/nuC
            nuA<-365/nuA
            nuU<-365/nuU
-           nuRCD<- 52/delayRCD
+           # nuRCD<- 52/delayRCD
            mu<-1/mu
            nTr<-365/nuTr
            nTrp<-365/nuTrp
@@ -369,13 +369,11 @@ runGMS<-function(initprev, scenario, param)
            
            # set up treatment rate for RCD
            incm<-ps*tau*lam*sS+pr*tau*lam*sR+pr*tau*lam*sIU+pr*tau*lam*sIA
-#           rateRCD<-((1-eta)*(1+(1-RCDcoex)*clustRCD)+eta*(1+RCDcoex*clustRCDcoex))*(effRCD/P)*incm*covRCD
            propRCD<-(1-RCDcoex)*(1-exp(-kRCD*(RCDrad-cRCD)))+RCDcoex*RCDs
            fRCD<-dnorm(delayRCD, mean = muRCDw, sd = sdRCDw, log = FALSE)/dnorm(muRCDw, mean = muRCDw, sd = sdRCDw, log = FALSE)
            avrad<-clustRCDrad*exp(-kRCD*RCDrad)
            avcoex<-clustRCDcoex*(1-RCDs)
-           rateRCD<-RCDon*nuRCD*covRCD*incm*(propRCD+fRCD*((1-RCDcoex)*(1-eta)*avrad+RCDcoex*avcoex))
-#           tauRCD<-1/((1/rateRCD)+(1/nuTr))
+           rateRCD<-RCDon*covRCD*incm*(propRCD+fRCD*((1-RCDcoex)*(1-eta)*avrad+RCDcoex*avcoex))
            tauRCD<-rateRCD
            
            

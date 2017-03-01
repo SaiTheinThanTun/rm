@@ -406,8 +406,8 @@ loopValue <- c(5:20,50, 100, 200, 500)
          # totalcases <- sum(GMSouti[,3]) #tail(GMSout0[,3],1)
          # total_0 <- sum(GMSout0[,3]) #tail(GMSout0[,2],1)
          #GMSouti[99,2]/GMSout0[99,3]
-  result[i, 1] <- GMSouti[99,2] #detected #/totalcases
-  result[i, 2] <- GMSout0[99,3] #total_0 #totalcases #detected_0
+  result[i, 1] <- GMSouti[97,3] #detected #/totalcases
+  result[i, 2] <- GMSouti[100,3] #total_0 #totalcases #detected_0
  }
  
 #  result3 <- cbind(result,loopValue)
@@ -416,7 +416,7 @@ loopValue <- c(5:20,50, 100, 200, 500)
 # plot(result3[,3],result3[,1], type='l', xlab="radius size (m)", ylab="% cases detected", main= "% cases detected by radius")
 
 
-result2 <- cbind(result[,1]/result[,2],loopValue)
+result2 <- cbind(result[,1]-result[,2],loopValue)
 result2
 
-plot(result2[,2],result2[,1], type='l', xlab="radius size (m)", ylab="% cases detected", main= "% cases detected by radius")
+plot(result2[,2],result2[,1], type='l', xlab="radius size (m)", ylab="reduction in incidence", main= "reduction in incidence \n  between 2018 Jan-Mar by radius")
