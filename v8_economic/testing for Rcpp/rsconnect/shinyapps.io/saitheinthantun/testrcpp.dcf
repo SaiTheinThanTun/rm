@@ -1,0 +1,11 @@
+name: testrcpp
+title: testRcpp
+account: saitheinthantun
+server: shinyapps.io
+appId: 160607
+bundleId: 730806
+url: https://saitheinthantun.shinyapps.io/testrcpp/
+when: 1488439218.0429
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: app.cpp|testlorenz.R
