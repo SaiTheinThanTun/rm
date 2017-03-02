@@ -11,7 +11,7 @@ ui <- fluidPage(
     tabPanel(title = strong("Typology Parameters"),
              column(3,
                     sliderInput(inputId="API", label = "baseline API", value = 2.5, min=1, max=100,step=0.5),
-                    sliderInput(inputId="bh", label = "number of mosquito bites per human per night (average)", value = 7, min=0, max=80,step=1), #change range 0-80, Dan's data
+                    sliderInput(inputId="bh_max", label = "number of mosquito bites per human per night (peak season)", value = 11, min=0, max=80,step=1), #change range 0-80, Dan's data
                     sliderInput(inputId="eta", label = "% of all infections that are caught outside the village (forest)", value = 50, min=0, max=100,step=10),
                     sliderInput(inputId="covEDAT0", label = "baseline % of all clinical cases treated", value = 30, min=0, max=100)
              ),
@@ -84,22 +84,26 @@ ui <- fluidPage(
     tabPanel(title = strong("Focal MDA Indicators"),
              column(3,
                     checkboxInput(inputId="MDAon", label = "switch on MDA", value = FALSE), #6
+                    sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=7, max=30,step=1),
+                    sliderInput(inputId="dm", label = "months to complete each round ", value = 6, min=1, max=24,step=0.5)
+                    
+             ),
+             column(3,
                     sliderInput(inputId="cmda_1", label = "effective population coverage of focal MDA in round 1 ", value = 50, min=0, max=100,step=10),
                     sliderInput(inputId="cmda_2", label = "effective population coverage of focal MDA in round 2 ", value = 50, min=0, max=100,step=10),
                     sliderInput(inputId="cmda_3", label = "effective population coverage of focal MDA in round 3 ", value = 50, min=0, max=100,step=10)
              ),
+
              column(3,
                     sliderInput(inputId="tm_1", label = "timing of 1st round [2018+ no. of month, 1 means Jan'2018, 13 means Jan'2019]", value = 1, min=1, max=36,step=1),
                     sliderInput(inputId="tm_2", label = "timing of 2nd round [2018+ no. of month]", value = 2, min=2, max=36,step=1),
-                    sliderInput(inputId="tm_3", label = "timing of 3rd round [2018+ no. of month]", value = 3, min=3, max=36,step=1),
-                    sliderInput(inputId="dm", label = "months to complete each round ", value = 6, min=1, max=24,step=0.5)
-             ),
-             column(3,
-                    sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=7, max=30,step=1),
-                    sliderInput(inputId="cm_1", label = "% population coverage of 1st MDA round", value = 80, min=0, max=100,step=10),
-                    sliderInput(inputId="cm_2", label = "% of 1st MDA round population to get 2nd", value = 95, min=0, max=100,step=10),
-                    sliderInput(inputId="cm_3", label = "% of 2nd MDA round population to get 3rd", value = 95, min=0, max=100,step=10)
+                    sliderInput(inputId="tm_3", label = "timing of 3rd round [2018+ no. of month]", value = 3, min=3, max=36,step=1)
              )
+             # column(3,
+             #        sliderInput(inputId="cm_1", label = "% population coverage of 1st MDA round", value = 80, min=0, max=100,step=10),
+             #        sliderInput(inputId="cm_2", label = "% of 1st MDA round population to get 2nd", value = 95, min=0, max=100,step=10),
+             #        sliderInput(inputId="cm_3", label = "% of 2nd MDA round population to get 3rd", value = 95, min=0, max=100,step=10)
+             # )
     ),
     tabPanel(title = strong("Imported Malaria MSAT Indicators"),
              column(3,
@@ -218,6 +222,9 @@ runGMS<-function(initprev, scenario, param)
                   gRCD = 230,
                   muRCDw=4,
                   sdRCDw=1.5,
+                  cm_1=80,
+                  cm_2=95,
+                  cm_3=95,
                   covMSAT0=0,
                   omega = 2,                   # average duration of immunity (years) [N]
                   nuC = 3,                     # days of symptoms in the absence of treatment [N], #change 9 -> 3
@@ -332,6 +339,7 @@ runGMS<-function(initprev, scenario, param)
            P <- (sS+sR+sIC+sIA+sIU+sTr+sSm+sRm)
            seas<-1+amp*cos(2*3.14159*(Y-phi))
            nu <- 1/((1/nuC)+(1/nuA)+(1/nuU))
+           bh<-bh_max/(1+amp)
            beta<-seas*b*epsilonh*epsilonm*bh/((bh*epsilonh+deltam)*(gammam/(gammam+deltam)))
            mu_out <- mu+muC+muA+muU
            
@@ -512,7 +520,7 @@ server <- function(input, output, session) {
                           MSATon = input$MSATon))
   
   parametersR <- reactive(c(
-    bh = input$bh,                 # bites per human per year
+    bh_max = input$bh_max,                 # bites per human per night
     eta = input$eta,
     covEDAT0 = input$covEDAT0,
     covITN0 = input$covITN0,
@@ -580,7 +588,7 @@ server <- function(input, output, session) {
     
     updateSliderInput(session, "API", value = datavalue()[9])
     
-    updateSliderInput(session, "bh", value = datavalue()[10])
+    updateSliderInput(session, "bh_max", value = datavalue()[10])
     updateSliderInput(session, "eta", value = datavalue()[11])
     updateSliderInput(session, "covEDAT0", value = datavalue()[12])
     updateSliderInput(session, "covITN0", value = datavalue()[13])
