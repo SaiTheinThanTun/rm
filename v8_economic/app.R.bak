@@ -60,10 +60,11 @@ ui <- fluidPage(
                sliderInput(inputId="covRCDi", label = "new coverage of RCD (%)", value = 50, min=0, max=100,step=10),
                sliderInput(inputId="delayRCD", label = "reaction time (weeks)", value = 4, min=1, max=8,step=1),
                radioButtons(inputId="RCDcoex", label = "RCD Search Type: ", choices = c("Radial search"=0, "Co-exposure search"=1), selected = 0, inline=TRUE),
-               sliderInput(inputId="RCDrad", label = "radius for radial search (m)", value = 20, min=5, max=200,step=5),
-               sliderInput(inputId="clustRCDrad", label = "added value of radial targetting (%)", value = 40, min=0, max=100,step=10),
-               sliderInput(inputId="RCDs", label = "sample size for coexposure search (% of village)", value = 5, min=1, max=100,step=1),
-               sliderInput(inputId="clustRCDcoex", label = "added value of co-exposure targetting (%)", value = 50, min=0, max=100,step=10)             )
+               sliderInput(inputId="RCDrad", label = "radius for radial search (m)", value = 5, min=5, max=20,step=1),
+               sliderInput(inputId="clustRCDrad", label = "added value of radial targetting (%)", value = 15, min=0, max=50,step=5),
+               sliderInput(inputId="RCDs", label = "sample size for coexposure search (% of village)", value = 5, min=1, max=10,step=1),
+               sliderInput(inputId="clustRCDcoex", label = "added value of co-exposure targetting (%)", value = 20, min=0, max=50,step=5)
+             )
              ),
              column(4, wellPanel(
                h3("Sensitivity of RCD"),
@@ -183,7 +184,7 @@ ui <- fluidPage(
 #non-reactive parameters
 # define the number of weeks to run the model
 dt<-1/12
-startyear<-2007
+startyear<-2010
 stopyear<-2025
 maxt<-stopyear-startyear
 times <- seq(0, maxt, by = dt)
@@ -212,10 +213,8 @@ runGMS<-function(initprev, scenario, param)
                   deltam=365/14,                 
                   gammam=365/10,
                   covRCD0 = 0,
-                  kRCD = 0.017,                
-                  cRCD = 105,                
-                  bRCD = 0.024,
-                  gRCD = 230,
+                  kRCD = 0.032,                
+                  cRCD = 3.5,
                   muRCDw=4,
                   sdRCDw=1.5,
                   covMSAT0=0,
@@ -227,7 +226,7 @@ runGMS<-function(initprev, scenario, param)
                   rhou = 30,                   # relative infectivity of asymptomatic microscopically undetectable carriers compared with clinical infections (%) [N]
                   ps = 90,                     # % of all non-immune new infections that are clinical [N]
                   pr = 20,                     # % of all immune new infections that are clinical [N]
-                  mu = 50,                      # life expectancy (years) [N]
+                  mu = 69,                      # life expectancy (years) [N], #change, 50 -> 69 SEA average of 2015
                   param)
   
   
@@ -370,11 +369,10 @@ runGMS<-function(initprev, scenario, param)
            
            # set up treatment rate for RCD
            incm<-ps*tau*lam*sS+pr*tau*lam*sR+pr*tau*lam*sIU+pr*tau*lam*sIA
-           propRCD<-(1-RCDcoex)*((1+exp(-kRCD*cRCD))*((1/(1+exp(-kRCD*(RCDrad-cRCD))))-(1/(1+exp(kRCD*cRCD)))))+RCDcoex*RCDs
+           propRCD<-(1-RCDcoex)*(1-exp(-kRCD*(RCDrad-cRCD)))+RCDcoex*RCDs
            fRCD<-dnorm(delayRCD, mean = muRCDw, sd = sdRCDw, log = FALSE)/dnorm(muRCDw, mean = muRCDw, sd = sdRCDw, log = FALSE)
-           avrad<-clustRCDrad/(1+exp(-bRCD*(gRCD-RCDrad)))
-           eqRCDrad<-cRCD-((1/kRCD)*log(((1+exp(kRCD*cRCD))/(1+RCDs*exp(kRCD*cRCD)))-1))
-           avcoex<-clustRCDcoex/(1+exp(-bRCD*(gRCD-eqRCDrad)))
+           avrad<-clustRCDrad*exp(-kRCD*RCDrad)
+           avcoex<-clustRCDcoex*(1-RCDs)
            rateRCD<-RCDon*covRCD*incm*(propRCD+fRCD*((1-RCDcoex)*(1-eta)*avrad+RCDcoex*avcoex))
            tauRCD<-rateRCD
            

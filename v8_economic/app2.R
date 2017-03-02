@@ -11,7 +11,7 @@ ui <- fluidPage(
     tabPanel(title = strong("Typology Parameters"),
              column(3,
                     sliderInput(inputId="API", label = "baseline API", value = 2.5, min=1, max=100,step=0.5),
-                    sliderInput(inputId="bh", label = "number of mosquito bites per human per night (average)", value = 7, min=0, max=80,step=1), #change range 0-80, Dan's data
+                    sliderInput(inputId="bh", label = "number of mosquito bites per human per day (average)", value = 7, min=0, max=30,step=1),
                     sliderInput(inputId="eta", label = "% of all infections that are caught outside the village (forest)", value = 50, min=0, max=100,step=10),
                     sliderInput(inputId="covEDAT0", label = "baseline % of all clinical cases treated", value = 30, min=0, max=100)
              ),
@@ -19,7 +19,7 @@ ui <- fluidPage(
                     #sliderInput(inputId="nuTr", label = "days of infectiosness after treatment ACT", value = 14, min=0, max=30), #remove
                     #sliderInput(inputId="nuTrp", label = "days of infectiosness after treatment ACT+primaquine", value = 7, min=0, max=30), #remove
                     sliderInput(inputId="covITN0", label = "baseline coverage of ITN (%) ", value = 75, min=0, max=90,step=.5),
-                    sliderInput(inputId="effITN", label = "% of infections averted due to owenership of ITN ", value = 30, min=0, max=50), 
+                    sliderInput(inputId="effITN", label = "% of infections averted due to owenership of ITN ", value = 30, min=0, max=50),
                     # sliderInput(inputId="covRCD0", label = "baseline coverage of RCD (%) ", value = 0, min=0, max=90),
                     sliderInput(inputId="covIRS0", label = "baseline coverage of IRS (%) ", value = 0, min=0, max=90,step=10),
                     sliderInput(inputId="effIRS", label = "% reduction in biting rate due to IRS ", value = 15, min=0, max=25,step=5)

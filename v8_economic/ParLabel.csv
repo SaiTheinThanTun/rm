@@ -7,7 +7,7 @@ switch on MDA,"1: On, 0: Off"
 ACT+primaquine for EDAT and MDA,"1: On, 0: Off"
 switch on MSAT for imported cases,"1: On, 0: Off"
 Baseline API,API per 1000 population
-No. of mosquito bites per human per day (average),bites per human per day
+No. of mosquito bites per human per day (average),bites per human per night
 % of all infections that are caught outside the village (forest),%
 baseline % of all clinical cases treated,%
 baseline coverage of ITN (%),%
