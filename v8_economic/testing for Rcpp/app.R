@@ -18,7 +18,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$plot1 <- renderPlot({
-    parameters1<-c(input$beta,input$sigma,input$rho)
+    parameters1<-c(input$beta,sigma=input$sigma,input$rho)
     
     # x=-10, y=-12, z=30.05
     init.state<-c(input$stateA,input$stateB,input$stateC, 0, 0, 0)

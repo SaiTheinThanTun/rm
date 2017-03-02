@@ -379,7 +379,7 @@ runGMS<-function(initprev, scenario, param)
            # set up treatment rate for RCD
            incm<-ps*tau*lam*sS+pr*tau*lam*sR+pr*tau*lam*sIU+pr*tau*lam*sIA
            propRCD<-(1-RCDcoex)*((1+exp(-kRCD*cRCD))*((1/(1+exp(-kRCD*(RCDrad-cRCD))))-(1/(1+exp(kRCD*cRCD)))))+RCDcoex*RCDs
-           fRCD<-dnorm(delayRCD, mean = muRCDw, sd = sdRCDw, log = FALSE)/dnorm(muRCDw, mean = muRCDw, sd = sdRCDw, log = FALSE)
+           fRCD<-exp(-((delayRCD-muRCDw)^2)/(2*sdRCDw))
            avrad<-clustRCDrad/(1+exp(-bRCD*(gRCD-RCDrad)))
            eqRCDrad<-cRCD-((1/kRCD)*log(((1+exp(kRCD*cRCD))/(1+RCDs*exp(kRCD*cRCD)))-1))
            avcoex<-clustRCDcoex/(1+exp(-bRCD*(gRCD-eqRCDrad)))
