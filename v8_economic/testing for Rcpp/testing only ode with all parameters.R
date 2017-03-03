@@ -1,7 +1,6 @@
 library(deSolve)
 library(Rcpp)
 
-
 parametersR <- c(
   bh = 7,                 # bites per human per year
   eta = 50,
@@ -125,4 +124,19 @@ WmodGMSrcpp<-function(t,state,parameters){
   tmp<-modGMSrcpp(t,state,parameters)
   return(list(tmp))
 }
+
+dt<-1/12
+startyear<-2007
+stopyear<-2025
+maxt<-stopyear-startyear
+times <- seq(0, maxt, by = dt)
+tsteps<-length(times)
+
+ParLabel <- read.table('ParLabel.csv', sep=",", as.is=TRUE)
+PATH<-"D:\\works\\Sai\\RAI"
+setwd(PATH)
+
+sourceCpp("modGMS.cpp")
+
 out <- ode(y = state, times = times, func = WmodGMSrcpp, parms = haha)
+plot(out,select = c("S_0","IA_0"))
