@@ -1,6 +1,6 @@
 library(deSolve)
 library(Rcpp)
-sourceCpp("D:\\Dropbox\\IBM project_Sai\\RAI model\\v8_economic\\testing for Rcpp\\modGMS.cpp")
+sourceCpp("D:\\Dropbox\\IBM project_Sai\\RAI model\\v9_rcpp\\testing for Rcpp\\modGMS.cpp")
 
 parametersR <- c(
   bh = 7,                 # bites per human per year
