@@ -7,7 +7,7 @@ switch on MDA,"1: On, 0: Off"
 ACT+primaquine for EDAT and MDA,"1: On, 0: Off"
 switch on MSAT for imported cases,"1: On, 0: Off"
 Baseline API,API per 1000 population
-No. of mosquito bites per human per day (average),bites per human per night
+No. of mosquito bites per human per night (peak season),bites per human per night
 % of all infections that are caught outside the village (forest),%
 baseline % of all clinical cases treated,%
 baseline coverage of ITN (%),%
@@ -42,9 +42,6 @@ timing of 2nd round [2018+ no. of month],year
 timing of 3rd round [2018+ no. of month],year
 months to complete each round,month
 days prophylaxis provided by the ACT,day
-% population coverage of 1st MDA round,%
-% of 1st MDA round population to get 2nd,%
-% of 2nd MDA round population to get 3rd,%
 years to scale up MSAT,year
 new coverage of MSAT (%),%
 sensitivity MSAT test (clinical),%
