@@ -3,7 +3,7 @@ library(shiny)
 library(Rcpp)
 library(deSolve)
 #sourceCpp("D:/Dropbox/IBM project_Sai/RAI model/v8_economic/testing for Rcpp/lorenz.cpp")
-sourceCpp("lorenz.cpp")
+sourceCpp("lorenz2.cpp")
 #expose_stan_functions("lorenz.stan")
 
 ui <- fluidPage(
@@ -21,7 +21,7 @@ server <- function(input, output) {
     parameters1<-c(input$beta,sigma=input$sigma,input$rho)
     
     # x=-10, y=-12, z=30.05
-    init.state<-c(input$stateA,input$stateB,input$stateC, 0, 0, 0)
+    init.state<-c(input$stateA,input$stateB,input$stateC,0,0,0)
     
     nderivs<-function(t,state,parameters){
       tmp<-lorenz(t,state,parameters)

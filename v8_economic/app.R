@@ -3,6 +3,8 @@
 library(deSolve)
 library(shiny)
 library(TSA)
+library(Rcpp)
+sourceCpp("modGMS.cpp")
 
 
 ui <- fluidPage(
@@ -463,6 +465,11 @@ runGMS<-function(initprev, scenario, param)
   }
   
   out <- ode(y = state, times = times, func = modGMS, parms = parameters)
+  # WmodGMSrcpp<-function(t,state,parameters){
+  #   tmp<-modGMSrcpp(t,state,parameters)
+  #   return(list(tmp))
+  # }
+  # out <- ode(y = state, times = times, func = WmodGMSrcpp, parms = parameters)
   
   # MODEL OUTPUTS
   ipop <- 5:35

@@ -1,4 +1,7 @@
 #library(rstan)
+library(deSolve)
+library(Rcpp)
+sourceCpp("D:\\Dropbox\\IBM project_Sai\\RAI model\\v8_economic\\testing for Rcpp\\lorenz.cpp")
 
 #expose_stan_functions("lorenz.stan")
 
@@ -13,5 +16,5 @@ nderivs<-function(t,state,parameters){
   return(list(tmp))
 }
 
-run1<-ode(y=init.state,times=seq(0,15,0.01), func=nderivs, parms=parameters1)
+run1<-ode(y=init.state,times=seq(0,15,0.01), func=lorenz, parms=parameters1)
 plot(run1)
