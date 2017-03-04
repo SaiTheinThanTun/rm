@@ -10,7 +10,7 @@ sourceCpp("modGMS.cpp")
 ui <- fluidPage(
   tabsetPanel(
     id="panels",
-    tabPanel(title = strong("Typology Parameters"),
+    tabPanel(title = strong("Baseline"),
              column(3,
                     sliderInput(inputId="API", label = "baseline API", value = 2.5, min=1, max=100,step=0.5),
                     sliderInput(inputId="bh_max", label = "number of mosquito bites per human per night (peak season)", value = 11, min=0, max=80,step=1), #change range 0-80, Dan's data
@@ -21,7 +21,7 @@ ui <- fluidPage(
                     #sliderInput(inputId="nuTr", label = "days of infectiosness after treatment ACT", value = 14, min=0, max=30), #remove
                     #sliderInput(inputId="nuTrp", label = "days of infectiosness after treatment ACT+primaquine", value = 7, min=0, max=30), #remove
                     sliderInput(inputId="covITN0", label = "baseline coverage of ITN (%) ", value = 75, min=0, max=90,step=.5),
-                    sliderInput(inputId="effITN", label = "% of infections averted due to owenership of ITN ", value = 30, min=0, max=50), 
+                    sliderInput(inputId="effITN", label = "% of infections averted due to ownership of ITN ", value = 30, min=0, max=50), 
                     # sliderInput(inputId="covRCD0", label = "baseline coverage of RCD (%) ", value = 0, min=0, max=90),
                     sliderInput(inputId="covIRS0", label = "baseline coverage of IRS (%) ", value = 0, min=0, max=90,step=10),
                     sliderInput(inputId="effIRS", label = "% reduction in biting rate due to IRS ", value = 15, min=0, max=25,step=5)
@@ -38,7 +38,7 @@ ui <- fluidPage(
              )
     ),
     
-    tabPanel(title = strong("New Interventions"),
+    tabPanel(title = strong("Interventions currently available"),
              column(4,
                     wellPanel(
                     h3("Early Diagnosis and Treatment"),
@@ -62,10 +62,10 @@ ui <- fluidPage(
                sliderInput(inputId="covRCDi", label = "new coverage of RCD (%)", value = 50, min=0, max=100,step=10),
                sliderInput(inputId="delayRCD", label = "reaction time (weeks)", value = 4, min=1, max=8,step=1),
                radioButtons(inputId="RCDcoex", label = "RCD Search Type: ", choices = c("Radial search"=0, "Co-exposure search"=1), selected = 0, inline=TRUE),
-               sliderInput(inputId="RCDrad", label = "radius for radial search (m)", value = 20, min=5, max=200,step=5),
-               sliderInput(inputId="clustRCDrad", label = "added value of radial targetting (%)", value = 40, min=0, max=100,step=10),
-               sliderInput(inputId="RCDs", label = "sample size for coexposure search (% of village)", value = 5, min=1, max=100,step=1),
-               sliderInput(inputId="clustRCDcoex", label = "added value of co-exposure targetting (%)", value = 50, min=0, max=100,step=10)             )
+               sliderInput(inputId="RCDrad", label = "radius for radial search (m)", value = 50, min=5, max=150,step=5), #value = 20, min=5, max=200,step=5),
+               sliderInput(inputId="clustRCDrad", label = "added value of radial targeting (%)", value = 40, min=0, max=100,step=10),
+               sliderInput(inputId="RCDs", label = "sample size for co-exposure search (% of village)", value = 5, min=1, max=50,step=1),
+               sliderInput(inputId="clustRCDcoex", label = "added value of co-exposure targeting (%)", value = 50, min=0, max=100,step=10)             )
              ),
              column(4, wellPanel(
                h3("Sensitivity of RCD"),
@@ -83,10 +83,10 @@ ui <- fluidPage(
              )
              
     ),
-    tabPanel(title = strong("Focal MDA Indicators"),
+    tabPanel(title = strong("Interventions under trial: Focal MDA (hotspot)"),
              column(3,
                     checkboxInput(inputId="MDAon", label = "switch on MDA", value = FALSE), #6
-                    sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=7, max=30,step=1),
+                    sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=15, max=30,step=1),
                     sliderInput(inputId="dm", label = "months to complete each round ", value = 6, min=1, max=24,step=0.5)
                     
              ),
@@ -107,7 +107,7 @@ ui <- fluidPage(
              #        sliderInput(inputId="cm_3", label = "% of 2nd MDA round population to get 3rd", value = 95, min=0, max=100,step=10)
              # )
     ),
-    tabPanel(title = strong("Imported Malaria MSAT Indicators"),
+    tabPanel(title = strong("Interventions under trial: Focal MSAT (mobile)"),
              column(3,
                     checkboxInput(inputId="MSATon", label = "switch on MSAT for imported cases", value = FALSE),
                     sliderInput(inputId="MSATscale", label = "years to scale up MSAT ", value = 2, min=.25, max=3, step=.25), 
@@ -132,11 +132,20 @@ ui <- fluidPage(
     ),
     tabPanel(title=strong("User Manual & Help"),
              br(),
-             tags$ul(tags$li(strong(a(href="https://www.dropbox.com/s/g9b96n4lki1r2l6/RAI_strategydesigntool_usermanual_01022017.docx?dl=0", "Download User Manual")))),
-             strong("Contact the developers for any question and feedback"),
-             tags$ul(tags$li(a(href="http://www.tropmedres.ac/researchers/researcher/lisa-white","Professor Lisa White, "), a(href="mailto:lisa@tropmedres.ac","lisa@tropmedres.ac")), 
-                             tags$li(a(href="http://www.tropmedres.ac/researchers/researcher/sompob-saralamba","Dr Sompob Saralamba, "),a(href="mailto:sompob@tropmedres.ac","sompob@tropmedres.ac")), 
-                                     tags$li(a(href="http://www.tropmedres.ac/sai-thein-than-tun","Dr Sai Thein Than Tun, "), a(href="mailto:sai@tropmedres.ac","sai@tropmedres.ac"))))
+             tags$ul(tags$li(strong(a(href="https://www.dropbox.com/s/d5q4ldkxtm2az6m/RAI_strategydesigntool_usermanual_03032017.pdf?dl=0", "Download User Manual")))),
+             strong("Contact the developers for any questions and feedback"),
+             tags$ul(
+               tags$li(a(href="http://www.tropmedres.ac/sai-thein-than-tun","Sai Thein Than Tun, "), a(href="mailto:sai@tropmedres.ac","sai@tropmedres.ac")),
+               tags$li(a(href="http://www.tropmedres.ac/researchers/researcher/sompob-saralamba","Sompob Saralamba, "),a(href="mailto:sompob@tropmedres.ac","sompob@tropmedres.ac")),
+               tags$li("Shwe Sin Kyaw"),
+               tags$li("Phetsavanh Chanthavilay"),
+               tags$li("Olivier Celhay, ", a(href="mailto:olivier.celhay@gmail.com","olivier.celhay@gmail.com")),
+               tags$li("Trần Đăng Nguyên"),
+               tags$li("Trần Nguyễn Anh Thư"),
+               tags$li("Daniel M Parker"),
+               tags$li("Professor Arjen M Dondorp"),
+               tags$li(a(href="http://www.tropmedres.ac/researchers/researcher/lisa-white","Professor Lisa White, "), a(href="mailto:lisa@tropmedres.ac","lisa@tropmedres.ac"))
+                     ))
     # tabPanel(title = strong("Biological Parameters"), #not remove
     #          column(3,
     #                 sliderInput(inputId="omega", label = "average duration of immunity (years) ", value = 2, min=0, max=10),

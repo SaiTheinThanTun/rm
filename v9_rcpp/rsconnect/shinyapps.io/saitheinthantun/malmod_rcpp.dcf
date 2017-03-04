@@ -1,0 +1,11 @@
+name: malmod_rcpp
+title: malmod_rcpp
+account: saitheinthantun
+server: shinyapps.io
+appId: 160880
+bundleId: 732273
+url: https://saitheinthantun.shinyapps.io/malmod_rcpp/
+when: 1488519530.02573
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: testing for Rcpp/all parameters to input.txt|testing for Rcpp/modGMS.cpp|testing for Rcpp/testing only ode with all parameters.R
