@@ -1,0 +1,11 @@
+name: v11_tmp
+title: V11_tmp
+account: saitheinthantun
+server: shinyapps.io
+appId: 165155
+bundleId: 754073
+url: https://saitheinthantun.shinyapps.io/v11_tmp/
+when: 1489983404.80858
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: 1_lastUIinRcpp.R|2_app_dif.R|3_app_combinedUI.R|4_app_combined.R|original/app.R|theory behind/20170319_144715_resized.jpg|theory behind/20170319_144727_resized.jpg

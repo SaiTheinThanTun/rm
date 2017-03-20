@@ -7,7 +7,6 @@ library(TSA)
 #sourceCpp("modGMS.cpp")
 
 
-
 ui <- fluidPage(
   tabsetPanel(
     id="panels",
@@ -19,8 +18,11 @@ ui <- fluidPage(
                     sliderInput(inputId="covEDAT0", label = "baseline % of all clinical cases treated", value = 30, min=0, max=100)
              ),
              column(3,
+                    #sliderInput(inputId="nuTr", label = "days of infectiosness after treatment ACT", value = 14, min=0, max=30), #remove
+                    #sliderInput(inputId="nuTrp", label = "days of infectiosness after treatment ACT+primaquine", value = 7, min=0, max=30), #remove
                     sliderInput(inputId="covITN0", label = "baseline coverage of ITN (%) ", value = 75, min=0, max=90,step=.5),
                     sliderInput(inputId="effITN", label = "% of infections averted due to ownership of ITN ", value = 30, min=0, max=50), 
+                    # sliderInput(inputId="covRCD0", label = "baseline coverage of RCD (%) ", value = 0, min=0, max=90),
                     sliderInput(inputId="covIRS0", label = "baseline coverage of IRS (%) ", value = 0, min=0, max=90,step=10),
                     sliderInput(inputId="effIRS", label = "% reduction in biting rate due to IRS ", value = 15, min=0, max=25,step=5)
              ),
@@ -40,6 +42,7 @@ ui <- fluidPage(
              column(4,
                     wellPanel(
                       h3("Early Diagnosis and Treatment"),
+                      #sliderInput(inputId="timei", label = "timing of intervention ", value = 2018, min=2017, max=2020),
                       checkboxInput(inputId="EDATon", label = "switch on scale up of EDAT ", value = FALSE),
                       checkboxInput(inputId="primon", label = "ACT+primaquine for EDAT and MDA ", value = FALSE), #under EDAT checkbox
                       sliderInput(inputId="EDATscale", label = "years to scale up EDAT ", value = 1, min=.25, max=3, step=.25),
@@ -75,6 +78,7 @@ ui <- fluidPage(
                checkboxInput(inputId="IRSon", label = "switch on scale up of IRS ", value = FALSE),
                sliderInput(inputId="IRSscale", label = "years to scale up IRS ", value = 1, min=.25, max=3, step=.25),
                sliderInput(inputId="covIRSi", label = "new coverage of IRS (%) ", value = 90, min=0, max=90,step=5)
+               # sliderInput(inputId="effIRS", label = "% reduction in biting rate due to IRS ", value = 15, min=0, max=25)
              )
              )
              
@@ -86,51 +90,22 @@ ui <- fluidPage(
                     sliderInput(inputId="dm", label = "months to complete each round ", value = 6, min=1, max=24,step=0.5)
                     
              ),
-             column(5,
-                    "Old",
-                    sliderInput(inputId="cmda_1", label = "effective population coverage of focal MDA in round 1 ", value = 50, min=0, max=100,step=10), #old
-                    sliderInput(inputId="cmda_2", label = "effective population coverage of focal MDA in round 2 ", value = 50, min=0, max=100,step=10), #old
-                    sliderInput(inputId="cmda_3", label = "effective population coverage of focal MDA in round 3 ", value = 50, min=0, max=100,step=10), #old
-                    sliderInput(inputId="tm_1", label = "timing of 1st round [2018+ no. of month, 1 means Jan'2018, 13 means Jan'2019]", value = 1, min=1, max=36,step=1), #old
-                    sliderInput(inputId="tm_2", label = "timing of 2nd round [2018+ no. of month]", value = 2, min=2, max=36,step=1), #old
-                    sliderInput(inputId="tm_3", label = "timing of 3rd round [2018+ no. of month]", value = 3, min=3, max=36,step=1) #old
+             column(3,
+                    sliderInput(inputId="cmda_1", label = "effective population coverage of focal MDA in round 1 ", value = 50, min=0, max=100,step=10),
+                    sliderInput(inputId="cmda_2", label = "effective population coverage of focal MDA in round 2 ", value = 50, min=0, max=100,step=10),
+                    sliderInput(inputId="cmda_3", label = "effective population coverage of focal MDA in round 3 ", value = 50, min=0, max=100,step=10)
              ),
-             
-             column(4,
-                    "New",
-                    sliderInput(inputId="tmda", label = "Month of the year to start set of MDA rounds", value = 11, min=1, max=12,step=1), #new
-                    sliderInput(inputId="nyMDA", label = "Number of years to deliver sets of MDA rounds", value = 1, min=1, max=3,step=1), #new
-                    sliderInput(inputId="avMDA", label = "Added value of focal targetting", value = 50, min=0, max=80,step=10), #new
-                    sliderInput(inputId="prevT2018", label = "Prevalence threshold for defining hotspots in 2018", value = 30, min=0, max=50,step=10), #new
-                    sliderInput(inputId="prevT2019", label = "Prevalence threshold for defining hotspots in 2019", value = 30, min=0, max=50,step=10), #new
-                    sliderInput(inputId="prevT2020", label = "Prevalence threshold for defining hotspots in 2020", value = 30, min=0, max=50,step=10) #new
-             )
 
-    ),
-    tabPanel(title = strong("Mass Vaccination Indicators"), #new
              column(3,
-                    "Old",
-                    sliderInput(inputId="effv_1", label = "% protective efficacy of RTS,S with 1st dose", value = 10, min=0, max=100),
-                    sliderInput(inputId="effv_2", label = "% protective efficacy of RTS,S with 2nd dose", value = 20, min=0, max=100),
-                    sliderInput(inputId="effv_3", label = "% protective efficacy of RTS,S with 3rd dose", value = 50, min=0, max=100),
-                    sliderInput(inputId="dv", label = "years of protective effect of RTS,S", value = 1, min=0.5, max=3,step=.25)
-             ),
-             column(3,
-                    "New",
-                    checkboxInput(inputId="Vacon", label = "switch on mass Vaccination", value = FALSE),
-                    sliderInput(inputId="lossv", label = "duration of vaccine protective efficacy (years)",value = 1, min=0.25, max=3,step=0.25),
-                    sliderInput(inputId="effv", label = "initial level of vaccine protective efficacy",value = 30, min=0, max=100,step=10),
-                    radioButtons(inputId="Vactype", label = "Mass Vaccination coverage type: ", choices = c("Mass vaccination"=0, "MVDA"=1), selected = 1, inline=TRUE)
-             ),
-             column(3,
-                    "New",
-                    sliderInput(inputId="covvmass", label = "population coverage for mass vaccination option",value = 80, min=0, max=90,step=10),
-                    sliderInput(inputId="dcv", label = "time needed to vaccinate residents of all villages in target population (months) ", value = 3, min=1, max=6,step=1),
-                    sliderInput(inputId="tvac", label = "Month of the year to start mass vaccination", value = 11, min=1, max=12,step=1),
-                    sliderInput(inputId="nyvac", label = "Number of years to deliver annual mass vaccination", value = 1, min=1, max=3,step=1)
-              )
-             
-             
+                    sliderInput(inputId="tm_1", label = "timing of 1st round [2018+ no. of month, 1 means Jan'2018, 13 means Jan'2019]", value = 1, min=1, max=36,step=1),
+                    sliderInput(inputId="tm_2", label = "timing of 2nd round [2018+ no. of month]", value = 2, min=2, max=36,step=1),
+                    sliderInput(inputId="tm_3", label = "timing of 3rd round [2018+ no. of month]", value = 3, min=3, max=36,step=1)
+             )
+             # column(3,
+             #        sliderInput(inputId="cm_1", label = "% population coverage of 1st MDA round", value = 80, min=0, max=100,step=10),
+             #        sliderInput(inputId="cm_2", label = "% of 1st MDA round population to get 2nd", value = 95, min=0, max=100,step=10),
+             #        sliderInput(inputId="cm_3", label = "% of 2nd MDA round population to get 3rd", value = 95, min=0, max=100,step=10)
+             # )
     ),
     tabPanel(title = strong("Interventions under trial: Focal MSAT (mobile)"),
              column(3,
@@ -236,10 +211,10 @@ runGMS<-function(initprev, scenario, param)
 {
   #MODEL PARAMETERS
   parameters <- c(scenario,
-                  # effv_1 = 0,                  # protective efficacy of a single dose of RTS,S [N]
-                  # effv_2 = 0,                 # protective efficacy of two doses of RTS,S [N]
-                  # effv_3 = 0,                 # protective efficacy of three doses of RTS,S [N]
-                  # dv = 1,                      # duration of vaccine protection [N]
+                  effv_1 = 0,                  # protective efficacy of a single dose of RTS,S [N]
+                  effv_2 = 0,                 # protective efficacy of two doses of RTS,S [N]
+                  effv_3 = 0,                 # protective efficacy of three doses of RTS,S [N]
+                  dv = 1,                      # duration of vaccine protection [N]
                   timei = 2018,
                   dRCD = 4,
                   nuTr = 14,                   # days of infectiosness after treatment ACT [N]
@@ -346,6 +321,7 @@ runGMS<-function(initprev, scenario, param)
            nuC<-365/nuC
            nuA<-365/nuA
            nuU<-365/nuU
+           # nuRCD<- 52/delayRCD
            mu<-1/mu
            nTr<-365/nuTr
            nTrp<-365/nuTrp
@@ -539,273 +515,6 @@ runGMS<-function(initprev, scenario, param)
   return(GMSout)
 }
 
-runGMSnew<-function(initprev, scenario, param) 
-{
-  #MODEL PARAMETERS
-  parameters <- c(scenario,
-                  timei = 2018,
-                  dRCD = 4,
-                  nuTr = 14,                   # days of infectiosness after treatment ACT [N]
-                  nuTrp = 7,                   # days of infectiosness after treatment ACT+primaquine [N]
-                  amp = 0.7,                   # relative amplitude seasonality [N]
-                  phi = 0.5,                   # phase angle seasonality [N]
-                  epsilonh=0.23,                 # per bite probability of an infectious mosquito infecting a human
-                  epsilonm=0.5,                  # per bite probability of an infectious human infecting a mosquito
-                  b=365/3,                       # per mosquito rate of biting
-                  deltam=365/14,                 
-                  gammam=365/10,
-                  covRCD0 = 0,
-                  kRCD = 0.017,                
-                  cRCD = 105,                
-                  bRCD = 0.024,
-                  gRCD = 230,
-                  muRCDw=4,
-                  sdRCDw=1.5,
-                  rmda = 3,
-                  cmda1=0.8,
-                  cmda2=0.85,
-                  cmda3=0.9,
-                  kmda = 1,
-                  covMSAT0=0,
-                  omega = 2,                   # average duration of immunity (years) [N]
-                  nuC = 3,                     # days of symptoms in the absence of treatment [N], #change 9 -> 3
-                  nuA = 60,                    # days of asymptomatic microscopically detectable carriage [N]
-                  nuU = 100,                    # days of asymptomatic microscopically undetectable carriage [N], #change 60 -> 100, Mean duration of a malaria untreated infection: 160 days, 
-                  rhoa = 70,                   # relative infectivity of asymptomatic microscopically detectable carriers compared with clinical infections (%) [N]
-                  rhou = 30,                   # relative infectivity of asymptomatic microscopically undetectable carriers compared with clinical infections (%) [N]
-                  ps = 90,                     # % of all non-immune new infections that are clinical [N]
-                  pr = 20,                     # % of all immune new infections that are clinical [N]
-                  mu = 50,                      # life expectancy (years) [N]
-                  param)
-  
-  
-  
-  # MODEL INITIAL CONDITIONS
-  # population size
-  initP<-10000 
-  
-  initS<-0.5*(1-initprev)*initP
-  initIC<-0
-  initIA<-initprev*initP
-  initIU<-0
-  initR<-0.5*(1-initprev)*initP
-  initTr<-0
-  
-  state <- c(Y = 0, Cinc_det = 0, Cinc_tot = 0, 
-             S = initS, IC = initIC, IA = initIA, IU = initIU, R = initR, Tr = initTr, Sm = 0, Rm = 0, V=0
-  )
-  
-  # set up a function to solve the model
-  modGMS<-function(t, state, parameters) 
-  {
-    with(as.list(c(state, parameters)),
-         {
-           #convert %s to proportions
-           covEDATi<-0.9*covEDATi/100
-           covEDAT0<-0.9*covEDAT0/100
-           covITNi<-covITNi/100
-           covITN0<-covITN0/100
-           effITN <- effITN/100
-           covIRSi<-covIRSi/100
-           covIRS0<-covIRS0/100
-           effIRS <- effIRS/100
-           covRCDi<-covRCDi/100
-           covRCD0<-covRCD0/100
-           RCDs<-RCDs/100
-           RCDsensC<-RCDsensC/100
-           RCDsensA<-RCDsensA/100
-           RCDsensU<-RCDsensU/100
-           covMSATi<-covMSATi/100
-           covMSAT0<-covMSAT0/100
-           MSATsensC<-MSATsensC/100
-           MSATsensA<-MSATsensA/100
-           MSATsensU<-MSATsensU/100
-           
-           clustRCDrad<-clustRCDrad/100
-           clustRCDcoex<-clustRCDcoex/100
-           
-           avMDA <- avMDA/100
-           prevT2018 <- prevT2018/100
-           prevT2019 <- prevT2019/100
-           prevT2020 <- prevT2020/100
-           
-           effv <- effv/100
-           covvmass <- covvmass/100
-           
-           
-           # effv_1<-effv_1/100
-           # effv_2<-effv_2/100
-           # effv_3<-effv_3/100
-           rhoa<-rhoa/100
-           rhou<-rhou/100
-           ps<-ps/100
-           pr<-pr/100
-           eta<-eta/100
-           # convert time scales
-           dm<-dm/12
-           tmda <- 2018+(tmda/12) 
-           dcv<-dcv/12
-           tvac <- 2018+(tvac/12) 
-           
-           # convert durations to rate
-           lossd<-365/lossd
-           lossv<-1/lossv
-           omega<-1/omega
-           nuC<-365/nuC
-           nuA<-365/nuA
-           nuU<-365/nuU
-           mu<-1/mu
-           nTr<-365/nuTr
-           nTrp<-365/nuTrp
-           dRCD<-52/dRCD
-           # imported cases
-           muC<-muC/1000
-           muA<-muA/1000
-           muU<-muU/1000
-           
-           # swtich on interventions
-           covEDATi <- EDATon*covEDATi+(1-EDATon)*covEDAT0
-           covITNi <- ITNon*covITNi+(1-ITNon)*covITN0
-           covRCDi <- RCDon*covRCDi+(1-RCDon)*covRCD0
-           covIRSi <- IRSon*covIRSi+(1-IRSon)*covIRS0
-           
-           
-           # define variables
-           P <- (S+R+IC+IA+IU+Tr+Sm+Rm)
-           seas<-1+amp*cos(2*3.14159*(Y-phi))
-           nu <- 1/((1/nuC)+(1/nuA)+(1/nuU))
-           bh<-bh_max/(1+amp)
-           beta<-seas*b*epsilonh*epsilonm*bh/((bh*epsilonh+deltam)*(gammam/(gammam+deltam)))
-           mu_out <- mu+muC+muA+muU
-           
-           timei<-timei-startyear
-           
-           wsiEDAT<-(1-(Y<=timei))*(Y<=(timei+EDATscale))*((Y-timei)/EDATscale)+1*(Y>=(timei+EDATscale))
-           wsiITN<-(1-(Y<=timei))*(Y<=(timei+ITNscale))*((Y-timei)/ITNscale)+1*(Y>=(timei+ITNscale))
-           wsiRCD<-(1-(Y<=timei))*(Y<=(timei+RCDscale))*((Y-timei)/RCDscale)+1*(Y>=(timei+RCDscale))
-           wsiIRS<-(1-(Y<=timei))*(Y<=(timei+IRSscale))*((Y-timei)/IRSscale)+1*(Y>=(timei+IRSscale))
-           wsiMSAT<-(1-(Y<=timei))*(Y<=(timei+MSATscale))*((Y-timei)/MSATscale)+1*(Y>=(timei+MSATscale))
-           covEDAT<-(1-wsiEDAT)*covEDAT0+wsiEDAT*covEDATi
-           covITN<-(1-wsiITN)*covITN0+wsiITN*covITNi
-           covRCD<-(1-wsiRCD)*covRCD0+wsiRCD*covRCDi
-           covIRS<-(1-wsiIRS)*covIRS0+wsiIRS*covIRSi
-           covMSAT<-(1-wsiMSAT)*covMSAT0+wsiMSAT*covMSATi
-           
-           nuTr<- primon*((Y<timei)*nTr+(Y>timei)*nTrp)+(1-primon)*nTr
-           lossd<-1/((1/lossd)-(1/nuTr))
-           
-           
-           # MDA rounds
-           
-           prevA<-(IC+Tr+IA+IU)/P
-           prevT <- (((Y+startyear)>2018)*((Y+startyear)<=2019)*prevT2018+((Y+startyear)>2019)*((Y+startyear)<=2020)*prevT2019+((Y+startyear)>2020)*prevT2020)
-           cc <- (1-avMDA)/(-2+(1+avMDA)*exp(kmda*prevA))
-           cmda <- (rmda==1)*cmda1+(rmda==2)*cmda2+(rmda==3)*cmda3
-           cemda <- cmda*((Y+startyear)>2018)*(1+cc)/(1+cc*exp(kmda*prevT))
-           
-           swmda <- (Y>(tmda-startyear))*(Y<=(tmda+dm-startyear))+(nyMDA>=2)*(Y>(tmda+1-startyear))*(Y<=(tmda+1+dm-startyear))+(nyMDA>=3)*(Y>(tmda+2-startyear))*(Y<=(tmda+2+dm-startyear))
-           mdarate <- MDAon*swmda*(-log((1-cemda))/(dm+(rmda/12))) 
-           
-           # vaccine rates
-           swvac <- (Y>(tvac-startyear))*(Y<=(tvac+dcv-startyear))+(nyvac>=2)*(Y>(tvac+1-startyear))*(Y<=(tvac+1+dcv-startyear))+(nyvac>=3)*(Y>(tvac+2-startyear))*(Y<=(tvac+2+dcv-startyear))
-           
-           vacrate <- Vacon*(Vactype*swmda*MDAon*(-log((1-cemda))/(dm+(rmda/12)))+(1-Vactype)*swvac*(-log((1-covvmass))/(dcv+(3/12))) )
-           
-           lam <- (1-(effv*V/P))*(1-(1-eta)*effIRS*covIRS)*(1-effITN*covITN)*beta*(IC+Tr+rhoa*IA+rhou*IU)/P
-           
-           tau <- covEDAT
-           
-           fail <- ((Y+startyear)<2019)*(percfail2018/100)+((Y+startyear)>=2019)*((Y+startyear)<2020)*(percfail2019/100)+((Y+startyear)>=2020)*(percfail2020/100)
-           
-           
-           # set up treatment rate for RCD
-           incm<-ps*tau*lam*S+pr*tau*lam*R+pr*tau*lam*IU+pr*tau*lam*IA
-           propRCD<-(1-RCDcoex)*((1+exp(-kRCD*cRCD))*((1/(1+exp(-kRCD*(RCDrad-cRCD))))-(1/(1+exp(kRCD*cRCD)))))+RCDcoex*RCDs
-           fRCD<-exp(-((delayRCD-muRCDw)^2)/(2*sdRCDw))
-           avrad<-clustRCDrad/(1+exp(-bRCD*(gRCD-RCDrad)))
-           eqRCDrad<-cRCD-((1/kRCD)*log(((1+exp(kRCD*cRCD))/(1+RCDs*exp(kRCD*cRCD)))-1))
-           avcoex<-clustRCDcoex/(1+exp(-bRCD*(gRCD-eqRCDrad)))
-           rateRCD<-RCDon*covRCD*incm*(propRCD+fRCD*((1-RCDcoex)*(1-eta)*avrad+RCDcoex*avcoex))
-           tauRCD<-rateRCD
-           
-           
-           
-           
-           treat <- ((ps*tau*lam*S+pr*tau*lam*R+pr*tau*lam*IU+pr*tau*lam*IA)
-                     +mdarate*(IC+IA+IU)
-                     +tauRCD*(RCDsensC*IC+RCDsensA*IA+RCDsensU*IU)
-           )
-           
-           muC <- (1-MSATon*MSATsensC*covMSAT)*muC
-           muA <- (1-MSATon*MSATsensA*covMSAT)*muA
-           muU <- (1-MSATon*MSATsensU*covMSAT)*muU
-           
-           # rate of change
-           dY <- 1                                                                                                                                         #2                                                                    
-           dCinc_det <- ps*tau*lam*S+pr*tau*lam*R+pr*tau*lam*IU+pr*tau*lam*IA                                                                              #3
-           dCinc_tot <- ps*lam*S+pr*lam*R+pr*lam*IU+pr*lam*IA                                                                                              #4
-           dS <- mu*P-mu_out*S+omega*R-lam*S+lossd*Sm-mdarate*S                                                                                            #5
-           dIC <- muC*P-mu_out*IC+ps*(1-tau)*lam*S+pr*(1-tau)*lam*R+pr*(1-tau)*lam*IU+pr*(1-tau)*lam*IA-nuC*IC-mdarate*IC-RCDsensC*tauRCD*IC               #6 
-           dIA <- muA*P-mu_out*IA+(1-ps)*lam*S+(1-pr)*lam*R+(1-pr)*lam*IU-pr*lam*IA+nuC*IC-nuA*IA+fail*nuTr*Tr-mdarate*IA-RCDsensA*tauRCD*IA               #7
-           dIU <- muU*P-mu_out*IU-lam*IU-nuU*IU+nuA*IA-mdarate*IU-RCDsensU*tauRCD*IU                                                                       #8
-           dR <- -mu_out*R-omega*R-lam*R+nuU*IU+lossd*Rm-mdarate*R                                                                                         #9
-           dTr <- -mu_out*Tr+ps*tau*lam*S+pr*tau*lam*R+pr*tau*lam*IU+pr*tau*lam*IA-nuTr*Tr+tauRCD*(RCDsensC*IC+RCDsensA*IA+RCDsensU*IU)+mdarate*(IC+IA+IU) #10
-           dSm <- -mu_out*Sm+omega*Rm-lossd*Sm+mdarate*S                                                                                                   #11
-           dRm <- -mu_out*Rm-omega*Rm+(1-fail)*nuTr*Tr-lossd*Rm+mdarate*R                                                                                  #12
-           dV <- -mu_out*V+vacrate*(P-V)-lossv*V                                                                                                           #13
-           # dV <- vacrate*(P-V)-lossv*V                                                                                                           #13
-           
-           
-           # return the rate of change
-           list(c(dY,dCinc_det,dCinc_tot, 
-                  dS, dIC, dIA, dIU, dR, dTr, dSm, dRm, dV 
-           ))
-         }
-    ) 
-    
-  }
-  
-  out <- ode(y = state, times = times, func = modGMS, parms = parameters)
-  # WmodGMSrcpp<-function(t,state,parameters){
-  #   tmp<-modGMSrcpp(t,state,parameters)
-  #   return(list(tmp))
-  # }
-  # out <- ode(y = state, times = times, func = WmodGMSrcpp, parms = parameters)
-  
-  # MODEL OUTPUTS
-  ipop <- 5:12
-  iinc_det <- 3
-  iinc_tot <- 4
-  iprev <- c(6,  7,  8, 10)
-  
-  # population
-  times<-out[,1]+startyear
-  pop<-rowSums(out[,ipop])
-  
-  
-  # clinical incidence detected per 1000 per month
-  tci_det <- out[,iinc_det]
-  clinmonth_det <- tci_det
-  clinmonth_det[1] <- 0
-  clinmonth_det[2:length(times)] <- 1000*(tci_det[2:length(times)] - tci_det[1:(length(times)-1)])/pop[2:length(times)]
-  
-  # clinical incidence total per 1000 per month
-  tci_tot <- out[,iinc_tot]
-  clinmonth_tot <- tci_tot
-  clinmonth_tot[1] <- 0
-  clinmonth_tot[2:length(times)] <- 1000*(tci_tot[2:length(times)] - tci_tot[1:(length(times)-1)])/pop[2:length(times)]
-  
-  
-  # % prevalence
-  prevalence <- 100*rowSums(out[,iprev])/pop
-  GMSout<-matrix(NA,nrow=length(times),ncol=4)
-  GMSout[,1]<-times
-  GMSout[,2]<-clinmonth_det
-  GMSout[,3]<-clinmonth_tot
-  GMSout[,4]<-prevalence
-  
-  return(GMSout)
-}
 
 server <- function(input, output, session) {
   scenario_0<-c(EDATon = 0,
@@ -817,23 +526,12 @@ server <- function(input, output, session) {
                 primon = 0,
                 MSATon = 0)
   
-  scenario_iRold<-reactive(c(EDATon = input$EDATon,
-                          ITNon = input$ITNon,
-                          RCDon = input$RCDon,
-                          RCDcoex = as.numeric(input$RCDcoex),
-                          IRSon = input$IRSon,
-                          MDAon = input$MDAon,
-                          primon = input$primon,
-                          MSATon = input$MSATon))
-  
   scenario_iR<-reactive(c(EDATon = input$EDATon,
                           ITNon = input$ITNon,
                           RCDon = input$RCDon,
                           RCDcoex = as.numeric(input$RCDcoex),
                           IRSon = input$IRSon,
                           MDAon = input$MDAon,
-                          Vacon = input$Vacon,
-                          Vactype = as.numeric(input$Vactype),
                           primon = input$primon,
                           MSATon = input$MSATon))
   
@@ -859,7 +557,9 @@ server <- function(input, output, session) {
     RCDscale = input$RCDscale,
     covRCDi = input$covRCDi,
     delayRCD = input$delayRCD,
+    #RCDrad = input$RCDrad,
     clustRCDrad = input$clustRCDrad,
+    #RCDs = input$RCDs,
     clustRCDcoex = input$clustRCDcoex,
     RCDsensC = input$RCDsensC,
     RCDsensA = input$RCDsensA,
@@ -873,24 +573,12 @@ server <- function(input, output, session) {
     tm_1 = input$tm_1,          # timing of 1st round [2018 to 2021 - 1 month steps]
     tm_2 = input$tm_2,          # timing of 2nd round [2018+(1/12) to 2021 - 1 month steps]
     tm_3 = input$tm_3,          # timing of 3rd round [2018+(2/12) to 2021 - 1 month steps]
-    avMDA = input$avMDA,
-    tmda = input$tmda,          
-    nyMDA = input$nyMDA,
     dm = input$dm,
     lossd = input$lossd,
-    prevT2018 = input$prevT2018,
-    prevT2019 = input$prevT2019,
-    prevT2020 = input$prevT2020,
     cm_1 = input$cm_1,
     cm_2 = input$cm_2,
     cm_3 = input$cm_3,
     
-    lossv = input$lossv,
-    effv = input$effv,
-    covvmass = input$covvmass,
-    dcv = input$dcv,
-    tvac = input$tvac,
-    nyvac = input$nyvac,
     MSATscale = input$MSATscale,
     covMSATi = input$covMSATi,
     MSATsensC = input$MSATsensC,
@@ -898,12 +586,7 @@ server <- function(input, output, session) {
     MSATsensU = input$MSATsensU,
     
     RCDrad = input$RCDrad,
-    RCDs = input$RCDs,
-    
-    effv_1 = input$effv_1, #reinserted
-    effv_2 = input$effv_2,
-    effv_3 = input$effv_3,
-    dv = input$dv
+    RCDs = input$RCDs
   ))
   
   #getting back previous parameters
@@ -972,9 +655,9 @@ server <- function(input, output, session) {
   # initial prevalence
   initprevR <- reactive(0.001*input$API)
   
-  GMSoutiR <- reactive(runGMSnew(initprevR(), scenario_iR(),parametersR())) #new
+  GMSout0R <- reactive(runGMS(initprevR(), scenario_0,parametersR()))
   
-  GMSout0R <- reactive(runGMS(initprevR(), scenario_iRold(),parametersR()))
+  GMSoutiR <- reactive(runGMS(initprevR(), scenario_iR(),parametersR()))
   
   plotR <- function()
   {
@@ -1037,7 +720,7 @@ server <- function(input, output, session) {
     })
   
   tableContentR <- reactive({
-    tmp <- c(scenario_iRold(), input$API, parametersR())
+    tmp <- c(scenario_iR(), input$API, parametersR())
     tmp2 <- cbind(ParLabel[,1], tmp, ParLabel[,2], names(tmp))
     colnames(tmp2) <- c("Name","Value","Unit","VarName")
     tmp2
