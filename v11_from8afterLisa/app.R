@@ -81,7 +81,7 @@ ui <- fluidPage(
     ),
     tabPanel(title = strong("Interventions under trial: Focal MDA (hotspot)"),
              column(3,
-                    checkboxInput(inputId="MDAon", label = "switch on MDA", value = FALSE), #6
+                    checkboxInput(inputId="MDAon", label = "switch on MDA", value = TRUE), #6
                     sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=15, max=30,step=1),
                     sliderInput(inputId="dm", label = "months to complete each round ", value = 6, min=1, max=24,step=0.5)
                     
@@ -98,10 +98,10 @@ ui <- fluidPage(
              
              column(4,
                     "New",
-                    sliderInput(inputId="tmda", label = "Month of the year to start set of MDA rounds", value = 11, min=1, max=12,step=1), #new
+                    sliderInput(inputId="tmda", label = "Month of the year to start set of MDA rounds", value = 1, min=1, max=12,step=1), #new
                     sliderInput(inputId="nyMDA", label = "Number of years to deliver sets of MDA rounds", value = 1, min=1, max=3,step=1), #new
-                    sliderInput(inputId="avMDA", label = "Added value of focal targetting", value = 50, min=0, max=80,step=10), #new
-                    sliderInput(inputId="prevT2018", label = "Prevalence threshold for defining hotspots in 2018", value = 30, min=0, max=50,step=10), #new
+                    sliderInput(inputId="avMDA", label = "Added value of focal targetting", value = 70, min=0, max=80,step=10), #new
+                    sliderInput(inputId="prevT2018", label = "Prevalence threshold for defining hotspots in 2018", value = 10, min=0, max=50,step=10), #new
                     sliderInput(inputId="prevT2019", label = "Prevalence threshold for defining hotspots in 2019", value = 30, min=0, max=50,step=10), #new
                     sliderInput(inputId="prevT2020", label = "Prevalence threshold for defining hotspots in 2020", value = 30, min=0, max=50,step=10) #new
              )
@@ -117,7 +117,7 @@ ui <- fluidPage(
              ),
              column(3,
                     "New",
-                    checkboxInput(inputId="Vacon", label = "switch on mass Vaccination", value = FALSE),
+                    checkboxInput(inputId="Vacon", label = "switch on mass Vaccination", value = TRUE),
                     sliderInput(inputId="lossv", label = "duration of vaccine protective efficacy (years)",value = 1, min=0.25, max=3,step=0.25),
                     sliderInput(inputId="effv", label = "initial level of vaccine protective efficacy",value = 30, min=0, max=100,step=10),
                     radioButtons(inputId="Vactype", label = "Mass Vaccination coverage type: ", choices = c("Mass vaccination"=0, "MVDA"=1), selected = 1, inline=TRUE)
@@ -126,7 +126,7 @@ ui <- fluidPage(
                     "New",
                     sliderInput(inputId="covvmass", label = "population coverage for mass vaccination option",value = 80, min=0, max=90,step=10),
                     sliderInput(inputId="dcv", label = "time needed to vaccinate residents of all villages in target population (months) ", value = 3, min=1, max=6,step=1),
-                    sliderInput(inputId="tvac", label = "Month of the year to start mass vaccination", value = 11, min=1, max=12,step=1),
+                    sliderInput(inputId="tvac", label = "Month of the year to start mass vaccination", value = 1, min=1, max=12,step=1),
                     sliderInput(inputId="nyvac", label = "Number of years to deliver annual mass vaccination", value = 1, min=1, max=3,step=1)
               )
              
@@ -699,7 +699,9 @@ runGMSnew<-function(initprev, scenario, param)
            
            prevA<-(IC+Tr+IA+IU)/P
            prevT <- (((Y+startyear)>2018)*((Y+startyear)<=2019)*prevT2018+((Y+startyear)>2019)*((Y+startyear)<=2020)*prevT2019+((Y+startyear)>2020)*prevT2020)
-           cc <- (1-avMDA)/(-2+(1+avMDA)*exp(kmda*prevA))
+           #cc <- (1-avMDA)/(-2+(1+avMDA)*exp(kmda*prevA))
+           #cc <- ((1-avMDA)/(-1+(1+avMDA)*exp(kmda*prevA)))+1
+           cc <- (1-avMDA)/(-1+(1+avMDA)*exp(kmda*prevA))
            cmda <- (rmda==1)*cmda1+(rmda==2)*cmda2+(rmda==3)*cmda3
            cemda <- cmda*((Y+startyear)>2018)*(1+cc)/(1+cc*exp(kmda*prevT))
            
@@ -711,6 +713,7 @@ runGMSnew<-function(initprev, scenario, param)
            
            vacrate <- Vacon*(Vactype*swmda*MDAon*(-log((1-cemda))/(dm+(rmda/12)))+(1-Vactype)*swvac*(-log((1-covvmass))/(dcv+(3/12))) )
            
+           #lam <- (1-(effv*V/P))*(1-(1-eta)*effIRS*covIRS)*(1-effITN*covITN)*beta*(IC+Tr+rhoa*IA+rhou*IU)/P
            lam <- (1-(effv*V/P))*(1-(1-eta)*effIRS*covIRS)*(1-effITN*covITN)*beta*(IC+Tr+rhoa*IA+rhou*IU)/P
            
            tau <- covEDAT
