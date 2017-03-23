@@ -449,7 +449,7 @@ server <- function(input, output, session) {
     
     
     # PLOTTING
-    par(mfrow=c(1,2))
+    par(mfrow=c(1,2), cex=1.5)
     
     maxy<-max(finclin,input$API/12)
     x<-times[(runin:length(clinmonth_det[,1]))]
