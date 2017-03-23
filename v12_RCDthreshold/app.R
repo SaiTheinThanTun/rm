@@ -18,11 +18,8 @@ ui <- fluidPage(
                     sliderInput(inputId="covEDAT0", label = "baseline % of all clinical cases treated", value = 30, min=0, max=100)
              ),
              column(3,
-                    #sliderInput(inputId="nuTr", label = "days of infectiosness after treatment ACT", value = 14, min=0, max=30), #remove
-                    #sliderInput(inputId="nuTrp", label = "days of infectiosness after treatment ACT+primaquine", value = 7, min=0, max=30), #remove
                     sliderInput(inputId="covITN0", label = "baseline coverage of ITN (%) ", value = 75, min=0, max=90,step=.5),
                     sliderInput(inputId="effITN", label = "% of infections averted due to ownership of ITN ", value = 30, min=0, max=50), 
-                    # sliderInput(inputId="covRCD0", label = "baseline coverage of RCD (%) ", value = 0, min=0, max=90),
                     sliderInput(inputId="covIRS0", label = "baseline coverage of IRS (%) ", value = 0, min=0, max=90,step=10),
                     sliderInput(inputId="effIRS", label = "% reduction in biting rate due to IRS ", value = 15, min=0, max=25,step=5)
              ),
@@ -42,7 +39,6 @@ ui <- fluidPage(
              column(4,
                     wellPanel(
                     h3("Early Diagnosis and Treatment"),
-                    #sliderInput(inputId="timei", label = "timing of intervention ", value = 2018, min=2017, max=2020),
                     checkboxInput(inputId="EDATon", label = "switch on scale up of EDAT ", value = FALSE),
                     checkboxInput(inputId="primon", label = "ACT+primaquine for EDAT and MDA ", value = FALSE), #under EDAT checkbox
                     sliderInput(inputId="EDATscale", label = "years to scale up EDAT ", value = 1, min=.25, max=3, step=.25),
@@ -78,7 +74,6 @@ ui <- fluidPage(
                     checkboxInput(inputId="IRSon", label = "switch on scale up of IRS ", value = FALSE),
                     sliderInput(inputId="IRSscale", label = "years to scale up IRS ", value = 1, min=.25, max=3, step=.25),
                     sliderInput(inputId="covIRSi", label = "new coverage of IRS (%) ", value = 90, min=0, max=90,step=5)
-                    # sliderInput(inputId="effIRS", label = "% reduction in biting rate due to IRS ", value = 15, min=0, max=25)
              )
              )
              
@@ -146,25 +141,6 @@ ui <- fluidPage(
                tags$li("Professor Arjen M Dondorp"),
                tags$li(a(href="http://www.tropmedres.ac/researchers/researcher/lisa-white","Professor Lisa White, "), a(href="mailto:lisa@tropmedres.ac","lisa@tropmedres.ac"))
                      ))
-    # tabPanel(title = strong("Biological Parameters"), #not remove
-    #          column(3,
-    #                 sliderInput(inputId="omega", label = "average duration of immunity (years) ", value = 2, min=0, max=10),
-    #                 sliderInput(inputId="nuC", label = "days of symptoms in the absence of treatment ", value = 9, min=1, max=30),
-    #                 sliderInput(inputId="nuA", label = "days of asymptomatic microscopically detectable carriage ", value = 60, min=30, max=90)
-    #          ),
-    #          column(3,
-    #                 sliderInput(inputId="nuU", label = "days of asymptomatic microscopically undetectable carriage ", value = 60, min=30, max=365),
-    #                 sliderInput(inputId="rhoa", label = "relative infectivity of asymptomatic microscopically detectable carriers compared with clinical infections (%) ", value = 70, min=0, max=100)
-    #          ),
-    #          column(3,
-    #                 sliderInput(inputId="rhou", label = "relative infectivity of asymptomatic microscopically undetectable carriers compared with clinical infections (%) ", value = 30, min=0, max=100),
-    #                 sliderInput(inputId="ps", label = "% of all non-immune new infections that are clinical ", value = 90, min=0, max=100)
-    #          ),
-    #          column(3,
-    #                 sliderInput(inputId="pr", label = "% of all immune new infections that are clinical ", value = 20, min=0, max=100),
-    #                 sliderInput(inputId="mu", label = "life expectancy (years) ", value = 50, min=45, max=95)
-    #          )
-    # )
   ),
   fluidRow(plotOutput(outputId = "MODEL")),
   br(),
