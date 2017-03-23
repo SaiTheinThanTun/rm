@@ -38,108 +38,107 @@ ui <- fluidPage(
     tabPanel(title = strong("Interventions currently available"),
              column(4,
                     wellPanel(
-                    h3("Early Diagnosis and Treatment"),
-                    checkboxInput(inputId="EDATon", label = "switch on scale up of EDAT ", value = FALSE),
-                    checkboxInput(inputId="primon", label = "ACT+primaquine for EDAT and MDA ", value = FALSE), #under EDAT checkbox
-                    sliderInput(inputId="EDATscale", label = "years to scale up EDAT ", value = 1, min=.25, max=3, step=.25),
-                    sliderInput(inputId="covEDATi", label = "new % of all clinical cases treated", value = 90, min=0, max=100,step=5)
-                    ), wellPanel(
-                    h3("Insecticide Treated Net"),
-                    checkboxInput(inputId="ITNon", label = "switch on scale up of ITN ", value = FALSE),
-                    sliderInput(inputId="ITNscale", label = "years to scale up ITN ", value = 0.5, min=.25, max=3, step=.25),
-                    sliderInput(inputId="covITNi", label = "new coverage of ITN (%) ", value = 90, min=0, max=90,step=5)
-                    )
-                    
-             ),
-              column(4, wellPanel(
-               h3("Reactive Case Detection"),
-               checkboxInput(inputId="RCDon", label = "switch on scale up of RCD", value = FALSE),
-               sliderInput(inputId="RCDscale", label = "years to scale up RCD ", value = 2, min=.25, max=3, step=.25), #.25 timesteps
-               sliderInput(inputId="covRCDi", label = "new coverage of RCD (%)", value = 50, min=0, max=100,step=10),
-               sliderInput(inputId="delayRCD", label = "reaction time (weeks)", value = 4, min=1, max=8,step=1),
-               radioButtons(inputId="RCDcoex", label = "RCD Search Type: ", choices = c("Radial search"=0, "Co-exposure search"=1), selected = 0, inline=TRUE),
-               sliderInput(inputId="RCDrad", label = "radius for radial search (m)", value = 50, min=5, max=150,step=5), #value = 20, min=5, max=200,step=5),
-               sliderInput(inputId="clustRCDrad", label = "added value of radial targeting (%)", value = 40, min=0, max=100,step=10),
-               sliderInput(inputId="RCDs", label = "sample size for co-exposure search (% of village)", value = 5, min=1, max=50,step=1),
-               sliderInput(inputId="clustRCDcoex", label = "added value of co-exposure targeting (%)", value = 50, min=0, max=100,step=10)             )
-             ),
-             column(4, wellPanel(
-               h3("Sensitivity of RCD"),
-                    sliderInput(inputId="RCDsensC", label = "sensitivity RCD test (clinical) ", value = 95, min=0, max=100,step=5),
-                    sliderInput(inputId="RCDsensA", label = "sensitivity RCD test (micro detectable, asym)", value = 60, min=0, max=100,step=5),
-                    sliderInput(inputId="RCDsensU", label = "sensitivity RCD test (micro undetectable, asym)", value = 0, min=0, max=100,step=5)
-             ),
-             wellPanel(
-                       h3("Indoor Residual Spray"),
-                    checkboxInput(inputId="IRSon", label = "switch on scale up of IRS ", value = FALSE),
-                    sliderInput(inputId="IRSscale", label = "years to scale up IRS ", value = 1, min=.25, max=3, step=.25),
-                    sliderInput(inputId="covIRSi", label = "new coverage of IRS (%) ", value = 90, min=0, max=90,step=5)
-             )
-             )
-             
-    ),
-    tabPanel(title = strong("Interventions under trial: Focal MDA (hotspot)"),
-             column(3,
-                    checkboxInput(inputId="MDAon", label = "switch on MDA", value = FALSE), #6
-                    sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=15, max=30,step=1),
-                    sliderInput(inputId="dm", label = "months to complete each round ", value = 6, min=1, max=24,step=0.5)
-                    
-             ),
-             column(3,
-                    sliderInput(inputId="cmda_1", label = "effective population coverage of focal MDA in round 1 ", value = 50, min=0, max=100,step=10),
-                    sliderInput(inputId="cmda_2", label = "effective population coverage of focal MDA in round 2 ", value = 50, min=0, max=100,step=10),
-                    sliderInput(inputId="cmda_3", label = "effective population coverage of focal MDA in round 3 ", value = 50, min=0, max=100,step=10)
-             ),
-
-             column(3,
-                    sliderInput(inputId="tm_1", label = "timing of 1st round [2018+ no. of month, 1 means Jan'2018, 13 means Jan'2019]", value = 1, min=1, max=36,step=1),
-                    sliderInput(inputId="tm_2", label = "timing of 2nd round [2018+ no. of month]", value = 2, min=2, max=36,step=1),
-                    sliderInput(inputId="tm_3", label = "timing of 3rd round [2018+ no. of month]", value = 3, min=3, max=36,step=1)
-             )
-             # column(3,
-             #        sliderInput(inputId="cm_1", label = "% population coverage of 1st MDA round", value = 80, min=0, max=100,step=10),
-             #        sliderInput(inputId="cm_2", label = "% of 1st MDA round population to get 2nd", value = 95, min=0, max=100,step=10),
-             #        sliderInput(inputId="cm_3", label = "% of 2nd MDA round population to get 3rd", value = 95, min=0, max=100,step=10)
-             # )
-    ),
-    tabPanel(title = strong("Interventions under trial: Focal MSAT (mobile)"),
-             column(3,
-                    checkboxInput(inputId="MSATon", label = "switch on MSAT for imported cases", value = FALSE),
-                    sliderInput(inputId="MSATscale", label = "years to scale up MSAT ", value = 2, min=.25, max=3, step=.25), 
-                    sliderInput(inputId="covMSATi", label = "new coverage of MSAT (%)", value = 80, min=0, max=100,step=10)
-              ),
-             column(3,
-                    sliderInput(inputId="MSATsensC", label = "sensitivity MSAT test (clinical) ", value = 95, min=0, max=100,step=5),
-                    sliderInput(inputId="MSATsensA", label = "sensitivity MSAT test (micro detectable, asym)", value = 60, min=0, max=100,step=5),
-                    sliderInput(inputId="MSATsensU", label = "sensitivity MSAT test (micro undetectable, asym)", value = 0, min=0, max=100,step=5)
-             )
-    ),
-    tabPanel(title= strong("Download"),
-             br(),
-             downloadButton("downloadTable", "Download current values of parameters"),
-             downloadButton("downloadplot","Download high resolution figure")),
-    tabPanel(title= strong("Restore your parameters"),
-             wellPanel(
-               fileInput(inputId = "file", label ="Your input file:", accept = c(".csv"))
-             )
-             #,
-             #tableOutput(outputId = "table")
-    ),
-    tabPanel(title=strong("User Manual & Help"),
-             br(),
-             tags$ul(tags$li(strong(a(href="https://www.dropbox.com/s/d5q4ldkxtm2az6m/RAI_strategydesigntool_usermanual_03032017.pdf?dl=0", "Download User Manual")))),
-             strong("Contact the developers for any questions and feedback"),
-             tags$ul(
-               tags$li(a(href="http://www.tropmedres.ac/sai-thein-than-tun","Sai Thein Than Tun, "), a(href="mailto:sai@tropmedres.ac","sai@tropmedres.ac")),
-               tags$li(a(href="http://www.tropmedres.ac/researchers/researcher/sompob-saralamba","Sompob Saralamba, "),a(href="mailto:sompob@tropmedres.ac","sompob@tropmedres.ac")),
-               tags$li("Shwe Sin Kyaw"),
-               tags$li("Phetsavanh Chanthavilay"),
-               tags$li("Olivier Celhay, ", a(href="mailto:olivier.celhay@gmail.com","olivier.celhay@gmail.com")),
-               tags$li("Trần Đăng Nguyên"),
-               tags$li("Trần Nguyễn Anh Thư"),
-               tags$li("Daniel M Parker"),
-               tags$li("Professor Arjen M Dondorp"),
-               tags$li(a(href="http://www.tropmedres.ac/researchers/researcher/lisa-white","Professor Lisa White, "), a(href="mailto:lisa@tropmedres.ac","lisa@tropmedres.ac"))
+                      h3("Early Diagnosis and Treatment"),
+                      checkboxInput(inputId="EDATon", label = "switch on scale up of EDAT ", value = FALSE),
+                      checkboxInput(inputId="primon", label = "ACT+primaquine for EDAT and MDA ", value = FALSE), #under EDAT checkbox
+                      sliderInput(inputId="EDATscale", label = "years to scale up EDAT ", value = 1, min=.25, max=3, step=.25),
+                      sliderInput(inputId="covEDATi", label = "new % of all clinical cases treated", value = 90, min=0, max=100,step=5)
+                    )), 
+             column(4,wellPanel(
+                      h3("Insecticide Treated Net"),
+                      checkboxInput(inputId="ITNon", label = "switch on scale up of ITN ", value = FALSE),
+                      sliderInput(inputId="ITNscale", label = "years to scale up ITN ", value = 0.5, min=.25, max=3, step=.25),
+                      sliderInput(inputId="covITNi", label = "new coverage of ITN (%) ", value = 90, min=0, max=90,step=5)
+                    )),
+             column(4,wellPanel(
+               h3("Indoor Residual Spray"),
+               checkboxInput(inputId="IRSon", label = "switch on scale up of IRS ", value = FALSE),
+               sliderInput(inputId="IRSscale", label = "years to scale up IRS ", value = 1, min=.25, max=3, step=.25),
+               sliderInput(inputId="covIRSi", label = "new coverage of IRS (%) ", value = 90, min=0, max=90,step=5)
+             ))
+  ),
+  tabPanel(title = strong("Reactive case detection"),
+            column(4, 
+              checkboxInput(inputId="RCDon", label = "switch on scale up of RCD", value = FALSE),
+              sliderInput(inputId="RCDscale", label = "years to scale up RCD", value = 2, min=.25, max=3, step=.25), #.25 timesteps
+              sliderInput(inputId="RCDthresh", label = "upper limit on annual incidence per 1000 for RCD", value = 1, min=1, max=12,step=1),
+              sliderInput(inputId="covRCDi", label = "new coverage of RCD (%)", value = 50, min=0, max=100,step=10),
+              sliderInput(inputId="delayRCD", label = "reaction time (weeks)", value = 4, min=1, max=8,step=1)
+            ),
+           column(4, 
+                  radioButtons(inputId="RCDcoex", label = "RCD Search Type: ", choices = c("Radial search"=0, "Co-exposure search"=1), selected = 0, inline=TRUE),
+                  sliderInput(inputId="RCDrad", label = "radius for radial search (m)", value = 50, min=5, max=150,step=5), #value = 20, min=5, max=200,step=5),
+                  sliderInput(inputId="clustRCDrad", label = "added value of radial targeting (%)", value = 40, min=0, max=100,step=10),
+                  sliderInput(inputId="RCDs", label = "sample size for co-exposure search (% of village)", value = 5, min=1, max=50,step=1),
+                  sliderInput(inputId="clustRCDcoex", label = "added value of co-exposure targeting (%)", value = 50, min=0, max=100,step=10)  
+           ),
+            column(4, 
+              sliderInput(inputId="RCDsensC", label = "sensitivity RCD test (clinical) ", value = 95, min=0, max=100,step=5),
+              sliderInput(inputId="RCDsensA", label = "sensitivity RCD test (micro detectable, asym)", value = 60, min=0, max=100,step=5),
+              sliderInput(inputId="RCDsensU", label = "sensitivity RCD test (micro undetectable, asym)", value = 0, min=0, max=100,step=5)
+            )),
+            tabPanel(title = strong("Interventions under trial: Focal MDA (hotspot)"),
+                     column(3,
+                            checkboxInput(inputId="MDAon", label = "switch on MDA", value = FALSE), #6
+                            sliderInput(inputId="lossd", label = "days prophylaxis provided by the ACT", value = 30, min=15, max=30,step=1),
+                            sliderInput(inputId="dm", label = "months to complete each round ", value = 6, min=1, max=24,step=0.5)
+                            
+                     ),
+                     column(3,
+                            sliderInput(inputId="cmda_1", label = "effective population coverage of focal MDA in round 1 ", value = 50, min=0, max=100,step=10),
+                            sliderInput(inputId="cmda_2", label = "effective population coverage of focal MDA in round 2 ", value = 50, min=0, max=100,step=10),
+                            sliderInput(inputId="cmda_3", label = "effective population coverage of focal MDA in round 3 ", value = 50, min=0, max=100,step=10)
+                     ),
+                     
+                     column(3,
+                            sliderInput(inputId="tm_1", label = "timing of 1st round [2018+ no. of month, 1 means Jan'2018, 13 means Jan'2019]", value = 1, min=1, max=36,step=1),
+                            sliderInput(inputId="tm_2", label = "timing of 2nd round [2018+ no. of month]", value = 2, min=2, max=36,step=1),
+                            sliderInput(inputId="tm_3", label = "timing of 3rd round [2018+ no. of month]", value = 3, min=3, max=36,step=1)
+                     )
+                     # column(3,
+                     #        sliderInput(inputId="cm_1", label = "% population coverage of 1st MDA round", value = 80, min=0, max=100,step=10),
+                     #        sliderInput(inputId="cm_2", label = "% of 1st MDA round population to get 2nd", value = 95, min=0, max=100,step=10),
+                     #        sliderInput(inputId="cm_3", label = "% of 2nd MDA round population to get 3rd", value = 95, min=0, max=100,step=10)
+                     # )
+            ),
+            tabPanel(title = strong("Interventions under trial: Focal MSAT (mobile)"),
+                     column(3,
+                            checkboxInput(inputId="MSATon", label = "switch on MSAT for imported cases", value = FALSE),
+                            sliderInput(inputId="MSATscale", label = "years to scale up MSAT ", value = 2, min=.25, max=3, step=.25), 
+                            sliderInput(inputId="covMSATi", label = "new coverage of MSAT (%)", value = 80, min=0, max=100,step=10)
+                     ),
+                     column(3,
+                            sliderInput(inputId="MSATsensC", label = "sensitivity MSAT test (clinical) ", value = 95, min=0, max=100,step=5),
+                            sliderInput(inputId="MSATsensA", label = "sensitivity MSAT test (micro detectable, asym)", value = 60, min=0, max=100,step=5),
+                            sliderInput(inputId="MSATsensU", label = "sensitivity MSAT test (micro undetectable, asym)", value = 0, min=0, max=100,step=5)
+                     )
+            ),
+            tabPanel(title= strong("Download"),
+                     br(),
+                     downloadButton("downloadTable", "Download current values of parameters"),
+                     downloadButton("downloadplot","Download high resolution figure")),
+            tabPanel(title= strong("Restore your parameters"),
+                     wellPanel(
+                       fileInput(inputId = "file", label ="Your input file:", accept = c(".csv"))
+                     )
+                     #,
+                     #tableOutput(outputId = "table")
+            ),
+            tabPanel(title=strong("User Manual & Help"),
+                     br(),
+                     tags$ul(tags$li(strong(a(href="https://www.dropbox.com/s/d5q4ldkxtm2az6m/RAI_strategydesigntool_usermanual_03032017.pdf?dl=0", "Download User Manual")))),
+                     strong("Contact the developers for any questions and feedback"),
+                     tags$ul(
+                       tags$li(a(href="http://www.tropmedres.ac/sai-thein-than-tun","Sai Thein Than Tun, "), a(href="mailto:sai@tropmedres.ac","sai@tropmedres.ac")),
+                       tags$li(a(href="http://www.tropmedres.ac/researchers/researcher/sompob-saralamba","Sompob Saralamba, "),a(href="mailto:sompob@tropmedres.ac","sompob@tropmedres.ac")),
+                       tags$li("Shwe Sin Kyaw"),
+                       tags$li("Phetsavanh Chanthavilay"),
+                       tags$li("Olivier Celhay, ", a(href="mailto:olivier.celhay@gmail.com","olivier.celhay@gmail.com")),
+                       tags$li("Trần Đăng Nguyên"),
+                       tags$li("Trần Nguyễn Anh Thư"),
+                       tags$li("Daniel M Parker"),
+                       tags$li("Professor Arjen M Dondorp"),
+                       tags$li(a(href="http://www.tropmedres.ac/researchers/researcher/lisa-white","Professor Lisa White, "), a(href="mailto:lisa@tropmedres.ac","lisa@tropmedres.ac"))
                      ))
   ),
   fluidRow(plotOutput(outputId = "MODEL")),
@@ -358,7 +357,8 @@ server <- function(input, output, session) {
     MSATsensU = input$MSATsensU,
     
     RCDrad = input$RCDrad,
-    RCDs = input$RCDs
+    RCDs = input$RCDs,
+    RCDthresh = input$RCDthresh
   ))
   
   #getting back previous parameters
@@ -418,7 +418,7 @@ server <- function(input, output, session) {
     updateSliderInput(session, "MSATsensU", value = datavalue()[49])
     updateSliderInput(session, "RCDrad", value = datavalue()[50])
     updateSliderInput(session, "RCDs", value = datavalue()[51])
-    
+    updateSliderInput(session, "RCDthresh", value = datavalue()[52])
   })
   
   #testing

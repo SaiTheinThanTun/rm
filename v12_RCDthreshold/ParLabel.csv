@@ -49,3 +49,4 @@ sensitivity MSAT test (clinical),%
 "sensitivity MSAT test (sub-micro, asym)",%
 radius for radial search,meters
 sample size for coexposure search,% of village
+monthly incidence threshold for RCD,case
