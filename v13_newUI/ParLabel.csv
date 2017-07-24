@@ -1,0 +1,52 @@
+switch on scale up of EDAT,"1: On, 0: Off"
+switch on scale up of ITN,"1: On, 0: Off"
+switch on scale up of RCD,"1: On, 0: Off"
+change RCD from radial search to co-exposure search,"1: On, 0: Off"
+switch on scale up of IRS,"1: On, 0: Off"
+switch on MDA,"1: On, 0: Off"
+ACT+primaquine for EDAT and MDA,"1: On, 0: Off"
+switch on MSAT for imported cases,"1: On, 0: Off"
+Baseline API,API per 1000 population
+No. of mosquito bites per human per night (peak season),bites per human per night
+% of all infections that are caught outside the village (forest),%
+baseline % of all clinical cases treated,%
+baseline coverage of ITN (%),%
+% of infections averted due to ownership of ITN,%
+baseline coverage of IRS (%),%
+% reduction in biting rate due to IRS,%
+imported clinical cases per 1000 population per year,cases per 1000 population per year
+imported asymptomatic microscopically detectable carriers per 1000 population per year,cases per 1000 population per year
+imported asymptomatic microscopically undetectable carriers per 1000 population per year,cases per 1000 population per year
+% of cases failing treatment in 2018 and before,%
+% of cases failing treatment in 2019,%
+% of cases failing treatment in 2020 and after,%
+years to scale up EDAT,year
+new % of all clinical cases treated,%
+years to scale up ITN,year
+new coverage of ITN (%),%
+years to scale up RCD,year
+new coverage of RCD (%),%
+reaction time,weeks
+added value of radial targetting,%
+added value of co-exposure targetting,%
+sensitivity RCD test (clinical),%
+"sensitivity RCD test (super-micro, asym)",%
+"sensitivity RCD test (sub-micro, asym)",%
+years to scale up IRS,year
+new coverage of IRS (%),%
+effective population coverage of focal MDA in round 1,%
+effective population coverage of focal MDA in round 2,%
+effective population coverage of focal MDA in round 3,%
+"timing of 1st round [2018+ no. of month, 1 means Jan'2018, 13 means Jan'2019]",year
+timing of 2nd round [2018+ no. of month],year
+timing of 3rd round [2018+ no. of month],year
+months to complete each round,month
+days prophylaxis provided by the ACT,day
+years to scale up MSAT,year
+new coverage of MSAT (%),%
+sensitivity MSAT test (clinical),%
+"sensitivity MSAT test (super-micro, asym)",%
+"sensitivity MSAT test (sub-micro, asym)",%
+radius for radial search,meters
+sample size for coexposure search,% of village
+monthly incidence threshold for RCD,case
