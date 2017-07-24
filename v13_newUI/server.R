@@ -540,17 +540,6 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "RCDthresh"
-      tag_1 <- tagList(
-        do.call(sliderInput, list(
-          inputId = var, 
-          label = meta[meta$input_id==var, "label"], 
-          value = as.numeric(meta[meta$input_id==var, "default_value"]),
-          min = as.numeric(meta[meta$input_id==var, "min"]),
-          max = as.numeric(meta[meta$input_id==var, "max"]),
-          step = as.numeric(meta[meta$input_id==var, "step"]))),
-        bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
-      
       var <- "covRCDi"
       tag_2 <- tagList(
         do.call(sliderInput, list(
@@ -659,6 +648,19 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
+      
+      var <- "RCDthresh"
+      tag_12 <- tagList(
+        do.call(sliderInput, list(
+          inputId = var, 
+          label = meta[meta$input_id==var, "label"], 
+          value = as.numeric(meta[meta$input_id==var, "default_value"]),
+          min = as.numeric(meta[meta$input_id==var, "min"]),
+          max = as.numeric(meta[meta$input_id==var, "max"]),
+          step = as.numeric(meta[meta$input_id==var, "step"]))),
+        bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
+      
+      
       showModal(modalDialog(title = "RCD Parameters", size = "m", easyClose = FALSE, footer = modalButton("Cancel"),
                             tag_1,
                             tag_2,
@@ -671,6 +673,7 @@ shinyServer(
                             tag_9,
                             tag_10,
                             tag_11,
+                            tag_12,
                             actionButton('update_rcd', "Update")
       ))
     })
@@ -690,6 +693,7 @@ shinyServer(
       values$RCDsensA <- input$RCDsensA
       values$RCDsensU <- input$RCDsensU
       values$RCDsensU <- input$RCDsensU
+      values$RCDthresh <- input$RCDthresh
     })
     
     
@@ -1264,7 +1268,6 @@ shinyServer(
     plotR <- function()
     {
       #plot(1, main=(paste(length(parametersR()))))
-      
       GMSout0<-GMSout0R()
 
       GMSouti<-GMSoutiR()
@@ -1310,8 +1313,5 @@ shinyServer(
       lines(c(2018,2018),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
       lines(c(2021,2021),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
     }
-    
-    # output$MODEL <- renderPlot({
-    #   plotR()
-    # })
+
   })
