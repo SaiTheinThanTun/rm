@@ -16,5 +16,6 @@ This is a web-based mathematical modelling tool or ‘app’ to support Plasmodi
 - Trần Đăng Nguyên
 - Trần Nguyễn Anh Thư
 - Daniel M Parker
+- Maceij F. Boni
 - Arjen M Dondorp
 - Lisa J White

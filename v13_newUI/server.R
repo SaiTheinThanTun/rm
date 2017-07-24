@@ -8,7 +8,9 @@ shinyServer(
                                    "en" = "input_explanation_en",
                                    "th" = "input_explanation_th"))
     
-    values <- reactiveValues(primon = as.logical(meta[meta$input_id=="primon", "default_value"]),
+    values <- reactiveValues(
+                              #EDATon = as.logical(meta[meta$input_id=="EDATon", "default_value"]),
+                              primon = as.logical(meta[meta$input_id=="primon", "default_value"]),
                              EDATscale = as.numeric(meta[meta$input_id=="EDATscale", "default_value"]),
                              covEDATi = as.numeric(meta[meta$input_id=="covEDATi", "default_value"]),
                              ITNscale = as.numeric(meta[meta$input_id=="ITNscale", "default_value"]),
@@ -330,7 +332,7 @@ shinyServer(
       })
       
       output$plot_calibration_sai <- renderPlot({
-        plot(1)
+        plotR()
       })
       
       # output$text_baseline <- renderText({
@@ -1135,7 +1137,7 @@ shinyServer(
     
     output$plot_baseline_interventions_sai <- renderPlot({
       
-      plot(1)
+      plotR()
       
     })
     
@@ -1176,4 +1178,140 @@ shinyServer(
         )
       })
     
+    # MODEL, 20170724
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    scenario_0<-c(EDATon = 0,
+                  ITNon = 0,
+                  RCDon = 0,
+                  RCDcoex = 0,
+                  IRSon = 0,
+                  MDAon = 0,
+                  primon = 0,
+                  MSATon = 0)
+    
+    scenario_iR<-reactive(c(EDATon = input$EDATon,
+                            ITNon = input$ITNon,
+                            RCDon = input$RCDon,
+                            RCDcoex = as.numeric(input$RCDcoex),
+                            IRSon = input$IRSon,
+                            MDAon = input$MDAon,
+                            primon = input$primon,
+                            MSATon = input$MSATon))
+    
+    parametersR <- reactive(c(
+      bh_max = input$bh_max,                 # bites per human per night
+      eta = input$eta,
+      covEDAT0 = input$covEDAT0,
+      covITN0 = input$covITN0,
+      effITN = input$effITN,
+      covIRS0 = input$covIRS0,
+      effIRS = input$effIRS,
+      muC = input$muC,
+      muA = input$muA,
+      muU = input$muU,
+      percfail2018 = input$percfail2018,
+      percfail2019 = input$percfail2019,
+      percfail2020 = input$percfail2020,
+      
+      EDATscale = input$EDATscale,
+      covEDATi = input$covEDATi,
+      ITNscale = input$ITNscale,
+      covITNi = input$covITNi,
+      RCDscale = input$RCDscale,
+      covRCDi = input$covRCDi,
+      delayRCD = input$delayRCD,
+      #RCDrad = input$RCDrad,
+      clustRCDrad = input$clustRCDrad,
+      #RCDs = input$RCDs,
+      clustRCDcoex = input$clustRCDcoex,
+      RCDsensC = input$RCDsensC,
+      RCDsensA = input$RCDsensA,
+      RCDsensU = input$RCDsensU,
+      IRSscale = input$IRSscale,
+      covIRSi = input$covIRSi,
+      
+      cmda_1 = input$cmda_1,
+      cmda_2 = input$cmda_2,
+      cmda_3 = input$cmda_3,
+      tm_1 = input$tm_1,          # timing of 1st round [2018 to 2021 - 1 month steps]
+      tm_2 = input$tm_2,          # timing of 2nd round [2018+(1/12) to 2021 - 1 month steps]
+      tm_3 = input$tm_3,          # timing of 3rd round [2018+(2/12) to 2021 - 1 month steps]
+      dm = input$dm,
+      lossd = input$lossd,
+      cm_1 = input$cm_1,
+      cm_2 = input$cm_2,
+      cm_3 = input$cm_3,
+      
+      MSATscale = input$MSATscale,
+      covMSATi = input$covMSATi,
+      MSATsensC = input$MSATsensC,
+      MSATsensA = input$MSATsensA,
+      MSATsensU = input$MSATsensU,
+      
+      RCDrad = input$RCDrad,
+      RCDs = input$RCDs,
+      RCDthresh = input$RCDthresh
+    ))
+    
+    # initial prevalence
+    initprevR <- reactive(0.001*input$API)
+    
+    GMSout0R <- reactive(runGMS(initprevR(), scenario_0,parametersR()))
+    
+    GMSoutiR <- reactive(runGMS(initprevR(), scenario_iR(),parametersR()))
+    
+    plotR <- function()
+    {
+      #plot(1, main=(paste(length(parametersR()))))
+      
+      GMSout0<-GMSout0R()
+
+      GMSouti<-GMSoutiR()
+
+      times<-GMSout0[,1]
+      clinmonth_det<-cbind(GMSout0[,2],GMSouti[,2])
+      clinmonth_tot<-cbind(GMSout0[,3],GMSouti[,3])
+      prevalence<-cbind(GMSout0[,4],GMSouti[,4])
+
+      runin<-(2016-startyear)/dt
+
+      finclin<-max(clinmonth_tot[(runin:length(clinmonth_det[,1])),])
+      finprev<-max(prevalence[(runin:length(prevalence[,1])),])
+
+
+      # PLOTTING
+      par(mfrow=c(1,2), cex=1.5)
+
+      maxy<-max(finclin,input$API/12)
+      x<-times[(runin:length(clinmonth_det[,1]))]
+      y1<-clinmonth_det[runin:length(clinmonth_det[,1]),1]
+      y2<-clinmonth_tot[runin:length(clinmonth_tot[,1]),1]
+
+      plot(x,y1, type='l',lty=1,col=rgb(0,0,0,alpha=0.1),xlab = "Time",ylab="incidence per 1000 per month",main="Monthly cases per 1000 population",ylim=c(0,maxy),lwd=2)
+      lines(x,y2, type='l',lty=1,col=rgb(0,0,0,alpha=0.1),lwd=2)
+
+      polygon(c(x,rev(x)),c(y2,rev(y1)),col=rgb(0,0,0,alpha=0.1),border=NA)
+
+      y1<-clinmonth_det[runin:length(clinmonth_det[,1]),2]
+      y2<-clinmonth_tot[runin:length(clinmonth_tot[,1]),2]
+      lines(x,y1, type='l',lty=1,col=rgb(0,0,1,alpha=0.4),lwd=2)
+      lines(x,y2, type='l',lty=1,col=rgb(0,0,1,alpha=0.4),lwd=2)
+
+      polygon(c(x,rev(x)),c(y2,rev(y1)),col=rgb(0,0,1,alpha=0.4),border=NA)
+
+      lines(c(2018,2018),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
+      lines(c(2021,2021),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
+      abline(h=input$API/12,col="dark blue",lty=1,lwd=1)
+      abline(h=1/12,col="red",lty=3,lwd=3)
+      maxy<-finprev
+      plot(times[(runin:length(prevalence[,1]))],prevalence[(runin:length(prevalence[,1])),1], type='l',lty=1,col=rgb(0,0,0,alpha=0.25),xlab = "Time",ylab="% prevalence",main="Predicted true prevalence",ylim=c(0,maxy),lwd=6)
+      lines(times[(runin:length(prevalence[,1]))],prevalence[(runin:length(prevalence[,1])),2], type='l',lty=1,col=rgb(0,0,1,alpha=0.6),xlab = "Time",ylab="% prevalence",main="Predicted true prevalence",ylim=c(0,maxy),lwd=6)
+      lines(c(2018,2018),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
+      lines(c(2021,2021),c(-maxy,2*maxy),col="dark grey",lty=3,lwd=2)
+    }
+    
+    # output$MODEL <- renderPlot({
+    #   plotR()
+    # })
   })
