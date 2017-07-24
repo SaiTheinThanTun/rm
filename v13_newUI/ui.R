@@ -10,29 +10,29 @@ fluidPage(
   
   sidebarPanel(
     conditionalPanel(condition="input.tabs == 'A'",
-    # language selection
-    radioButtons("language", NULL,
-                 choiceNames = mapply(languages, flags, FUN = function(languages, flagUrl) {
-                   tagList(
-                     tags$img(src=flagUrl, width=20, height=20),
-                     languages
-                   )
-                 }, SIMPLIFY = FALSE, USE.NAMES = FALSE),
-                 choiceValues = languages_short,
-                 inline=TRUE
-    )),
+                     # language selection
+                     radioButtons("language", NULL,
+                                  choiceNames = mapply(languages, flags, FUN = function(languages, flagUrl) {
+                                    tagList(
+                                      tags$img(src=flagUrl, width=20, height=20),
+                                      languages
+                                    )
+                                  }, SIMPLIFY = FALSE, USE.NAMES = FALSE),
+                                  choiceValues = languages_short,
+                                  inline=TRUE
+                     )),
     
     conditionalPanel(condition="input.tabs == 'B'",
                      HTML("Provide basic info on the Area.<br>"),
                      uiOutput("area_name_render"),
                      uiOutput("baseline_population_render"),
-                     uiOutput("baseline_API_render")
+                     uiOutput("API_render")
     ),
     
     conditionalPanel(condition="input.tabs == 'C'",
                      tags$h3('Calibration'),
                      tags$p("Adjust the “calibration” parameter until the API line (dark blue, flat) passes through the centre of the model prediction for monthly incidence of confirmed cases line (the lower boundary of the blue wavy line)."),
-                     uiOutput("baseline_calibration"),
+                     uiOutput("bh_max"),
                      actionButton("run_calibration", "Run Calibration", class = "btn-primary")
     ),
     
@@ -43,17 +43,17 @@ fluidPage(
                      
                      # EDAT
                      # selection and access to advanced parameters
-                     uiOutput("edat_yes_render"),
+                     uiOutput("EDATon_render"),
                      fluidRow(
                        column(width = 7,
                               conditionalPanel(
-                                condition = "input['edat_yes']",
+                                condition = "input['EDATon']",
                                 htmlOutput("edat_parameters"))),
                        column(width = 2, offset = 2,  
                               conditionalPanel(
-                                condition = "input['edat_yes']",
+                                condition = "input['EDATon']",
                                 uiOutput("edat_advanced_settings")))
-                       ),
+                     ),
                      
                      
                      
@@ -63,10 +63,10 @@ fluidPage(
                      
                      # ITN
                      # selection and access to advanced parameters
-                     uiOutput("itn_yes_render"),
+                     uiOutput("ITNon_render"),
                      
                      conditionalPanel(
-                       condition = "input['itn_yes']",
+                       condition = "input['ITNon']",
                        htmlOutput("itn_parameters")
                      ),
                      
@@ -74,10 +74,10 @@ fluidPage(
                      
                      # RCD
                      # selection and access to advanced parameters
-                     uiOutput("rcd_yes_render"),
+                     uiOutput("RCDon_render"),
                      
                      conditionalPanel(
-                       condition = "input['rcd_yes']",
+                       condition = "input['RCDon']",
                        htmlOutput("rcd_parameters")
                      ),
                      
@@ -86,10 +86,10 @@ fluidPage(
                      
                      # IRS
                      # selection and access to advanced parameters
-                     uiOutput("irs_yes_render"),
+                     uiOutput("IRSon_render"),
                      
                      conditionalPanel(
-                       condition = "input['irs_yes']",
+                       condition = "input['IRSon']",
                        htmlOutput("irs_parameters")
                      ),
                      
@@ -99,10 +99,10 @@ fluidPage(
                      tags$h3('Interventions under trial'),
                      
                      # MSAT
-                     uiOutput("msat_yes_render"),
+                     uiOutput("MSATon_render"),
                      
                      conditionalPanel(
-                       condition = "input['msat_yes']",
+                       condition = "input['MSATon']",
                        htmlOutput("msat_parameters")
                      ),
                      
@@ -110,10 +110,10 @@ fluidPage(
                      
                      
                      # MDA
-                     uiOutput("mda_yes_render"),
+                     uiOutput("MDAon_render"),
                      
                      conditionalPanel(
-                       condition = "input['mda_yes']",
+                       condition = "input['MDAon']",
                        htmlOutput("mda_parameters")
                      ),
                      
@@ -147,25 +147,25 @@ fluidPage(
                            
                            column(width=4,
                                   tags$h3('→ Vector Control'),
-                                  uiOutput("baseline_cov_ITN_render"),
-                                  uiOutput("baseline_avert_ITN_render"),
-                                  uiOutput("baseline_cov_IRS_render"),
-                                  uiOutput("baseline_avert_IRS_render")
+                                  uiOutput("covITN0_render"),
+                                  uiOutput("effITN_render"),
+                                  uiOutput("covIRS0_render"),
+                                  uiOutput("effIRS_render")
                            ),
                            column(width=4,
                                   tags$h3('→ Treatment'),
-                                  uiOutput("baseline_treatment_render"),
-                                  uiOutput("baseline_treat_fail_2018_render"),
-                                  uiOutput("baseline_treat_fail_2019_render"),
-                                  uiOutput("baseline_treat_fail_2020_render")
+                                  uiOutput("covEDAT0_render"),
+                                  uiOutput("percfail2018_render"),
+                                  uiOutput("percfail2019_render"),
+                                  uiOutput("percfail2020_render")
                            ),
                            
                            column(width=4,
                                   tags$h3('→ Transmission'),
-                                  uiOutput("baseline_trans_forest_render"),
-                                  uiOutput("baseline_trans_import_render"),
-                                  uiOutput("baseline_trans_detect_render"),
-                                  uiOutput("baseline_trans_undetect_render")
+                                  uiOutput("eta_render"),
+                                  uiOutput("muC_render"),
+                                  uiOutput("muA_render"),
+                                  uiOutput("muU_render")
                            )
                          )
                          

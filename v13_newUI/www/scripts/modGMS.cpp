@@ -85,6 +85,7 @@ List modGMSrcpp(double t, NumericVector state, NumericVector parameters)
   pr=pr/100;
   double eta=parameters["eta"];
   eta=eta/100;
+  double RCDthresh=parameters["RCDthresh"]; //new v12
   
   // convert time scales
   double dm=parameters["dm"];
@@ -280,7 +281,9 @@ List modGMSrcpp(double t, NumericVector state, NumericVector parameters)
   double avrad=clustRCDrad/(1+exp(-bRCD*(gRCD-RCDrad)));
   double eqRCDrad=cRCD-((1/kRCD)*log(((1+exp(kRCD*cRCD))/(1+RCDs*exp(kRCD*cRCD)))-1));
   double avcoex=clustRCDcoex/(1+exp(-bRCD*(gRCD-eqRCDrad)));
-  double rateRCD=RCDon*covRCD*incm*(propRCD+fRCD*((1-RCDcoex)*(1-eta)*avrad+RCDcoex*avcoex));
+  double rateRCD=RCDon*covRCD*incm*(propRCD+fRCD*((1-RCDcoex)*(1-eta)*avrad+RCDcoex*avcoex))*((1000*incm/P)<=RCDthresh);
+  //old rateRCD=RCDon*covRCD*incm*(propRCD+fRCD*((1-RCDcoex)*(1-eta)*avrad+RCDcoex*avcoex));
+  //new rateRCD=RCDon*covRCD*incm*(propRCD+fRCD*((1-RCDcoex)*(1-eta)*avrad+RCDcoex*avcoex))*((1000*incm/P)<=RCDthresh);
   double tauRCD=rateRCD;
   
   

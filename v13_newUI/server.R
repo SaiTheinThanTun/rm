@@ -8,37 +8,37 @@ shinyServer(
                                    "en" = "input_explanation_en",
                                    "th" = "input_explanation_th"))
     
-    values <- reactiveValues(edat_act = as.logical(meta[meta$input_id=="edat_act", "default_value"]),
-                             edat_scale = as.numeric(meta[meta$input_id=="edat_scale", "default_value"]),
-                             edat_treatment = as.numeric(meta[meta$input_id=="edat_treatment", "default_value"]),
-                             itn_scale = as.numeric(meta[meta$input_id=="itn_scale", "default_value"]),
-                             itn_cov = as.numeric(meta[meta$input_id=="itn_cov", "default_value"]),
-                             rcd_scale = as.numeric(meta[meta$input_id=="rcd_scale", "default_value"]),
-                             rcd_cov = as.numeric(meta[meta$input_id=="rcd_cov", "default_value"]),
-                             rcd_delay = as.numeric(meta[meta$input_id=="rcd_delay", "default_value"]),
-                             rcd_search = as.numeric(meta[meta$input_id=="rcd_search", "default_value"]),
-                             rcd_value = as.numeric(meta[meta$input_id=="rcd_value", "default_value"]),
-                             rcd_radial_value = as.numeric(meta[meta$input_id=="rcd_radial_value", "default_value"]),
-                             rcd_samplesize = as.numeric(meta[meta$input_id=="rcd_samplesize", "default_value"]),
-                             rcd_value_coexp = as.numeric(meta[meta$input_id=="rcd_value_coexp", "default_value"]),
-                             rcd_sens_clin = as.numeric(meta[meta$input_id=="rcd_sens_clin", "default_value"]),
-                             rcd_sens_detect = as.numeric(meta[meta$input_id=="rcd_sens_detect", "default_value"]),
-                             rcd_sens_undetect = as.numeric(meta[meta$input_id=="rcd_sens_undetect", "default_value"]),
-                             irs_scale = as.numeric(meta[meta$input_id=="irs_scale", "default_value"]),
-                             irs_cov = as.numeric(meta[meta$input_id=="irs_cov", "default_value"]),
-                             msat_scale = as.numeric(meta[meta$input_id=="msat_scale", "default_value"]),
-                             msat_cov = as.numeric(meta[meta$input_id=="msat_cov", "default_value"]),
-                             msat_sens_clinical = as.numeric(meta[meta$input_id=="msat_sens_clinical", "default_value"]),
-                             msat_sens_detect = as.numeric(meta[meta$input_id=="msat_sens_detect", "default_value"]),
-                             msat_sens_undetect = as.numeric(meta[meta$input_id=="msat_sens_undetect", "default_value"]),
-                             mda_prophylaxys = as.numeric(meta[meta$input_id=="mda_prophylaxys", "default_value"]),
-                             mda_months = as.numeric(meta[meta$input_id=="mda_months", "default_value"]),
-                             mda_cov_1 = as.numeric(meta[meta$input_id=="mda_cov_1", "default_value"]),
-                             mda_cov_2 = as.numeric(meta[meta$input_id=="mda_cov_2", "default_value"]),
-                             mda_cov_3 = as.numeric(meta[meta$input_id=="mda_cov_3", "default_value"]),
-                             mda_timing_1 = as.numeric(meta[meta$input_id=="mda_timing_1", "default_value"]),
-                             mda_timing_2 = as.numeric(meta[meta$input_id=="mda_timing_2", "default_value"]),
-                             mda_timing_3 = as.numeric(meta[meta$input_id=="mda_timing_3", "default_value"])
+    values <- reactiveValues(primon = as.logical(meta[meta$input_id=="primon", "default_value"]),
+                             EDATscale = as.numeric(meta[meta$input_id=="EDATscale", "default_value"]),
+                             covEDATi = as.numeric(meta[meta$input_id=="covEDATi", "default_value"]),
+                             ITNscale = as.numeric(meta[meta$input_id=="ITNscale", "default_value"]),
+                             covITNi = as.numeric(meta[meta$input_id=="covITNi", "default_value"]),
+                             RCDscale = as.numeric(meta[meta$input_id=="RCDscale", "default_value"]),
+                             covRCDi = as.numeric(meta[meta$input_id=="covRCDi", "default_value"]),
+                             delayRCD = as.numeric(meta[meta$input_id=="delayRCD", "default_value"]),
+                             RCDcoex = as.numeric(meta[meta$input_id=="RCDcoex", "default_value"]),
+                             RCDrad = as.numeric(meta[meta$input_id=="RCDrad", "default_value"]),
+                             clustRCDrad = as.numeric(meta[meta$input_id=="clustRCDrad", "default_value"]),
+                             RCDs = as.numeric(meta[meta$input_id=="RCDs", "default_value"]),
+                             clustRCDcoex = as.numeric(meta[meta$input_id=="clustRCDcoex", "default_value"]),
+                             RCDsensC = as.numeric(meta[meta$input_id=="RCDsensC", "default_value"]),
+                             RCDsensA = as.numeric(meta[meta$input_id=="RCDsensA", "default_value"]),
+                             RCDsensU = as.numeric(meta[meta$input_id=="RCDsensU", "default_value"]),
+                             IRSscale = as.numeric(meta[meta$input_id=="IRSscale", "default_value"]),
+                             covIRSi = as.numeric(meta[meta$input_id=="covIRSi", "default_value"]),
+                             MSATscale = as.numeric(meta[meta$input_id=="MSATscale", "default_value"]),
+                             covMSATi = as.numeric(meta[meta$input_id=="covMSATi", "default_value"]),
+                             MSATsensC = as.numeric(meta[meta$input_id=="MSATsensC", "default_value"]),
+                             MSATsensA = as.numeric(meta[meta$input_id=="MSATsensA", "default_value"]),
+                             MSATsensU = as.numeric(meta[meta$input_id=="MSATsensU", "default_value"]),
+                             lossd = as.numeric(meta[meta$input_id=="lossd", "default_value"]),
+                             dm = as.numeric(meta[meta$input_id=="dm", "default_value"]),
+                             cmda_1 = as.numeric(meta[meta$input_id=="cmda_1", "default_value"]),
+                             cmda_2 = as.numeric(meta[meta$input_id=="cmda_2", "default_value"]),
+                             cmda_3 = as.numeric(meta[meta$input_id=="cmda_3", "default_value"]),
+                             tm_1 = as.numeric(meta[meta$input_id=="tm_1", "default_value"]),
+                             tm_2 = as.numeric(meta[meta$input_id=="tm_2", "default_value"]),
+                             tm_3 = as.numeric(meta[meta$input_id=="tm_3", "default_value"])
     )
     
     # Baseline set-up section
@@ -64,9 +64,9 @@ shinyServer(
       )
     })
     
-    # baseline_API
-    output$baseline_API_render <- renderUI({
-      var <- "baseline_API"
+    # API
+    output$API_render <- renderUI({
+      var <- "API"
       tagList(
         numericInput(var, label=meta[meta$input_id==var, "label"], value=as.numeric(meta[meta$input_id==var, "default_value"]), 
                      min=as.numeric(meta[meta$input_id==var, "min"]),
@@ -88,8 +88,8 @@ shinyServer(
     
     
     # Vector Control
-    output$baseline_cov_ITN_render <- renderUI({
-      var <- "baseline_cov_ITN"
+    output$covITN0_render <- renderUI({
+      var <- "covITN0"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -102,8 +102,8 @@ shinyServer(
     })
     
     
-    output$baseline_avert_ITN_render <- renderUI({
-      var <- "baseline_avert_ITN"
+    output$effITN_render <- renderUI({
+      var <- "effITN"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -115,8 +115,8 @@ shinyServer(
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
     })
     
-    output$baseline_cov_IRS_render <- renderUI({
-      var <- "baseline_cov_IRS"
+    output$covIRS0_render <- renderUI({
+      var <- "covIRS0"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -128,8 +128,8 @@ shinyServer(
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
     })
     
-    output$baseline_avert_IRS_render <- renderUI({
-      var <- "baseline_avert_IRS"
+    output$effIRS_render <- renderUI({
+      var <- "effIRS"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -142,8 +142,8 @@ shinyServer(
     })
     
     # Treatment
-    output$baseline_treatment_render <- renderUI({
-      var <- "baseline_treatment"
+    output$covEDAT0_render <- renderUI({
+      var <- "covEDAT0"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -155,8 +155,8 @@ shinyServer(
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
     })
     
-    output$baseline_treat_fail_2018_render <- renderUI({
-      var <- "baseline_treat_fail_2018"
+    output$percfail2018_render <- renderUI({
+      var <- "percfail2018"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -168,8 +168,8 @@ shinyServer(
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
     })
     
-    output$baseline_treat_fail_2019_render <- renderUI({
-      var <- "baseline_treat_fail_2019"
+    output$percfail2019_render <- renderUI({
+      var <- "percfail2019"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -181,8 +181,8 @@ shinyServer(
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
     })
     
-    output$baseline_treat_fail_2020_render <- renderUI({
-      var <- "baseline_treat_fail_2020"
+    output$percfail2020_render <- renderUI({
+      var <- "percfail2020"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -196,8 +196,8 @@ shinyServer(
     
     
     # Transmission
-    output$baseline_trans_forest_render <- renderUI({
-      var <- "baseline_trans_forest"
+    output$eta_render <- renderUI({
+      var <- "eta"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -209,8 +209,8 @@ shinyServer(
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="left", options = list(container = "body")))
     })
     
-    output$baseline_trans_import_render <- renderUI({
-      var <- "baseline_trans_import"
+    output$muC_render <- renderUI({
+      var <- "muC"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -222,8 +222,8 @@ shinyServer(
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="left", options = list(container = "body")))
     })
     
-    output$baseline_trans_detect_render <- renderUI({
-      var <- "baseline_trans_detect"
+    output$muA_render <- renderUI({
+      var <- "muA"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -235,8 +235,8 @@ shinyServer(
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="left", options = list(container = "body")))
     })
     
-    output$baseline_trans_undetect_render <- renderUI({
-      var <- "baseline_trans_undetect"
+    output$muU_render <- renderUI({
+      var <- "muU"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -267,9 +267,9 @@ shinyServer(
     # Calibration
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    # baseline_calibration
-    output$baseline_calibration <- renderUI({
-      var <- "baseline_calibration"
+    # bh_max
+    output$bh_max <- renderUI({
+      var <- "bh_max"
       tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -284,20 +284,20 @@ shinyServer(
     
     # Invalidation when baseline parameters change
     observeEvent({
-      input$baseline_API
+      input$API
       input$baseline_population
-      input$baseline_cov_ITN
-      input$baseline_avert_ITN
-      input$baseline_cov_IRS
-      input$baseline_avert_IRS
-      input$baseline_treatment
-      input$baseline_treat_fail_2018
-      input$baseline_treat_fail_2019
-      input$baseline_treat_fail_2020
-      input$baseline_trans_forest
-      input$baseline_trans_import
-      input$baseline_trans_detect
-      input$baseline_trans_undetect
+      input$covITN0
+      input$effITN
+      input$covIRS0
+      input$effIRS
+      input$covEDAT0
+      input$percfail2018
+      input$percfail2019
+      input$percfail2020
+      input$eta
+      input$muC
+      input$muA
+      input$muU
     }, 
     ignoreInit=TRUE, 
     {
@@ -338,7 +338,7 @@ shinyServer(
       #   paste0(
       #     "<p>Baseline data summary:</p>",
       #     "<ul>",
-      #     "<li>", meta$label[3], ": ", input$baseline_API, "</li>",
+      #     "<li>", meta$label[3], ": ", input$API, "</li>",
       #     "<li>", meta$label[4], ": ", input$baseline_bites_night, "</li>",
       #     "<li>...</li>",
       #     "</ul>")
@@ -355,31 +355,31 @@ shinyServer(
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     # EDAT Yes/No checkbox
-    output$edat_yes_render <- renderUI({
-      checkboxInput("edat_yes", label=tags$span(class="label label-default", meta[meta$input_id=="edat_yes", "label"]), value=as.logical(meta[meta$input_id=="edat_yes", "default_value"]))
+    output$EDATon_render <- renderUI({
+      checkboxInput("EDATon", label=tags$span(class="label label-default", meta[meta$input_id=="EDATon", "label"]), value=as.logical(meta[meta$input_id=="EDATon", "default_value"]))
     })
     
     # EDAT summary text of parameters values
     output$edat_parameters <- renderText({
       input$update
       return(
-        paste0("<ul>", "<li>", ifelse(values$edat_act, "With ACT and Primaquine", "Without ACT and Primaquine"), "</li>",
-               "<li>", values$edat_scale, " year(s) to scale up EDAT", "</li>",
-               "<li>New percentage of all clinical cases treated: ", values$edat_treatment, "%", "</li>",
+        paste0("<ul>", "<li>", ifelse(values$primon, "With ACT and Primaquine", "Without ACT and Primaquine"), "</li>",
+               "<li>", values$EDATscale, " year(s) to scale up EDAT", "</li>",
+               "<li>New percentage of all clinical cases treated: ", values$covEDATi, "%", "</li>",
                "</ul>")
       )
     })
     
     # EDAT button to provide access to advanced parameters
     output$edat_advanced_render <- renderUI({
-      if (!isTRUE(input$edat_yes)) return()
+      if (!isTRUE(input$EDATon)) return()
       actionButton("edat_advanced", "EDAT Parameters", icon = icon("external-link"))
     })
     
     # EDAT modal dialogue with access to parameters
     output$edat_advanced_settings <- renderUI({
 
-      var <- "edat_act"
+      var <- "primon"
       tag_1 <- tagList(
         do.call(checkboxInput, list(
           inputId = var, 
@@ -388,7 +388,7 @@ shinyServer(
           )),
         bsTooltip(var, title = meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "edat_scale"
+      var <- "EDATscale"
       tag_2 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -399,7 +399,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsTooltip(var, title = meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "edat_treatment"
+      var <- "covEDATi"
       tag_3 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -417,9 +417,9 @@ shinyServer(
     # update EDAT patameters on update button
     observe({
       # removeModal(session)
-      values$edat_act <- input$edat_act
-      values$edat_scale <- input$edat_scale
-      values$edat_treatment <- input$edat_treatment
+      values$primon <- input$primon
+      values$EDATscale <- input$EDATscale
+      values$covEDATi <- input$covEDATi
     })
     
     
@@ -428,30 +428,30 @@ shinyServer(
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     # ITN Yes/No checkbox
-    output$itn_yes_render <- renderUI({
-      checkboxInput("itn_yes", label=tags$span(style="color:#228B22", tags$u(tags$strong(meta[meta$input_id=="itn_yes", "label"]))), value=as.logical(meta[meta$input_id=="itn_yes", "default_value"]))
+    output$ITNon_render <- renderUI({
+      checkboxInput("ITNon", label=tags$span(style="color:#228B22", tags$u(tags$strong(meta[meta$input_id=="ITNon", "label"]))), value=as.logical(meta[meta$input_id=="ITNon", "default_value"]))
     })
     
     # ITN summary text of parameters values
     output$itn_parameters <- renderText({
       input$update
       return(
-        paste0("<ul>", "<li>", values$itn_scale, " year(s) to scale up ITN", "</li>",
-               "<li>New coverage of ITNs: ", values$itn_cov, "%", "</li>",
+        paste0("<ul>", "<li>", values$ITNscale, " year(s) to scale up ITN", "</li>",
+               "<li>New coverage of ITNs: ", values$covITNi, "%", "</li>",
                "</ul>")
       )
     })
     
     # ITN button to provide access to advanced parameters
     output$itn_advanced_render <- renderUI({
-      if (!isTRUE(input$itn_yes)) return()
+      if (!isTRUE(input$ITNon)) return()
       actionButton("itn_advanced", "ITN Parameters", icon = icon("external-link"))
     })
     
     # ITN modal dialogue with access to parameters
     observeEvent(input$itn_advanced, {
       
-      var <- "itn_scale"
+      var <- "ITNscale"
       tag_1 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -462,7 +462,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "itn_cov"
+      var <- "covITNi"
       tag_2 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -483,8 +483,8 @@ shinyServer(
     # update ITN parameters on update button
     observeEvent(input$update_itn,{
       removeModal(session)
-      values$itn_scale <- input$itn_scale
-      values$itn_cov <- input$itn_cov
+      values$ITNscale <- input$ITNscale
+      values$covITNi <- input$covITNi
     })
     
     
@@ -495,39 +495,39 @@ shinyServer(
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     # RCD Yes/No checkbox
-    output$rcd_yes_render <- renderUI({
-      checkboxInput("rcd_yes", label=tags$span(style="color:#228B22", tags$u(tags$strong(meta[meta$input_id=="rcd_yes", "label"]))), value=as.logical(meta[meta$input_id=="itn_yes", "default_value"]))
+    output$RCDon_render <- renderUI({
+      checkboxInput("RCDon", label=tags$span(style="color:#228B22", tags$u(tags$strong(meta[meta$input_id=="RCDon", "label"]))), value=as.logical(meta[meta$input_id=="ITNon", "default_value"]))
     })
     
     # RCD summary text of parameters values
     output$rcd_parameters <- renderText({
       input$update
       return(
-        paste0("<ul>", "<li>", values$rcd_scale, " year(s) to scale up RCD", "</li>",
-               "<li>", "New coverage of RCD: ", values$rcd_cov, "%", "</li>",
-               "<li>", "Reaction time: ", values$rcd_cov, " weeks", "</li>",
-               "<li>", ifelse(values$rcd_search == 0, 'Performed with "radial" search', 'Performed with "co-exposure search"'), "</li>",
-               "<li>", "Radius for radial search: ", values$rcd_value, " meters", "</li>",
-               "<li>", "Added value of radial targetting: ", values$rcd_radial_value, "%", "</li>",
-               "<li>", "Sample size for coexposure search: ", values$rcd_samplesize, "% of village", "</li>",
-               "<li>", "Added value of co-exposure targetting: ", values$rcd_value_coexp, "%", "</li>",
-               "<li>", "Sensitivity of RDT test (clinical): ", values$rcd_sens_clin, "%", "</li>",
-               "<li>", "Sensitivity of RDT test (micro detectable, asym.): ", values$rcd_sens_detect, "%", "</li>",
-               "<li>", "Sensitivity of RDT test (micro undetectable, asym.): ", values$rcd_sens_undetect, "%", "</li>",
+        paste0("<ul>", "<li>", values$RCDscale, " year(s) to scale up RCD", "</li>",
+               "<li>", "New coverage of RCD: ", values$covRCDi, "%", "</li>",
+               "<li>", "Reaction time: ", values$covRCDi, " weeks", "</li>",
+               "<li>", ifelse(values$RCDcoex == 0, 'Performed with "radial" search', 'Performed with "co-exposure search"'), "</li>",
+               "<li>", "Radius for radial search: ", values$RCDrad, " meters", "</li>",
+               "<li>", "Added value of radial targetting: ", values$clustRCDrad, "%", "</li>",
+               "<li>", "Sample size for coexposure search: ", values$RCDs, "% of village", "</li>",
+               "<li>", "Added value of co-exposure targetting: ", values$clustRCDcoex, "%", "</li>",
+               "<li>", "Sensitivity of RDT test (clinical): ", values$RCDsensC, "%", "</li>",
+               "<li>", "Sensitivity of RDT test (micro detectable, asym.): ", values$RCDsensA, "%", "</li>",
+               "<li>", "Sensitivity of RDT test (micro undetectable, asym.): ", values$RCDsensU, "%", "</li>",
                "</ul>")
       )
     })
     
     # RCD button to provide access to advanced parameters
     output$rcd_advanced_render <- renderUI({
-      if (!isTRUE(input$rcd_yes)) return()
+      if (!isTRUE(input$RCDon)) return()
       actionButton("rcd_advanced", "RCD Parameters", icon = icon("external-link"))
     })
     
     # RCD modal dialogue with access to parameters
     observeEvent(input$rcd_advanced, {
       
-      var <- "rcd_scale"
+      var <- "RCDscale"
       tag_1 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -538,7 +538,18 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "rcd_cov"
+      var <- "RCDthresh"
+      tag_1 <- tagList(
+        do.call(sliderInput, list(
+          inputId = var, 
+          label = meta[meta$input_id==var, "label"], 
+          value = as.numeric(meta[meta$input_id==var, "default_value"]),
+          min = as.numeric(meta[meta$input_id==var, "min"]),
+          max = as.numeric(meta[meta$input_id==var, "max"]),
+          step = as.numeric(meta[meta$input_id==var, "step"]))),
+        bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
+      
+      var <- "covRCDi"
       tag_2 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -549,7 +560,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "rcd_delay"
+      var <- "delayRCD"
       tag_3 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -560,16 +571,16 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "rcd_search"
+      var <- "RCDcoex"
       tag_4 <- tagList(
         do.call(radioButtons, list(
           inputId = var, 
           label = meta[meta$input_id==var, "label"], 
-          selected=as.numeric(meta[meta$input_id=="rcd_search", "default_value"]),
+          selected=as.numeric(meta[meta$input_id=="RCDcoex", "default_value"]),
           choices=c("Radial search"=0, "Co-exposure search"=1))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "rcd_value"
+      var <- "RCDrad"
       tag_5 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -580,7 +591,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "rcd_radial_value"
+      var <- "clustRCDrad"
       tag_6 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -591,7 +602,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "rcd_samplesize"
+      var <- "RCDs"
       tag_7 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -602,7 +613,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "rcd_value_coexp"
+      var <- "clustRCDcoex"
       tag_8 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -613,7 +624,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "rcd_sens_clin"
+      var <- "RCDsensC"
       tag_9 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -624,7 +635,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "rcd_sens_detect"
+      var <- "RCDsensA"
       tag_10 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -635,7 +646,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "rcd_sens_undetect"
+      var <- "RCDsensU"
       tag_11 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -665,18 +676,18 @@ shinyServer(
     # update RCD parameters on update button
     observeEvent(input$update_rcd,{
       removeModal(session)
-      values$rcd_scale <- input$rcd_scale
-      values$rcd_cov <- input$rcd_cov
-      values$rcd_delay <- input$rcd_delay
-      values$rcd_search <- input$rcd_search
-      values$rcd_value <- input$rcd_value
-      values$rcd_radial_value <- input$rcd_radial_value
-      values$rcd_samplesize <- input$rcd_samplesize
-      values$rcd_value_coexp <- input$rcd_value_coexp
-      values$rcd_sens_clin <- input$rcd_sens_clin
-      values$rcd_sens_detect <- input$rcd_sens_detect
-      values$rcd_sens_undetect <- input$rcd_sens_undetect
-      values$rcd_sens_undetect <- input$rcd_sens_undetect
+      values$RCDscale <- input$RCDscale
+      values$covRCDi <- input$covRCDi
+      values$delayRCD <- input$delayRCD
+      values$RCDcoex <- input$RCDcoex
+      values$RCDrad <- input$RCDrad
+      values$clustRCDrad <- input$clustRCDrad
+      values$RCDs <- input$RCDs
+      values$clustRCDcoex <- input$clustRCDcoex
+      values$RCDsensC <- input$RCDsensC
+      values$RCDsensA <- input$RCDsensA
+      values$RCDsensU <- input$RCDsensU
+      values$RCDsensU <- input$RCDsensU
     })
     
     
@@ -685,30 +696,30 @@ shinyServer(
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     # IRS Yes/No checkbox
-    output$irs_yes_render <- renderUI({
-      checkboxInput("irs_yes", label=tags$span(style="color:#228B22", tags$u(tags$strong(meta[meta$input_id=="irs_yes", "label"]))), value=as.logical(meta[meta$input_id=="irs_yes", "default_value"]))
+    output$IRSon_render <- renderUI({
+      checkboxInput("IRSon", label=tags$span(style="color:#228B22", tags$u(tags$strong(meta[meta$input_id=="IRSon", "label"]))), value=as.logical(meta[meta$input_id=="IRSon", "default_value"]))
     })
     
     # IRS summary text of parameters values
     output$irs_parameters <- renderText({
       input$update
       return(
-        paste0("<ul>", "<li>", values$irs_scale, " year(s) to scale up IRS", "</li>",
-               "<li>New coverage of IRS: ", values$irs_cov, "%", "</li>",
+        paste0("<ul>", "<li>", values$IRSscale, " year(s) to scale up IRS", "</li>",
+               "<li>New coverage of IRS: ", values$covIRSi, "%", "</li>",
                "</ul>")
       )
     })
     
     # IRS button to provide access to advanced parameters
     output$irs_advanced_render <- renderUI({
-      if (!isTRUE(input$irs_yes)) return()
+      if (!isTRUE(input$IRSon)) return()
       actionButton("irs_advanced", "IRS Parameters", icon = icon("external-link"))
     })
     
     # IRS modal dialogue with access to parameters
     observeEvent(input$irs_advanced, {
       
-      var <- "irs_scale"
+      var <- "IRSscale"
       tag_1 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -719,7 +730,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "irs_cov"
+      var <- "covIRSi"
       tag_2 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -740,8 +751,8 @@ shinyServer(
     # update IRS parameters on update button
     observeEvent(input$update_irs,{
       removeModal(session)
-      values$irs_scale <- input$irs_scale
-      values$irs_cov <- input$irs_cov
+      values$IRSscale <- input$IRSscale
+      values$covIRSi <- input$covIRSi
     })
     
     
@@ -751,33 +762,33 @@ shinyServer(
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     # MSAT Yes/No checkbox
-    output$msat_yes_render <- renderUI({
-      checkboxInput("msat_yes", label=tags$span(style="color:#228B22", tags$u(tags$strong(meta[meta$input_id=="msat_yes", "label"]))), value=as.logical(meta[meta$input_id=="msat_yes", "default_value"]))
+    output$MSATon_render <- renderUI({
+      checkboxInput("MSATon", label=tags$span(style="color:#228B22", tags$u(tags$strong(meta[meta$input_id=="MSATon", "label"]))), value=as.logical(meta[meta$input_id=="MSATon", "default_value"]))
     })
     
     # MSAT summary text of parameters values
     output$msat_parameters <- renderText({
       input$update_msat
       return(
-        paste0("<ul>", "<li>", values$msat_scale, " year(s) to scale up MSAT", "</li>",
-               "<li>", "New coverage of MSAT: ", values$msat_cov, "%", "</li>",
-               "<li>", "Sensitivity MSAT test (clinical): ", values$msat_sens_clinical, "%", "</li>",
-               "<li>", "Sensitivity MSAT test (micro detectable, asym): ", values$msat_sens_detect, "%", "</li>",
-               "<li>", "Sensitivity MSAT test (micro undetectable, asym): ", values$msat_sens_undetect, "%", "</li>",
+        paste0("<ul>", "<li>", values$MSATscale, " year(s) to scale up MSAT", "</li>",
+               "<li>", "New coverage of MSAT: ", values$covMSATi, "%", "</li>",
+               "<li>", "Sensitivity MSAT test (clinical): ", values$MSATsensC, "%", "</li>",
+               "<li>", "Sensitivity MSAT test (micro detectable, asym): ", values$MSATsensA, "%", "</li>",
+               "<li>", "Sensitivity MSAT test (micro undetectable, asym): ", values$MSATsensU, "%", "</li>",
                "</ul>")
       )
     })
     
     # MSAT button to provide access to advanced parameters
     output$msat_advanced_render <- renderUI({
-      if (!isTRUE(input$msat_yes)) return()
+      if (!isTRUE(input$MSATon)) return()
       actionButton("msat_advanced", "MSAT Parameters", icon = icon("external-link"))
     })
     
     # MSAT modal dialogue with access to parameters
     observeEvent(input$msat_advanced, {
       
-      var <- "msat_scale"
+      var <- "MSATscale"
       tag_1 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -788,7 +799,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "msat_cov"
+      var <- "covMSATi"
       tag_2 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -799,7 +810,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "msat_sens_clinical"
+      var <- "MSATsensC"
       tag_3 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -810,7 +821,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "msat_sens_detect"
+      var <- "MSATsensA"
       tag_4 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -821,7 +832,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "msat_sens_undetect"
+      var <- "MSATsensU"
       tag_5 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -846,11 +857,11 @@ shinyServer(
     # update MSAT patameters on update button
     observeEvent(input$update_msat,{
       removeModal(session)
-      values$msat_scale <- input$msat_scale
-      values$msat_cov <- input$msat_cov
-      values$msat_sens_clinical <- input$msat_sens_clinical
-      values$msat_sens_detect <- input$msat_sens_detect
-      values$msat_sens_undetect <- input$msat_sens_undetect
+      values$MSATscale <- input$MSATscale
+      values$covMSATi <- input$covMSATi
+      values$MSATsensC <- input$MSATsensC
+      values$MSATsensA <- input$MSATsensA
+      values$MSATsensU <- input$MSATsensU
     })
     
     
@@ -858,36 +869,36 @@ shinyServer(
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     # MDA Yes/No checkbox
-    output$mda_yes_render <- renderUI({
-      checkboxInput("mda_yes", label=tags$span(style="color:#228B22", tags$u(tags$strong(meta[meta$input_id=="mda_yes", "label"]))), value=as.logical(meta[meta$input_id=="mda_yes", "default_value"]))
+    output$MDAon_render <- renderUI({
+      checkboxInput("MDAon", label=tags$span(style="color:#228B22", tags$u(tags$strong(meta[meta$input_id=="MDAon", "label"]))), value=as.logical(meta[meta$input_id=="MDAon", "default_value"]))
     })
     
     # MDA summary text of parameters values
     output$mda_parameters <- renderText({
       input$update_mda
       return(
-        paste0("<ul>", "<li>", values$mda_prophylaxys, " days prophylaxis provided by the ACT", "</li>",
-               "<li>", values$mda_months, " months to complete each round", "</li>",
-               "<li>", "Effective population coverage of focal MDA in round 1: ", values$mda_cov_1, "%", "</li>",
-               "<li>", "Effective population coverage of focal MDA in round 2: ", values$mda_cov_2, "%", "</li>",
-               "<li>", "Effective population coverage of focal MDA in round 3: ", values$mda_cov_3, "%", "</li>",
-               "<li>", "Start of 1st round: ", format(as.Date("2017-12-15")+(values$mda_timing_1*30.5), "%B %Y"), "</li>",
-               "<li>", "Start of 2nd round: ", format(as.Date("2017-12-15")+(values$mda_timing_2*30.5), "%B %Y"), "</li>",
-               "<li>", "Start of 3rd round: ", format(as.Date("2017-12-01")+(values$mda_timing_3*30.5), "%B %Y"), "</li>",
+        paste0("<ul>", "<li>", values$lossd, " days prophylaxis provided by the ACT", "</li>",
+               "<li>", values$dm, " months to complete each round", "</li>",
+               "<li>", "Effective population coverage of focal MDA in round 1: ", values$cmda_1, "%", "</li>",
+               "<li>", "Effective population coverage of focal MDA in round 2: ", values$cmda_2, "%", "</li>",
+               "<li>", "Effective population coverage of focal MDA in round 3: ", values$cmda_3, "%", "</li>",
+               "<li>", "Start of 1st round: ", format(as.Date("2017-12-15")+(values$tm_1*30.5), "%B %Y"), "</li>",
+               "<li>", "Start of 2nd round: ", format(as.Date("2017-12-15")+(values$tm_2*30.5), "%B %Y"), "</li>",
+               "<li>", "Start of 3rd round: ", format(as.Date("2017-12-01")+(values$tm_3*30.5), "%B %Y"), "</li>",
                "</ul>")
       )
     })
     
     # MDA button to provide access to advanced parameters
     output$mda_advanced_render <- renderUI({
-      if (!isTRUE(input$mda_yes)) return()
+      if (!isTRUE(input$MDAon)) return()
       actionButton("mda_advanced", "MDA Parameters", icon = icon("external-link"))
     })
     
     # MDA modal dialogue with access to parameters
     observeEvent(input$mda_advanced, {
       
-      var <- "mda_prophylaxys"
+      var <- "lossd"
       tag_1 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -898,7 +909,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "mda_months"
+      var <- "dm"
       tag_2 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -909,7 +920,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "mda_cov_1"
+      var <- "cmda_1"
       tag_3 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -920,7 +931,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "mda_cov_2"
+      var <- "cmda_2"
       tag_4 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -931,7 +942,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "mda_cov_3"
+      var <- "cmda_3"
       tag_5 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -942,7 +953,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "mda_timing_1"
+      var <- "tm_1"
       tag_6 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -953,7 +964,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "mda_timing_2"
+      var <- "tm_2"
       tag_7 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -964,7 +975,7 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      var <- "mda_timing_3"
+      var <- "tm_3"
       tag_8 <- tagList(
         do.call(sliderInput, list(
           inputId = var, 
@@ -991,14 +1002,14 @@ shinyServer(
     # update MDA patameters on update button
     observeEvent(input$update_mda,{
       removeModal(session)
-      values$mda_prophylaxys <- input$mda_prophylaxys
-      values$mda_months <- input$mda_months
-      values$mda_cov_1 <- input$mda_cov_1
-      values$mda_cov_2 <- input$mda_cov_2
-      values$mda_cov_3 <- input$mda_cov_3
-      values$mda_timing_1 <- input$mda_timing_1
-      values$mda_timing_2 <- input$mda_timing_2
-      values$mda_timing_3 <- input$mda_timing_3
+      values$lossd <- input$lossd
+      values$dm <- input$dm
+      values$cmda_1 <- input$cmda_1
+      values$cmda_2 <- input$cmda_2
+      values$cmda_3 <- input$cmda_3
+      values$tm_1 <- input$tm_1
+      values$tm_2 <- input$tm_2
+      values$tm_3 <- input$tm_3
     })
     
     
@@ -1007,14 +1018,14 @@ shinyServer(
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     output$package_name_render <- renderUI({
-      if(is.null(input$edat_yes) | is.null(input$itn_yes) | is.null(input$rcd_yes) | is.null(input$irs_yes) | is.null(input$msat_yes) | is.null(input$mda_yes)) return()
-      if ((input$edat_yes+input$itn_yes+input$rcd_yes+input$irs_yes+input$msat_yes+input$mda_yes)==0) return() 
+      if(is.null(input$EDATon) | is.null(input$ITNon) | is.null(input$RCDon) | is.null(input$IRSon) | is.null(input$MSATon) | is.null(input$MDAon)) return()
+      if ((input$EDATon+input$ITNon+input$RCDon+input$IRSon+input$MSATon+input$MDAon)==0) return() 
       textInput('package_name', label="Package name:", placeholder=paste0("package ", compteur_simul()+1))
     })
     
     output$run_simul_render <- renderUI({
-      if(is.null(input$edat_yes) | is.null(input$itn_yes) | is.null(input$rcd_yes) | is.null(input$irs_yes) | is.null(input$msat_yes) | is.null(input$mda_yes)) return()
-      if ((input$edat_yes+input$itn_yes+input$rcd_yes+input$irs_yes+input$msat_yes+input$mda_yes)==0) return() 
+      if(is.null(input$EDATon) | is.null(input$ITNon) | is.null(input$RCDon) | is.null(input$IRSon) | is.null(input$MSATon) | is.null(input$MDAon)) return()
+      if ((input$EDATon+input$ITNon+input$RCDon+input$IRSon+input$MSATon+input$MDAon)==0) return() 
       actionButton("run_simul", "Simul package", class = "btn-primary")
     })
     
@@ -1056,21 +1067,21 @@ shinyServer(
                                         explain=paste0(
                                           # "<p>package was generated with the following parameters:</p>",
                                           "<ul>",
-                                          ifelse(input$edat_yes, paste0("<li>", "includes EDAT: ", 
-                                                                        paste0("<ul>", "<li>", ifelse(values$edat_act, "With ACT and Primaquine", "Without ACT and Primaquine"), "</li>",
-                                                                               "<li>", values$edat_scale, " year(s) to scale up EDAT", "</li>",
-                                                                               "<li>New percentage of all clinical cases treated: ", values$edat_treatment, "%", "</li>",
+                                          ifelse(input$EDATon, paste0("<li>", "includes EDAT: ", 
+                                                                        paste0("<ul>", "<li>", ifelse(values$primon, "With ACT and Primaquine", "Without ACT and Primaquine"), "</li>",
+                                                                               "<li>", values$EDATscale, " year(s) to scale up EDAT", "</li>",
+                                                                               "<li>New percentage of all clinical cases treated: ", values$covEDATi, "%", "</li>",
                                                                                "</ul>"),
                                                                         "</li>"), ""),
-                                          ifelse(input$itn_yes, paste0("<li>", "includes ITN: ", 
-                                                                       paste0("<ul>", "<li>", values$itn_scale, " year(s) to scale up ITN", "</li>",
-                                                                              "<li>New coverage of ITNs: ", values$itn_cov, "%", "</li>",
+                                          ifelse(input$ITNon, paste0("<li>", "includes ITN: ", 
+                                                                       paste0("<ul>", "<li>", values$ITNscale, " year(s) to scale up ITN", "</li>",
+                                                                              "<li>New coverage of ITNs: ", values$covITNi, "%", "</li>",
                                                                               "</ul>"), 
                                                                        "</li>"), ""),
-                                          ifelse(input$rcd_yes, paste0("<li>", "includes RCD: ", ": <em>parameters to be detailed here</em>", "</li>"), ""),
-                                          ifelse(input$irs_yes, paste0("<li>", "includes IRS: ", ": <em>parameters to be detailed here</em>", "</li>"), ""),
-                                          ifelse(input$msat_yes, paste0("<li>", "includes MSAT: ", ": <em>parameters to be detailed here</em>", "</li>"), ""),
-                                          ifelse(input$mda_yes, paste0("<li>", "includes MDA: ", ": <em>parameters to be detailed here</em>", "</li>"), ""),
+                                          ifelse(input$RCDon, paste0("<li>", "includes RCD: ", ": <em>parameters to be detailed here</em>", "</li>"), ""),
+                                          ifelse(input$IRSon, paste0("<li>", "includes IRS: ", ": <em>parameters to be detailed here</em>", "</li>"), ""),
+                                          ifelse(input$MSATon, paste0("<li>", "includes MSAT: ", ": <em>parameters to be detailed here</em>", "</li>"), ""),
+                                          ifelse(input$MDAon, paste0("<li>", "includes MDA: ", ": <em>parameters to be detailed here</em>", "</li>"), ""),
                                           "</ul>"
                                         )
                              )
