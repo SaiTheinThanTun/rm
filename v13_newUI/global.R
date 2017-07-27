@@ -11,6 +11,7 @@ library(TSA)
 
 # C++ script
 sourceCpp("./www/scripts/modGMS.cpp")
+
 # R script
 source("./www/scripts/runGMS.R")
 
@@ -30,11 +31,11 @@ flags <- c(
 # for bookmarking
 enableBookmarking(store = "url")
 
-#non-reactive parameters
+# non-reactive parameters
 # define the number of weeks to run the model
-dt<-1/12
-startyear<-2007
-stopyear<-2025
-maxt<-stopyear-startyear
+dt <- 1/12
+startyear <- 2007
+stopyear <- 2025
+maxt <- (stopyear-startyear)
 times <- seq(0, maxt, by = dt)
-tsteps<-length(times)
+tsteps <- length(times)

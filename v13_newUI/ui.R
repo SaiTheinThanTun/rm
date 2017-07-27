@@ -4,7 +4,7 @@ library(shinythemes)
 useShinyjs()
 
 fluidPage(
-  theme=shinytheme("simplex"),
+  theme=shinytheme("cosmo"),
   
   headerPanel(title="MALMOD (beta)"),
   
@@ -43,81 +43,59 @@ fluidPage(
                      
                      # EDAT
                      # selection and access to advanced parameters
-                     uiOutput("EDATon_render"),
-                     fluidRow(
-                       column(width = 7,
-                              conditionalPanel(
-                                condition = "input['EDATon']",
-                                htmlOutput("edat_parameters"))),
-                       column(width = 2, offset = 2,  
-                              conditionalPanel(
-                                condition = "input['EDATon']",
-                                uiOutput("edat_advanced_settings")))
-                     ),
-                     
-                     
-                     
-                     
-                     # uiOutput("edat_advanced_render"),
+                     fixedRow(column(width = 9, uiOutput("EDATon_render")), 
+                              column(width = 3, conditionalPanel(
+                                condition = "input['EDATon']", uiOutput("edat_advanced_settings")))),
+                     fluidRow(conditionalPanel(
+                       condition = "input['EDATon']", htmlOutput("edat_parameters"))),
                      
                      
                      # ITN
                      # selection and access to advanced parameters
-                     uiOutput("ITNon_render"),
+                     fixedRow(column(width = 9, uiOutput("ITNon_render")), 
+                              column(width = 3, conditionalPanel(
+                                condition = "input['ITNon']", uiOutput("itn_advanced_settings")))),
+                     fluidRow(conditionalPanel(
+                       condition = "input['ITNon']", htmlOutput("itn_parameters"))),
                      
-                     conditionalPanel(
-                       condition = "input['ITNon']",
-                       htmlOutput("itn_parameters")
-                     ),
                      
-                     uiOutput("itn_advanced_render"),
                      
                      # RCD
                      # selection and access to advanced parameters
-                     uiOutput("RCDon_render"),
+                     fixedRow(column(width = 9, uiOutput("RCDon_render")), 
+                              column(width = 3, conditionalPanel(
+                                condition = "input['RCDon']", uiOutput("rcd_advanced_settings")))),
+                     fluidRow(conditionalPanel(
+                       condition = "input['RCDon']", htmlOutput("rcd_parameters"))),
                      
-                     conditionalPanel(
-                       condition = "input['RCDon']",
-                       htmlOutput("rcd_parameters")
-                     ),
-                     
-                     uiOutput("rcd_advanced_render"),
                      
                      
                      # IRS
                      # selection and access to advanced parameters
-                     uiOutput("IRSon_render"),
+                     fixedRow(column(width = 9, uiOutput("IRSon_render")), 
+                              column(width = 3, conditionalPanel(
+                                condition = "input['IRSon']", uiOutput("irs_advanced_settings")))),
+                     fluidRow(conditionalPanel(
+                       condition = "input['IRSon']", htmlOutput("irs_parameters"))),
                      
-                     conditionalPanel(
-                       condition = "input['IRSon']",
-                       htmlOutput("irs_parameters")
-                     ),
-                     
-                     uiOutput("irs_advanced_render"),
                      
                      tags$br(),
                      tags$h3('Interventions under trial'),
                      
                      # MSAT
-                     uiOutput("MSATon_render"),
-                     
-                     conditionalPanel(
-                       condition = "input['MSATon']",
-                       htmlOutput("msat_parameters")
-                     ),
-                     
-                     uiOutput("msat_advanced_render"),
+                     fixedRow(column(width = 9, uiOutput("MSATon_render")), 
+                              column(width = 3, conditionalPanel(
+                                condition = "input['MSATon']", uiOutput("msat_advanced_settings")))),
+                     fluidRow(conditionalPanel(
+                       condition = "input['MSATon']", htmlOutput("msat_parameters"))),
                      
                      
                      # MDA
-                     uiOutput("MDAon_render"),
-                     
-                     conditionalPanel(
-                       condition = "input['MDAon']",
-                       htmlOutput("mda_parameters")
-                     ),
-                     
-                     uiOutput("mda_advanced_render"),
+                     fixedRow(column(width = 9, uiOutput("MDAon_render")), 
+                              column(width = 3, conditionalPanel(
+                                condition = "input['MDAon']", uiOutput("mda_advanced_settings")))),
+                     fluidRow(conditionalPanel(
+                       condition = "input['MDAon']", htmlOutput("mda_parameters"))),
                      
                      
                      # Button run simulation

@@ -26,6 +26,7 @@ shinyServer(
                              RCDsensC = as.numeric(meta[meta$input_id=="RCDsensC", "default_value"]),
                              RCDsensA = as.numeric(meta[meta$input_id=="RCDsensA", "default_value"]),
                              RCDsensU = as.numeric(meta[meta$input_id=="RCDsensU", "default_value"]),
+                             RCDthresh = as.numeric(meta[meta$input_id=="RCDthresh", "default_value"]),
                              IRSscale = as.numeric(meta[meta$input_id=="IRSscale", "default_value"]),
                              covIRSi = as.numeric(meta[meta$input_id=="covIRSi", "default_value"]),
                              MSATscale = as.numeric(meta[meta$input_id=="MSATscale", "default_value"]),
@@ -363,7 +364,6 @@ shinyServer(
     
     # EDAT summary text of parameters values
     output$edat_parameters <- renderText({
-      input$update
       return(
         paste0("<ul>", "<li>", ifelse(values$primon, "With ACT and Primaquine", "Without ACT and Primaquine"), "</li>",
                "<li>", values$EDATscale, " year(s) to scale up EDAT", "</li>",
@@ -373,10 +373,10 @@ shinyServer(
     })
     
     # EDAT button to provide access to advanced parameters
-    output$edat_advanced_render <- renderUI({
-      if (!isTRUE(input$EDATon)) return()
-      actionButton("edat_advanced", "EDAT Parameters", icon = icon("external-link"))
-    })
+    # output$edat_advanced_render <- renderUI({
+    #   if (!isTRUE(input$EDATon)) return()
+    #   actionButton("edat_advanced", "EDAT Parameters", icon = icon("external-link"))
+    # })
     
     # EDAT modal dialogue with access to parameters
     output$edat_advanced_settings <- renderUI({
@@ -416,9 +416,8 @@ shinyServer(
                      status = "info", icon = icon("gear"), size = "sm", circle = FALSE, right = FALSE, width = "400px")
     })
     
-    # update EDAT patameters on update button
+    # update EDAT parameters on update button
     observe({
-      # removeModal(session)
       values$primon <- input$primon
       values$EDATscale <- input$EDATscale
       values$covEDATi <- input$covEDATi
@@ -436,7 +435,6 @@ shinyServer(
     
     # ITN summary text of parameters values
     output$itn_parameters <- renderText({
-      input$update
       return(
         paste0("<ul>", "<li>", values$ITNscale, " year(s) to scale up ITN", "</li>",
                "<li>New coverage of ITNs: ", values$covITNi, "%", "</li>",
@@ -445,13 +443,13 @@ shinyServer(
     })
     
     # ITN button to provide access to advanced parameters
-    output$itn_advanced_render <- renderUI({
-      if (!isTRUE(input$ITNon)) return()
-      actionButton("itn_advanced", "ITN Parameters", icon = icon("external-link"))
-    })
+    # output$itn_advanced_render <- renderUI({
+    #   if (!isTRUE(input$ITNon)) return()
+    #   actionButton("itn_advanced", "ITN Parameters", icon = icon("external-link"))
+    # })
     
     # ITN modal dialogue with access to parameters
-    observeEvent(input$itn_advanced, {
+    output$itn_advanced_settings <- renderUI({
       
       var <- "ITNscale"
       tag_1 <- tagList(
@@ -475,16 +473,12 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      showModal(modalDialog(title = "ITN Parameters", size = "s", easyClose = FALSE, footer = modalButton("Cancel"),
-                            tag_1,
-                            tag_2,
-                            actionButton('update_itn', "Update")
-      ))
+      dropdownButton(tag_1, tag_2,
+                     status = "info", icon = icon("gear"), size = "sm", circle = FALSE, right = FALSE, width = "400px")
     })
     
     # update ITN parameters on update button
-    observeEvent(input$update_itn,{
-      removeModal(session)
+    observe({
       values$ITNscale <- input$ITNscale
       values$covITNi <- input$covITNi
     })
@@ -503,7 +497,6 @@ shinyServer(
     
     # RCD summary text of parameters values
     output$rcd_parameters <- renderText({
-      input$update
       return(
         paste0("<ul>", "<li>", values$RCDscale, " year(s) to scale up RCD", "</li>",
                "<li>", "New coverage of RCD: ", values$covRCDi, "%", "</li>",
@@ -516,18 +509,19 @@ shinyServer(
                "<li>", "Sensitivity of RDT test (clinical): ", values$RCDsensC, "%", "</li>",
                "<li>", "Sensitivity of RDT test (micro detectable, asym.): ", values$RCDsensA, "%", "</li>",
                "<li>", "Sensitivity of RDT test (micro undetectable, asym.): ", values$RCDsensU, "%", "</li>",
+               "<li>", "Upper limit on annual incidence per 1000 for RCD: ", values$RCDthresh, "%", "</li>",
                "</ul>")
       )
     })
     
     # RCD button to provide access to advanced parameters
-    output$rcd_advanced_render <- renderUI({
-      if (!isTRUE(input$RCDon)) return()
-      actionButton("rcd_advanced", "RCD Parameters", icon = icon("external-link"))
-    })
+    # output$rcd_advanced_render <- renderUI({
+    #   if (!isTRUE(input$RCDon)) return()
+    #   actionButton("rcd_advanced", "RCD Parameters", icon = icon("external-link"))
+    # })
     
     # RCD modal dialogue with access to parameters
-    observeEvent(input$rcd_advanced, {
+    output$rcd_advanced_settings <- renderUI({
       
       var <- "RCDscale"
       tag_1 <- tagList(
@@ -661,26 +655,24 @@ shinyServer(
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
       
-      showModal(modalDialog(title = "RCD Parameters", size = "m", easyClose = FALSE, footer = modalButton("Cancel"),
-                            tag_1,
-                            tag_2,
-                            tag_3,
-                            tag_4,
-                            tag_5,
-                            tag_6,
-                            tag_7,
-                            tag_8,
-                            tag_9,
-                            tag_10,
-                            tag_11,
-                            tag_12,
-                            actionButton('update_rcd', "Update")
-      ))
+      
+      dropdownButton(tag_1,
+                     tag_2,
+                     tag_3,
+                     tag_4,
+                     tag_5,
+                     tag_6,
+                     tag_7,
+                     tag_8,
+                     tag_9,
+                     tag_10,
+                     tag_11,
+                     tag_12,
+                     status = "info", icon = icon("gear"), size = "sm", circle = FALSE, right = FALSE, width = "400px")
     })
     
     # update RCD parameters on update button
-    observeEvent(input$update_rcd,{
-      removeModal(session)
+    observe({
       values$RCDscale <- input$RCDscale
       values$covRCDi <- input$covRCDi
       values$delayRCD <- input$delayRCD
@@ -708,7 +700,6 @@ shinyServer(
     
     # IRS summary text of parameters values
     output$irs_parameters <- renderText({
-      input$update
       return(
         paste0("<ul>", "<li>", values$IRSscale, " year(s) to scale up IRS", "</li>",
                "<li>New coverage of IRS: ", values$covIRSi, "%", "</li>",
@@ -717,13 +708,13 @@ shinyServer(
     })
     
     # IRS button to provide access to advanced parameters
-    output$irs_advanced_render <- renderUI({
-      if (!isTRUE(input$IRSon)) return()
-      actionButton("irs_advanced", "IRS Parameters", icon = icon("external-link"))
-    })
+    # output$irs_advanced_render <- renderUI({
+    #   if (!isTRUE(input$IRSon)) return()
+    #   actionButton("irs_advanced", "IRS Parameters", icon = icon("external-link"))
+    # })
     
     # IRS modal dialogue with access to parameters
-    observeEvent(input$irs_advanced, {
+    output$irs_advanced_settings <- renderUI({
       
       var <- "IRSscale"
       tag_1 <- tagList(
@@ -747,16 +738,12 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      showModal(modalDialog(title = "IRS Parameters", size = "s", easyClose = FALSE, footer = modalButton("Cancel"),
-                            tag_1,
-                            tag_2,
-                            actionButton('update_irs', "Update")
-      ))
+      dropdownButton(tag_1, tag_2,
+                     status = "info", icon = icon("gear"), size = "sm", circle = FALSE, right = FALSE, width = "400px")
     })
     
     # update IRS parameters on update button
-    observeEvent(input$update_irs,{
-      removeModal(session)
+    observe({
       values$IRSscale <- input$IRSscale
       values$covIRSi <- input$covIRSi
     })
@@ -774,7 +761,6 @@ shinyServer(
     
     # MSAT summary text of parameters values
     output$msat_parameters <- renderText({
-      input$update_msat
       return(
         paste0("<ul>", "<li>", values$MSATscale, " year(s) to scale up MSAT", "</li>",
                "<li>", "New coverage of MSAT: ", values$covMSATi, "%", "</li>",
@@ -786,13 +772,13 @@ shinyServer(
     })
     
     # MSAT button to provide access to advanced parameters
-    output$msat_advanced_render <- renderUI({
-      if (!isTRUE(input$MSATon)) return()
-      actionButton("msat_advanced", "MSAT Parameters", icon = icon("external-link"))
-    })
+    # output$msat_advanced_render <- renderUI({
+    #   if (!isTRUE(input$MSATon)) return()
+    #   actionButton("msat_advanced", "MSAT Parameters", icon = icon("external-link"))
+    # })
     
     # MSAT modal dialogue with access to parameters
-    observeEvent(input$msat_advanced, {
+    output$msat_advanced_settings <- renderUI({
       
       var <- "MSATscale"
       tag_1 <- tagList(
@@ -849,20 +835,13 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
+      dropdownButton(tag_1, tag_2, tag_3, tag_4, tag_5,
+                     status = "info", icon = icon("gear"), size = "sm", circle = FALSE, right = FALSE, width = "400px")
       
-      showModal(modalDialog(title = "MSAT Parameters", size = "s", easyClose = FALSE, footer = modalButton("Cancel"),
-                            tag_1,
-                            tag_2,
-                            tag_3,
-                            tag_4,
-                            tag_5,
-                            actionButton('update_msat', "Update")
-      ))
     })
     
     # update MSAT patameters on update button
-    observeEvent(input$update_msat,{
-      removeModal(session)
+    observe({
       values$MSATscale <- input$MSATscale
       values$covMSATi <- input$covMSATi
       values$MSATsensC <- input$MSATsensC
@@ -881,7 +860,6 @@ shinyServer(
     
     # MDA summary text of parameters values
     output$mda_parameters <- renderText({
-      input$update_mda
       return(
         paste0("<ul>", "<li>", values$lossd, " days prophylaxis provided by the ACT", "</li>",
                "<li>", values$dm, " months to complete each round", "</li>",
@@ -896,13 +874,13 @@ shinyServer(
     })
     
     # MDA button to provide access to advanced parameters
-    output$mda_advanced_render <- renderUI({
-      if (!isTRUE(input$MDAon)) return()
-      actionButton("mda_advanced", "MDA Parameters", icon = icon("external-link"))
-    })
+    # output$mda_advanced_render <- renderUI({
+    #   if (!isTRUE(input$MDAon)) return()
+    #   actionButton("mda_advanced", "MDA Parameters", icon = icon("external-link"))
+    # })
     
     # MDA modal dialogue with access to parameters
-    observeEvent(input$mda_advanced, {
+    output$mda_advanced_settings <- renderUI({
       
       var <- "lossd"
       tag_1 <- tagList(
@@ -992,22 +970,12 @@ shinyServer(
           step = as.numeric(meta[meta$input_id==var, "step"]))),
         bsPopover(var, title = NULL, content=meta[meta$input_id==var, explanation()], placement="right", options = list(container = "body")))
       
-      showModal(modalDialog(title = "MDA Parameters", size = "s", easyClose = FALSE, footer = modalButton("Cancel"),
-                            tag_1,
-                            tag_2,
-                            tag_3,
-                            tag_4,
-                            tag_5,
-                            tag_6,
-                            tag_7,
-                            tag_8,
-                            actionButton('update_mda', "Update")
-      ))
+      dropdownButton(tag_1, tag_2, tag_3, tag_4, tag_5, tag_6, tag_7, tag_8,
+                     status = "info", icon = icon("gear"), size = "sm", circle = FALSE, right = FALSE, width = "400px")
     })
     
     # update MDA patameters on update button
-    observeEvent(input$update_mda,{
-      removeModal(session)
+    observe({
       values$lossd <- input$lossd
       values$dm <- input$dm
       values$cmda_1 <- input$cmda_1
